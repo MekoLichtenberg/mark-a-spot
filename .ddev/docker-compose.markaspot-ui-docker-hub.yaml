@@ -1,0 +1,26 @@
+services:
+  markaspot-ui-docker-hub:
+    container_name: "ddev-${DDEV_SITENAME}-markaspot-ui-docker-hub"
+    image: markaspot/markaspot-ui-base:latest
+    working_dir: /app
+    restart: unless-stopped
+    # Adding external_links allows connections to `https://example.ddev.site`,
+    # which then can go through `ddev-router`
+    external_links:
+      - ddev-router:${DDEV_SITENAME}.${DDEV_TLD}
+    labels:
+      com.ddev.site-name: ${DDEV_SITENAME}
+      com.ddev.approot: ${DDEV_APPROOT}
+    expose:
+      - "3000"
+    environment:
+      - CLIENT=bonn
+      - NUXT_API_BASE=http://web
+      - GEOREPORT_API_KEY=${GEOREPORT_API_KEY:-changeme}
+      - JSONAPI_RANDOM_PATH="jsonapi"
+      - USE_PROXY="true"
+      - NODE_ENV=production
+      - HOST=0.0.0.0
+      - HTTP_EXPOSE=8040:3000
+      - HTTPS_EXPOSE=8040:3000
+      - VIRTUAL_HOST=$DDEV_HOSTNAME

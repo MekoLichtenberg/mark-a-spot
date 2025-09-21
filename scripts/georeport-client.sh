@@ -7,7 +7,7 @@ UUID=$(./vendor/bin/drush sql:query "SELECT uuid FROM users WHERE uid = 2" --dat
 ./vendor/bin/drush config-set services_api_key_auth.api_key.test_mas user_uuid $UUID -y
 
 # Get the API key from the configuration
-API_KEY=$(./vendor/bin/drush config-get services_api_key_auth.api_key.test_mas | awk '/key:/ {print $2}')
+API_KEY=${GEOREPORT_API_KEY:-$(./vendor/bin/drush config-get services_api_key_auth.api_key.test_mas | awk '/key:/ {print $2}')}
 
 # Set the center latitude and longitude
 CENTER_LAT=$(./vendor/bin/drush cget markaspot_map.settings center_lat --format=string)

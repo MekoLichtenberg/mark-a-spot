@@ -1,6 +1,17 @@
 #!/bin/sh
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+PROJECT_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
+
+# Determine Drupal web root for different container setups (DDEV and legacy Docker).
+if [ -d "$PROJECT_ROOT/web/sites/default" ]; then
+  WEB_ROOT="$PROJECT_ROOT/web"
+elif [ -d "/app/data/web/sites/default" ]; then
+  WEB_ROOT="/app/data/web"
+else
+  echo "ERROR: Unable to locate Drupal web directory. Checked '$PROJECT_ROOT/web' and '/app/data/web'."
+  exit 1
+fi
 
 usage() {
   echo "Usage: start.sh [-y] [-t] [-a]"
@@ -24,19 +35,32 @@ if [ "$ENVIRONMENT" != "prod" ]; then
   printf "\e[32mNo Prod deployment. Installing Drupal with the Mark-a-Spot Distribution...\e[0m\n"
 
   # Define the path to the Drupal settings file
-  SETTINGS_FILE="/app/data/web/sites/default/settings.php"
+  SETTINGS_FILE="$WEB_ROOT/sites/default/settings.php"
+  DEFAULT_SETTINGS_FILE="$WEB_ROOT/sites/default/default.settings.php"
 
-  cp /app/data/web/sites/default/default.settings.php $SETTINGS_FILE
+  if [ ! -f "$DEFAULT_SETTINGS_FILE" ]; then
+    echo "ERROR: Cannot find default settings file at $DEFAULT_SETTINGS_FILE"
+    exit 1
+  fi
+
+  cp "$DEFAULT_SETTINGS_FILE" "$SETTINGS_FILE"
+
+  DB_NAME=${DRUPAL_DATABASE_NAME:-${DB_NAME:-db}}
+  DB_USER=${DRUPAL_DATABASE_USERNAME:-${DB_USER:-db}}
+  DB_PASS=${DRUPAL_DATABASE_PASSWORD:-${DB_PASSWORD:-db}}
+  DB_HOST=${MARKASPOT_MARIADB_SERVICE_HOST:-${DB_HOST:-db}}
+  DB_PORT=${DRUPAL_DATABASE_PORT:-${DB_PORT:-3306}}
+  HASH_SALT=${DRUPAL_HASH_SALT:-$(tr -dc 'a-z0-9' </dev/urandom | head -c 32)}
 
   # Custom database configuration
   CUSTOM_DB_CONFIG="\\
   \$databases['default']['default'] = [\\
-      'database' => getenv('DRUPAL_DATABASE_NAME'),\\
-      'username' => getenv('DRUPAL_DATABASE_USERNAME'),\\
-      'password' => getenv('DRUPAL_DATABASE_PASSWORD'),\\
+      'database' => '$DB_NAME',\\
+      'username' => '$DB_USER',\\
+      'password' => '$DB_PASS',\\
       'prefix' => '',\\
-      'host' => getenv('MARKASPOT_MARIADB_SERVICE_HOST'),\\
-      'port' => 3306,\\
+      'host' => '$DB_HOST',\\
+      'port' => $DB_PORT,\\
       'namespace' => 'Drupal\\\\\\\\Core\\\\\\\\Database\\\\\\\\Driver\\\\\\\\mysql',\\
       'driver' => 'mysql',\\
   ];"
@@ -45,7 +69,7 @@ if [ "$ENVIRONMENT" != "prod" ]; then
   sed -i "/\$databases = \[\];/a $CUSTOM_DB_CONFIG" "$SETTINGS_FILE"
 
   # Custom hash salt configuration
-  CUSTOM_HASH_SALT="\$settings['hash_salt'] = getenv('DRUPAL_HASH_SALT');"
+  CUSTOM_HASH_SALT="\$settings['hash_salt'] = '$HASH_SALT';"
 
   # Replace the existing hash salt configuration with the custom one
   sed -i "s/\$settings\['hash_salt'\] = '';$/$CUSTOM_HASH_SALT/" "$SETTINGS_FILE"
@@ -53,9 +77,18 @@ if [ "$ENVIRONMENT" != "prod" ]; then
   # Update the config_sync_directory setting
   sed -i "s|# \$settings\['config_sync_directory'\] = '/directory/outside/webroot';|\$settings['config_sync_directory'] = '../config/sync';|" "$SETTINGS_FILE"
 
+  cat <<'EOF' >> "$SETTINGS_FILE"
 
-  printf "\e[32mCustom configuration added to $SETTINGS_FILE"
+// Override the GeoReport API key with environment configuration when available.
+if ((isset($app_root) || PHP_SAPI === 'cli') && ($geoKey = getenv('GEOREPORT_API_KEY'))) {
+  if ($geoKey !== 'changeme' && $geoKey !== '') {
+    $config['services_api_key_auth.api_key.test_mas']['key'] = $geoKey;
+  }
+}
 
+EOF
+
+  printf "\e[32mCustom configuration added to $SETTINGS_FILE\e[0m\n"
 
   printf "\e[36mDropping all tables in the database...\e[0m\n"
   drush sql-drop -y
@@ -64,8 +97,19 @@ if [ "$ENVIRONMENT" != "prod" ]; then
 
   # Function to query the Nominatim API for city information
   get_city_info() {
-      city_name=$(printf "%s" "$1" | jq -sRr @uri)
-      country_name=$(printf "%s" "$2" | jq -sRr @uri)
+      # Ensure curl and php are available
+      if ! command -v curl >/dev/null 2>&1; then
+          echo "ERROR: curl is required but not installed."
+          return 1
+      fi
+
+      if ! command -v php >/dev/null 2>&1; then
+          echo "ERROR: PHP CLI is required but not available."
+          return 1
+      fi
+
+      city_name=$(php -r 'echo rawurlencode($argv[1]);' "$1")
+      country_name=$(php -r 'echo rawurlencode($argv[1]);' "$2")
 
       # Exit the function if either city name or country name is empty
       if [ -z "$city_name" ] || [ -z "$country_name" ]; then
@@ -73,43 +117,54 @@ if [ "$ENVIRONMENT" != "prod" ]; then
           return 1
       fi
 
-      # Check if jq is installed
-      if ! command -v jq &> /dev/null; then
-          echo "ERROR: jq is required but not installed. Please install jq first."
-          return 1
-      fi
-
-      response=$(curl -s "https://nominatim.openstreetmap.org/search?city=$city_name&country=$country_name&format=json")
+      response=$(curl -s "https://nominatim.openstreetmap.org/search?city=$city_name&country=$country_name&format=json&limit=10")
 
       # Check if curl request was successful and response is valid JSON
-      if [ $? -ne 0 ] || ! echo "$response" | jq empty 2>/dev/null; then
-          echo "ERROR: Failed to query the Nominatim API or invalid response."
+      if [ $? -ne 0 ] || [ -z "$response" ]; then
+          echo "ERROR: Failed to query the Nominatim API."
           return 1
       fi
 
-      count=$(echo "$response" | jq length)
+      locations=$(printf "%s" "$response" | php -r '
+          $data = json_decode(stream_get_contents(STDIN), true);
+          if (!is_array($data) || empty($data)) {
+              exit(1);
+          }
+          foreach ($data as $row) {
+              if (!isset($row["lat"], $row["lon"], $row["display_name"])) {
+                  continue;
+              }
+              $display = str_replace(["\n", "\r"], " ", $row["display_name"]);
+              echo $row["lat"], "\t", $row["lon"], "\t", $display, "\n";
+          }
+      ')
+
+      if [ $? -ne 0 ] || [ -z "$locations" ]; then
+          echo "ERROR: Failed to parse location data."
+          return 1
+      fi
+
+      count=$(printf "%s" "$locations" | grep -c '^')
       if [ "$count" -eq 0 ]; then
           echo "ERROR: No results found for $1 in $2."
           return 1
       elif [ "$count" -eq 1 ]; then
-          selected=$(echo "$response" | jq -r ".[0]")
+          selected="$locations"
       else
           echo "Multiple locations found. Please select one by entering the corresponding number:"
-          for i in $(seq 0 $(($count - 1))); do
-              echo "$(($i + 1)): $(echo "$response" | jq -r ".[$i].display_name")"
-          done
+          printf "%s" "$locations" | nl -ba
           read -p "Choice: " choice
-          if ! [[ "$choice" =~ ^[0-9]+$ ]] || [ "$choice" -lt 1 ] || [ "$choice" -gt "$count" ]; then
+          if ! printf "%s" "$choice" | grep -Eq '^[0-9]+$' || [ "$choice" -lt 1 ] || [ "$choice" -gt "$count" ]; then
               echo "ERROR: Invalid selection."
               return 1
           fi
-          selected=$(echo "$response" | jq -r ".[$(($choice - 1))]")
+          selected=$(printf "%s" "$locations" | sed -n "${choice}p")
       fi
 
-      # Set global variables directly
-      latitude=$(echo "$selected" | jq -r '.lat')
-      longitude=$(echo "$selected" | jq -r '.lon')
-      city=$(echo "$selected" | jq -r '.display_name')
+      # Set global variables directly using tab-delimited values
+      latitude=$(printf "%s" "$selected" | cut -f1)
+      longitude=$(printf "%s" "$selected" | cut -f2)
+      city=$(printf "%s" "$selected" | cut -f3-)
 
       echo "Selected Location: $city"
       echo "Latitude: $latitude"
@@ -369,6 +424,24 @@ if [ "$ENVIRONMENT" != "prod" ]; then
   fi
 
   printf "\e[36mExecuting georeport client to import initial service requests...\e[0m\n"
+  # Ensure GeoReport API key exists in Drupal config and export for clients.
+  ENV_GEOREPORT_API_KEY=${GEOREPORT_API_KEY:-}
+  CURRENT_API_KEY=$(drush config-get services_api_key_auth.api_key.test_mas key --format=string 2>/dev/null || true)
+
+  if [ -n "$ENV_GEOREPORT_API_KEY" ] && [ "$ENV_GEOREPORT_API_KEY" != "changeme" ]; then
+    GEOREPORT_API_KEY="$ENV_GEOREPORT_API_KEY"
+    drush config-set services_api_key_auth.api_key.test_mas key "$GEOREPORT_API_KEY" -y >/dev/null
+  elif [ -n "$CURRENT_API_KEY" ] && [ "$CURRENT_API_KEY" != "changeme" ]; then
+    GEOREPORT_API_KEY="$CURRENT_API_KEY"
+  else
+    GEOREPORT_API_KEY=$(php -r 'echo bin2hex(random_bytes(8));')
+    drush config-set services_api_key_auth.api_key.test_mas key "$GEOREPORT_API_KEY" -y >/dev/null
+  fi
+
+  export GEOREPORT_API_KEY
+  printf "GeoReport API key: %s\n" "$GEOREPORT_API_KEY"
+  printf "Hint: update GEOREPORT_API_KEY in your host environment (e.g. .env) so external clients use the same key.\n"
+
   $SCRIPT_DIR/georeport-client.sh
 
   printf "\e[36mOne-Time Login for User 1 ...\e[0m\n"

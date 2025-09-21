@@ -62,6 +62,7 @@ module:
   history: 0
   image: 0
   image_effects: 0
+  iconify_field: 0
   inline_entity_form: 0
   jsonapi: 0
   language: 0
@@ -74,6 +75,7 @@ module:
   markaspot_blocks: 0
   markaspot_boilerplate: 0
   markaspot_feedback: 0
+  markaspot_icons: 0
   markaspot_map: 0
   markaspot_media: 0
   markaspot_nuxt: 0

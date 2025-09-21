@@ -1,7 +1,7 @@
 # Mark-a-Spot
 
 <div align="center">
-  <img src="https://www.markaspot.de/assets/images/logo.svg" width="200px" alt="Mark-a-Spot Logo"/>
+  <img src="https://www.markaspot.de/assets/images/logo.svg" width="100px" alt="Mark-a-Spot Logo"/>
   <h3>Open-Source Civic Issue Tracking and Open311 Platform for Drupal 11</h3>
 </div>
 
@@ -58,10 +58,26 @@ These instructions will guide you through getting a copy of the project up and r
 
 ### Prerequisites
 
-- Docker
-- Docker Compose
+Install one (or both) of the following toolchains before you begin:
+
+- [DDEV](https://ddev.readthedocs.io/en/stable/users/install/ddev-installation/) – recommended local development environment built on Docker
+- Docker and Docker Compose (v2 `docker compose` CLI works too)
 
 ### Installation
+
+**Quick start (DDEV)** *(requires DDEV to be installed first)*
+- `git clone https://github.com/markaspot/mark-a-spot.git`
+- `cd mark-a-spot`
+- `ddev config && ddev start`
+- `ddev ssh` → `./scripts/start.sh -y`
+
+#### Which environment should I use?
+- **DDEV** – best for day-to-day development, automatic HTTPS, and a config you can share with teammates.
+- **Docker Compose** – mirrors the legacy stack; handy if you need to run the shipped `docker-compose.yml` as-is.
+
+> The installer always drops and recreates the Drupal database. Back up any local work before rerunning it.
+
+#### DDEV workflow
 
 1. Clone this repository:
     ```bash
@@ -69,21 +85,27 @@ These instructions will guide you through getting a copy of the project up and r
     cd mark-a-spot
     ```
 
-2. Run the Docker containers:
+2. Configure and start DDEV:
     ```bash
-    docker-compose up -d
+    ddev config
+    ddev start
     ```
 
-3. Run the `start.sh` script
-
-   If it gives you an error of permission denied make it executable with: `chmod a+x ./scripts/start.sh`)
+3. Run the installer inside the DDEV web container:
     ```bash
-   docker exec -it markaspot ./scripts/start.sh -y
+    ddev ssh
+    ./scripts/start.sh -y    # run without -y for interactive setup
     ```
-   The `start.sh` script has the following options:
-   - `-y` For automatic installation with predefined values (latitude: 40.73, longitude: -73.93, city: New York, locale: en_US)
-   - `-t` To import translation file from the `/translations` directory and enable translations for terms
-   - `-a` To use OpenAI translation for content artifacts, see below
+
+   Geocoding works out of the box; the container already ships with `curl` and PHP.
+
+#### Installer flags (all environments)
+
+- `-y` Autopilot: uses default New York coordinates/locale and skips prompts.
+- `-t` Drupal translation import: installs language packs from `translations/`.
+- `-a` AI translation: runs `ai-translate.sh` to translate default content (needs `OPENAI_API_KEY`).
+- Combine as needed, e.g. `./scripts/start.sh -t -a` for a multilingual build.
+- On first run the installer generates a fresh GeoReport API key and prints it. To reuse a specific key, set `GEOREPORT_API_KEY` in your environment or `.env` before launching the installer (Docker/DDEV front-end services read the same variable).
 
 #### AI Translation Feature
 
@@ -109,29 +131,27 @@ The translation covers:
 
 Once the script has executed, the application should be accessible at http://localhost. Please exercise caution when executing the script, as it will drop the database and initialize Mark-a-Spot from scratch. Additionally, familiarize yourself with the Drupal development process, including configuring changes, backing up databases, and other relevant procedures.
 
-### Services
 
-The Docker Compose setup includes the following services:
+#### Docker Compose workflow
 
-- `web`: The Nginx web server
-- `markaspot`: The Mark-a-Spot Drupal application
-- `ui`: The frontend (Nuxt), remember to delete application cache when reinstall
-- `db`: The MariaDB database
-- `phpmyadmin`: PHPMyAdmin for database management
+1. Clone this repository (if you haven't already):
+    ```bash
+    git clone https://github.com/markaspot/mark-a-spot.git
+    cd mark-a-spot
+    ```
 
-### Configuration
+2. Start the stack:
+    ```bash
+    docker-compose up -d
+    ```
 
-You can adjust the configuration of the Docker services by editing the `docker-compose.yml` file. For example, you can modify the database username and password, the PHP memory limit, and other settings.
+3. Run the installer:
 
-## Usage
+   If the script is not executable, make it so with `chmod a+x ./scripts/start.sh`.
+    ```bash
+    docker exec -it markaspot ./scripts/start.sh -y
+    ```
 
-Access the Drupal application at `http://localhost`.
-Access the Frontend at `http://localhost:3000`.
-PHPMyAdmin is available at `http://localhost:8080` for database management.
-
-## Development
-
-For local development, we recommend using [DDEV](https://ddev.com), a Docker-based development environment.
 
 ## License
 
