@@ -4,7 +4,6 @@ url: https://github.com/markaspot/mark-a-spot
 landingURL: https://mark-a-spot.com
 softwareVersion: 7
 releaseDate: 2012-01-01
-platforms:
 logo: docs/assets/logo.svg
 monochromeLogo: docs/assets/logo-monochrome.svg
 platforms: 
@@ -20,7 +19,7 @@ categories:
   - data-visualization
   - crm
   - survey
-intendedAudience
+intendedAudience:
   scope:
     - local-authorities
     - emergency-services
@@ -29,9 +28,9 @@ intendedAudience
     - society
     - government
 usedBy:
-  - City of Munich / LHM München
-  - City of Cologne
-  - City of Bonn / Bundesstadt Bonn
+  - City of Munich - LHM München
+  - City of Cologne - Stadt Köln
+  - City of Bonn - Bundesstadt Bonn
   - City of Krefeld – Municipal Services (KBK)
   - City of Duisburg – Public Utilities (Wirtschaftsbetriebe)
 developmentStatus: stable
@@ -94,7 +93,7 @@ description:
       - docs/assets/sshot2.jpg
       - docs/assets/sshot3.jpg
       
-  license: GPL-2.0-or-later
+license: GPL-2.0-or-later
 maintenance:
   type: contract
   contacts:
