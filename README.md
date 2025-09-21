@@ -50,8 +50,6 @@ Mark-a-Spot is designed for:
 - **Civic Tech Innovators:**  
   To leverage an adaptable, open-source solution for developing and deploying civic technologies.
 
-> **Note**: This is the 11.7.x-dev branch, which is compatible with Drupal 11. For older versions, see the [10.6.x-dev](https://github.com/markaspot/mark-a-spot/tree/10.6.x-dev) or [8.5.x-dev](https://github.com/markaspot/mark-a-spot/tree/8.5.x-dev) branches.
-
 ## Getting Started
 
 These instructions will guide you through getting a copy of the project up and running on your local machine for development and testing purposes.
@@ -63,7 +61,7 @@ Install one (or both) of the following toolchains before you begin:
 - [DDEV](https://ddev.readthedocs.io/en/stable/users/install/ddev-installation/) – recommended local development environment built on Docker
 - Docker and Docker Compose (v2 `docker compose` CLI works too)
 
-### Installation
+## Installation
 
 **Quick start (DDEV)** *(requires DDEV to be installed first)*
 - `git clone https://github.com/markaspot/mark-a-spot.git`
@@ -71,35 +69,13 @@ Install one (or both) of the following toolchains before you begin:
 - `ddev config && ddev start`
 - `ddev ssh` → `./scripts/start.sh -y`
 
-#### Which environment should I use?
+### Which environment should I use?
 - **DDEV** – best for day-to-day development, automatic HTTPS, and a config you can share with teammates.
 - **Docker Compose** – mirrors the legacy stack; handy if you need to run the shipped `docker-compose.yml` as-is.
 
 > The installer always drops and recreates the Drupal database. Back up any local work before rerunning it.
 
-#### DDEV workflow
-
-1. Clone this repository:
-    ```bash
-    git clone https://github.com/markaspot/mark-a-spot.git
-    cd mark-a-spot
-    ```
-
-2. Configure and start DDEV:
-    ```bash
-    ddev config
-    ddev start
-    ```
-
-3. Run the installer inside the DDEV web container:
-    ```bash
-    ddev ssh
-    ./scripts/start.sh -y    # run without -y for interactive setup
-    ```
-
-   Geocoding works out of the box; the container already ships with `curl` and PHP.
-
-#### Installer flags (all environments)
+### Installer flags (all environments)
 
 - `-y` Autopilot: uses default New York coordinates/locale and skips prompts.
 - `-t` Drupal translation import: installs language packs from `translations/`.
@@ -107,7 +83,7 @@ Install one (or both) of the following toolchains before you begin:
 - Combine as needed, e.g. `./scripts/start.sh -t -a` for a multilingual build.
 - On first run the installer generates a fresh GeoReport API key and prints it. To reuse a specific key, set `GEOREPORT_API_KEY` in your environment or `.env` before launching the installer (Docker/DDEV front-end services read the same variable).
 
-#### AI Translation Feature
+### AI Translation Feature
 
 The (AI) translation feature allows you to automatically translate the Drupal UI and content artifacts (taxonomy terms, pages, blocks, etc.) using OpenAI's language models. This provides translations for your Mark-a-Spot installation's default content. 
 
@@ -129,7 +105,9 @@ The translation covers:
 - Boilerplate content
 - Block content
 
-Once the script has executed, the application should be accessible at http://localhost. Please exercise caution when executing the script, as it will drop the database and initialize Mark-a-Spot from scratch. Additionally, familiarize yourself with the Drupal development process, including configuring changes, backing up databases, and other relevant procedures.
+Once the script has executed, the application should be accessible at http://localhost or the ddev URLs you will be retrieve via `ddev describe`.
+
+ Please exercise caution when executing the script, as it will drop the database and initialize Mark-a-Spot from scratch. Additionally, familiarize yourself with the Drupal development process, including configuring changes, backing up databases, and other relevant procedures.
 
 
 #### Docker Compose workflow
