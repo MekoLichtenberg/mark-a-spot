@@ -5,7 +5,6 @@ landingURL: https://mark-a-spot.com
 softwareVersion: "7"
 releaseDate: 2012-01-01
 logo: docs/assets/logo.svg
-monochromeLogo: docs/assets/logo-monochrome.svg
 platforms:
   - web
   - linux
@@ -75,7 +74,7 @@ description:
       and accessibility features. Optional AI modules enable automated
       categorization, prioritization, and privacy checks.
 
-    apiDocumentation: https://open311.org
+    apiDocumentation: https://www.open311.org
     features:
       - citizen-reporting
       - geospatial-mapping
