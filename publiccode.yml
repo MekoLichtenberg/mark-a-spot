@@ -2,11 +2,11 @@ publiccodeYmlVersion: 0.4.0
 name: Mark-a-Spot
 url: https://github.com/markaspot/mark-a-spot
 landingURL: https://mark-a-spot.com
-softwareVersion: 7
+softwareVersion: "7"
 releaseDate: 2012-01-01
 logo: docs/assets/logo.svg
 monochromeLogo: docs/assets/logo-monochrome.svg
-platforms: 
+platforms:
   - web
   - linux
 categories:
@@ -89,17 +89,17 @@ description:
       - case-resubmission / follow-up
       - case-archiving & retention
     screenshots:
-      - docs/assets/sshot1.jpg
-      - docs/assets/sshot2.jpg
-      - docs/assets/sshot3.jpg
-      
-license: GPL-2.0-or-later
+      - docs/assets/sshot-1.png
+      - docs/assets/sshot-2.png
+      - docs/assets/sshot-3.png
+
+legal:
+  license: GPL-2.0-or-later
 maintenance:
-  type: contract
+  type: community
   contacts:
     - name: Mark-a-Spot
       email: info@markaspot.org
-      url: https://www.mark-a-spot.com
 localisation:
   localisationReady: true
   availableLanguages:
