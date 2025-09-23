@@ -73,8 +73,6 @@ description:
       with a powerful back office, open APIs (Open311), multilingual support,
       and accessibility features. Optional AI modules enable automated
       categorization, prioritization, and privacy checks.
-
-    apiDocumentation: https://www.open311.org
     features:
       - citizen-reporting
       - geospatial-mapping
