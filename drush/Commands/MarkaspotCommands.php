@@ -160,9 +160,9 @@ class MarkaspotCommands extends DrushCommands implements CustomEventAwareInterfa
       
       // Check if required modules are enabled
       $moduleHandler = \Drupal::service('module_handler');
-      if (!$moduleHandler->moduleExists('markaspot_map') || 
+      if (!$moduleHandler->moduleExists('markaspot_nuxt') ||
           !$moduleHandler->moduleExists('markaspot_validation')) {
-        $this->logger()->error(dt('Required modules (markaspot_map and/or markaspot_validation) are not enabled.'));
+        $this->logger()->error(dt('Required modules (markaspot_nuxt and/or markaspot_validation) are not enabled.'));
         return 1;
       }
       
