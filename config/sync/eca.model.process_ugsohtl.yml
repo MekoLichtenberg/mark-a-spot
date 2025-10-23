@@ -32,7 +32,7 @@ modeldata: |
 
   Please click on the following link to access additional information about your request at any time:
 
-  [site:url][node:url:path]
+  [site:url]requests/[node:request_id]
 
   Please note: If your matter is an urgent emergency or poses an immediate threat, please contact the police (110) or fire department (112) immediately.
             </camunda:string>
@@ -123,7 +123,7 @@ modeldata: |
 
   Bitte klicken Sie auf den folgenden Link, um sich jederzeit weitere Informationen zu Ihrem Anliegen anzusehen: 
 
-  [site:url][node:url:path]
+  [site:url]requests/[node:request_id]
 
   Bitte beachten Sie: Sollte es sich bei Ihrem Anliegen um einen dringenden Notfall bzw. einer akuter Gefährdung handeln, wenden Sie sich bitte sofort telefonisch an die Polizei (110) bzw. Feuerwehr (112).
 

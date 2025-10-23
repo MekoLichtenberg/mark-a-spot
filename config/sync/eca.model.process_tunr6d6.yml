@@ -62,7 +62,7 @@ modeldata: |
   Your request with number #[node:request_id] has been received, and the handling has been assigned to the responsible department.
   Please click on the following link to view additional information about your request at any time:
 
-    [site:url][node:url:path]
+    [site:url]requests/[node:request_id]
             </camunda:string>
 
           </camunda:field>
@@ -153,7 +153,7 @@ modeldata: |
 
               Please click on the following link to view additional information about your request at any time:
 
-              [site:url][node:url:path]
+              [site:url]requests/[node:request_id]
 
               Please note: If your matter is an urgent emergency or poses an immediate threat, please contact the police (110) or fire department (112) immediately.
 
