@@ -75,7 +75,6 @@ module:
   markaspot_blocks: 0
   markaspot_boilerplate: 0
   markaspot_icons: 0
-  markaspot_map: 0
   markaspot_media: 0
   markaspot_nuxt: 0
   markaspot_open311: 0

@@ -16,7 +16,7 @@ third_party_settings:
 preset_accent_color: neutral
 preset_focus_color: dark
 enable_darkmode: auto
-classic_toolbar: vertical
+classic_toolbar: new
 secondary_toolbar_frontend: true
 high_contrast_mode: false
 accent_color: ''
@@ -24,4 +24,4 @@ focus_color: ''
 layout_density: default
 show_description_toggle: false
 show_user_theme_settings: false
-sticky_action_buttons: false
+sticky_action_buttons: true

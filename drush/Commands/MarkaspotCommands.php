@@ -302,7 +302,7 @@ class MarkaspotCommands extends DrushCommands implements CustomEventAwareInterfa
       }
 
       // Update map settings
-      $this->markaspotSettingsConfig($config_factory, 'markaspot_map.settings', $lat, $lng);
+      $this->markaspotSettingsConfig($config_factory, 'markaspot_nuxt.settings', $lat, $lng);
       $this->logger()->success(dt('Map settings updated.'));
     }
     catch (\Exception $e) {
