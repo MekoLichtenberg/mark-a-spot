@@ -8,8 +8,8 @@ timeline_period: P1D
 timeline_fps: '15'
 nid_selector: 'article '
 zoom_initial: '10'
-center_lat: '50.8291313'
-center_lng: '6.9037057'
+center_lat: '40.73'
+center_lng: '-73.93'
 request_list_path: /requests
 visualization_path: /node/80
 langcode: en

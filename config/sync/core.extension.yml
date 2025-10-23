@@ -60,9 +60,9 @@ module:
   group_action: 0
   help: 0
   history: 0
+  iconify_field: 0
   image: 0
   image_effects: 0
-  iconify_field: 0
   inline_entity_form: 0
   jsonapi: 0
   language: 0
@@ -74,7 +74,6 @@ module:
   markaspot_archive: 0
   markaspot_blocks: 0
   markaspot_boilerplate: 0
-  markaspot_feedback: 0
   markaspot_icons: 0
   markaspot_map: 0
   markaspot_media: 0
@@ -82,7 +81,6 @@ module:
   markaspot_open311: 0
   markaspot_privacy: 0
   markaspot_request_id: 0
-  markaspot_resubmission: 0
   markaspot_token: 0
   markaspot_ui: 0
   markaspot_validation: 0

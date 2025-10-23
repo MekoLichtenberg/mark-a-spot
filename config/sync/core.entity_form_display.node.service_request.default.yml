@@ -96,7 +96,7 @@ content:
       center_lat: '40.73'
       center_lng: '-73.93'
       limit_countrycodes: de
-      limit_viewbox: '-74.379155587496,41.179155587496,-73.480844412504,40.280844412504'
+      limit_viewbox: '-74.523718255502,41.179915415902,-73.336281744498,40.280084584098'
       city: 'New York'
       set_address_field: '1'
       tileServerUrl: ''
@@ -114,6 +114,7 @@ content:
       tab: '1'
       autoLocate: 0
       zoomControl: 0
+      limit_country_code: US
     third_party_settings: {  }
   field_image:
     type: image_image
