@@ -1,0 +1,118 @@
+name: Composer Update and Auto-tag
+
+on:
+  schedule:
+    # Run every Monday at 9:00 AM UTC
+    - cron: '0 9 * * 1'
+  workflow_dispatch:
+    inputs:
+      branch:
+        description: 'Branch to update'
+        required: false
+        default: '11.7.x-dev'
+
+jobs:
+  composer-update:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.inputs.branch || '11.7.x-dev' }}
+          fetch-depth: 0
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          extensions: mbstring, xml, ctype, iconv, intl, pdo_sqlite, dom, filter, gd, json, pcre, pdo, spl, tokenizer
+          coverage: none
+
+      - name: Get Composer cache directory
+        id: composer-cache
+        run: echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
+
+      - name: Cache Composer dependencies
+        uses: actions/cache@v4
+        with:
+          path: ${{ steps.composer-cache.outputs.dir }}
+          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+          restore-keys: ${{ runner.os }}-composer-
+
+      - name: Run composer update
+        run: |
+          composer update --no-interaction --prefer-dist --optimize-autoloader
+          echo "COMPOSER_UPDATED=true" >> $GITHUB_ENV
+
+      - name: Check for changes
+        id: check-changes
+        run: |
+          if git diff --quiet composer.lock; then
+            echo "changes=false" >> $GITHUB_OUTPUT
+            echo "No changes in composer.lock"
+          else
+            echo "changes=true" >> $GITHUB_OUTPUT
+            echo "Changes detected in composer.lock"
+          fi
+
+      - name: Get latest tag
+        id: get-latest-tag
+        if: steps.check-changes.outputs.changes == 'true'
+        run: |
+          # Get the latest tag matching the pattern
+          LATEST_TAG=$(git tag -l "11.7.*" | sort -V | tail -n 1)
+          if [ -z "$LATEST_TAG" ]; then
+            # No existing tag, start with 11.7.0
+            NEW_TAG="11.7.0"
+          else
+            # Extract version parts
+            VERSION=${LATEST_TAG#11.7.}
+            PATCH=$((VERSION + 1))
+            NEW_TAG="11.7.$PATCH"
+          fi
+          echo "new_tag=$NEW_TAG" >> $GITHUB_OUTPUT
+          echo "New version will be: $NEW_TAG"
+
+      - name: Configure Git
+        if: steps.check-changes.outputs.changes == 'true'
+        run: |
+          git config --global user.name 'github-actions[bot]'
+          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+
+      - name: Commit and push changes
+        if: steps.check-changes.outputs.changes == 'true'
+        run: |
+          git add composer.lock
+          git commit -m "chore: update composer dependencies to ${{ steps.get-latest-tag.outputs.new_tag }}"
+          git push origin ${{ github.event.inputs.branch || '11.7.x-dev' }}
+
+      - name: Create and push tag
+        if: steps.check-changes.outputs.changes == 'true'
+        run: |
+          git tag -a ${{ steps.get-latest-tag.outputs.new_tag }} -m "Release ${{ steps.get-latest-tag.outputs.new_tag }}"
+          git push origin ${{ steps.get-latest-tag.outputs.new_tag }}
+
+      - name: Create GitHub Release
+        if: steps.check-changes.outputs.changes == 'true'
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: ${{ steps.get-latest-tag.outputs.new_tag }}
+          name: Release ${{ steps.get-latest-tag.outputs.new_tag }}
+          body: |
+            Automated composer dependency updates.
+
+            This release includes updated composer dependencies.
+
+            **Changes:**
+            - Updated composer.lock with latest compatible versions
+          draft: false
+          prerelease: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: No changes detected
+        if: steps.check-changes.outputs.changes == 'false'
+        run: echo "No composer.lock changes detected. Skipping tag creation."
