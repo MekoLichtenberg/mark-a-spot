@@ -8,6 +8,10 @@ on:
         required: false
         default: '11.7.x-dev'
 
+concurrency:
+  group: composer-update-${{ github.event.inputs.branch || '11.7.x-dev' }}
+  cancel-in-progress: true
+
 jobs:
   composer-update:
     runs-on: ubuntu-latest
@@ -20,6 +24,7 @@ jobs:
         with:
           ref: ${{ github.event.inputs.branch || '11.7.x-dev' }}
           fetch-depth: 0
+          persist-credentials: false
 
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
@@ -94,7 +99,7 @@ jobs:
 
       - name: Create GitHub Release
         if: steps.check-changes.outputs.changes == 'true'
-        uses: softprops/action-gh-release@v1
+        uses: softprops/action-gh-release@v2
         with:
           tag_name: ${{ steps.get-latest-tag.outputs.new_tag }}
           name: Release ${{ steps.get-latest-tag.outputs.new_tag }}

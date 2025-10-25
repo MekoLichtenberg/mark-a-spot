@@ -37,13 +37,8 @@ RUN apk add --no-cache \
 COPY . .
 RUN composer install --no-dev --optimize-autoloader \
     && composer clear-cache
-# Remove dev depndencies for better scout rating
-RUN rm -rf rm -rf web/core/modules/package_manager/tests/*
-
-# Generate SBOM in builder
-RUN apk add --no-cache syft \
-    && syft . -o spdx-json=/sbom.json
-
+# Remove dev dependencies for better scout rating
+RUN rm -rf web/core/modules/package_manager/tests/*
 
 # =========================
 #  Production stage
@@ -92,10 +87,9 @@ EXPOSE 9000
 HEALTHCHECK --interval=30s --timeout=3s \
     CMD curl -f http://localhost/ || exit 1
 
-# Copy SBOM from builder
+# OCI labels
 LABEL org.opencontainers.image.source="https://github.com/markaspot/mark-a-spot"
 LABEL org.opencontainers.image.authors="Mark-a-Spot"
 LABEL org.opencontainers.image.licenses="GPL-2.0-or-later"
 LABEL org.opencontainers.image.url="https://mark-a-spot.com"
 LABEL org.opencontainers.image.description="Mark-a-Spot application"
-LABEL org.opencontainers.image.sbom="sbom.json"

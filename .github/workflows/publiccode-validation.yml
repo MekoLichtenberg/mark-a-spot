@@ -8,11 +8,20 @@ on:
     paths:
       - publiccode.yml
 
+permissions:
+  contents: read
+
+concurrency:
+  group: publiccode-validation-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
 jobs:
   publiccode_yml_validation:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
       - uses: italia/publiccode-parser-action@v1
         with:
           publiccode: "publiccode.yml"
