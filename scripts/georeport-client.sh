@@ -10,8 +10,8 @@ UUID=$(./vendor/bin/drush sql:query "SELECT uuid FROM users WHERE uid = 2" --dat
 API_KEY=${GEOREPORT_API_KEY:-$(./vendor/bin/drush config-get services_api_key_auth.api_key.test_mas | awk '/key:/ {print $2}')}
 
 # Set the center latitude and longitude
-CENTER_LAT=$(./vendor/bin/drush cget markaspot_map.settings center_lat --format=string)
-CENTER_LNG=$(./vendor/bin/drush cget markaspot_map.settings center_lng --format=string)
+CENTER_LAT=$(./vendor/bin/drush cget markaspot_nuxt.settings center_lat --format=string)
+CENTER_LNG=$(./vendor/bin/drush cget markaspot_nuxt.settings center_lng --format=string)
 
 # Set the radius in kilometers
 RADIUS=15
