@@ -50,6 +50,42 @@ Mark-a-Spot is designed for:
 - **Civic Tech Innovators:**  
   To leverage an adaptable, open-source solution for developing and deploying civic technologies.
 
+## Architecture
+
+Mark-a-Spot uses a **decoupled/headless architecture** with Drupal as the backend API server and a modern JavaScript frontend.
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│                     Frontend (PWA)                          │
+│         Vue 3 · TypeScript · Tailwind · MapLibre            │
+│                                                             │
+│     Components ─── Stores (Pinia) ─── API Composables       │
+└─────────────────────────────┬───────────────────────────────┘
+                              │
+                    HTTPS/JSON (REST)
+                              │
+┌─────────────────────────────▼───────────────────────────────┐
+│                      Drupal 11 Backend                      │
+│              PHP 8.3 · MySQL · Search API                   │
+│                                                             │
+│  ┌──────────────────────┐  ┌──────────────────────┐        │
+│  │     Open311 API      │  │       JSON:API       │        │
+│  │     (GeoReport)      │  │        (CRUD)        │        │
+│  └──────────────────────┘  └──────────────────────┘        │
+└─────────────────────────────────────────────────────────────┘
+```
+
+The backend exposes two APIs:
+- **Open311 GeoReport v2** – Standardized civic issue API for reading/writing service requests
+- **JSON:API** – Drupal's RESTful API for content management
+
+## Requirements
+
+- **PHP** 8.3+
+- **Node.js** 22+ (LTS)
+- **MySQL** 8.0+ or MariaDB 10.6+
+- **Composer** 2.x
+
 ## Getting Started
 
 These instructions will guide you through getting a copy of the project up and running on your local machine for development and testing purposes.
@@ -64,10 +100,20 @@ Install one (or both) of the following toolchains before you begin:
 ## Installation
 
 **Quick start (DDEV)** *(requires DDEV to be installed first)*
-- `git clone https://github.com/markaspot/mark-a-spot.git`
-- `cd mark-a-spot`
-- `ddev config && ddev start`
-- `ddev ssh` → `./scripts/start.sh -y`
+
+```bash
+git clone https://github.com/markaspot/mark-a-spot.git
+cd mark-a-spot
+ddev start
+ddev ssh
+./scripts/start.sh -y
+exit
+```
+
+After installation, access:
+- **Backend (Drupal):** https://mark-a-spot.ddev.site
+- **Frontend (UI):** https://mark-a-spot.ddev.site:8040
+- **Admin login:** Run `ddev drush uli` to get a one-time login link
 
 ### Which environment should I use?
 - **DDEV** – best for day-to-day development, automatic HTTPS, and a config you can share with teammates.
@@ -130,6 +176,38 @@ Once the script has executed, the application should be accessible at http://loc
     docker exec -it markaspot ./scripts/start.sh -y
     ```
 
+
+## Environment Variables
+
+Key environment variables for deployment:
+
+| Variable | Description | Example |
+|----------|-------------|---------|
+| `GEOREPORT_API_KEY` | API key for GeoReport v2 authentication | `abc123...` |
+| `DRUPAL_DATABASE_*` | Database connection settings | See `env.example` |
+
+The installer generates a fresh `GEOREPORT_API_KEY` on first run. To use a specific key, set it before installation.
+
+## API Documentation
+
+Mark-a-Spot implements the [Open311 GeoReport v2](https://wiki.open311.org/GeoReport_v2) standard.
+
+**Endpoints:**
+- `GET /georeport/v2/services.json` – List available service categories
+- `GET /georeport/v2/requests.json` – List service requests
+- `GET /georeport/v2/requests/{id}.json` – Get single request
+- `POST /georeport/v2/requests.json` – Create new request
+
+**Authentication:**
+- **Read**: API key via `api_key` parameter or header
+- **Write**: Anonymous (with CSRF token) or authenticated session
+
+## Contributing
+
+Contributions are welcome! Please feel free to submit issues and pull requests.
+
+- **Issues**: [GitHub Issues](https://github.com/markaspot/mark-a-spot/issues)
+- **Profile**: [markaspot/markaspot](https://github.com/markaspot/markaspot)
 
 ## License
 

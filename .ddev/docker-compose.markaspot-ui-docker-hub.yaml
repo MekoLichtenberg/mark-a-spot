@@ -14,10 +14,9 @@ services:
     expose:
       - "3000"
     environment:
-      - CLIENT=bonn
       - NUXT_API_BASE=http://web
+      - NUXT_GEOREPORT_API_BASE=https://${DDEV_SITENAME}.${DDEV_TLD}
       - GEOREPORT_API_KEY=${GEOREPORT_API_KEY:-changeme}
-      - JSONAPI_RANDOM_PATH="jsonapi"
       - USE_PROXY="true"
       - NODE_ENV=production
       - HOST=0.0.0.0
