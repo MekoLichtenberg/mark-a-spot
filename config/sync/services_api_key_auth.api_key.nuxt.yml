@@ -1,0 +1,7 @@
+langcode: en
+status: true
+dependencies: {  }
+id: nuxt
+label: nuxt
+key: CHANGE_ME_NUXT_API_KEY
+user_uuid: null

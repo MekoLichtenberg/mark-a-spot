@@ -102,7 +102,7 @@ content:
       tileServerUrl: ''
       wmsLayer: ''
       mapboxToken: ''
-      mapboxStyle: 'https://api.maptiler.com/maps/basic-v2/style.json?key=bNO6K7YHmiJ3kLeuhrOK'
+      mapboxStyle: 'https://tiles.openfreemap.org/styles/liberty'
       maplibre: '1'
       customAttribution: '© MapTiler</a> <a href="https://www.openstreetmap.org/copyright" target="_blank">© OpenStreetMap contributors</a>'
       serviceUrl: 'https://nominatim.openstreetmap.org/'

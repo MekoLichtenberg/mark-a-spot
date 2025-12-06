@@ -1,9 +1,9 @@
-uuid: d13c0444-0d49-434a-858c-a89348ae8e95
+uuid: 22be92d8-3cfb-4e8b-a3a1-ab341e5ceade
 langcode: en
 status: true
 dependencies:
   config:
-    - group.relationship_type.jurisdiction-449f6e9915493991502
+    - group.relationship_type.organisation-group_node-service_request
   module:
     - content_translation
 third_party_settings:
@@ -11,8 +11,8 @@ third_party_settings:
     enabled: false
     bundle_settings:
       untranslatable_fields_hide: '0'
-id: group_relationship.jurisdiction-449f6e9915493991502
+id: group_relationship.organisation-group_node-service_request
 target_entity_type_id: group_relationship
-target_bundle: jurisdiction-449f6e9915493991502
+target_bundle: organisation-group_node-service_request
 default_langcode: site_default
 language_alterable: false

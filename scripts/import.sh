@@ -14,8 +14,10 @@ drush en migrate_tools migrate_plus migrate_source_csv -y
 
 printf "\e[36mCustom module and migration created successfully...\e[0m\n"
 
-# Define migration IDs
+# Define migration IDs (groups first, then content)
 MIGRATIONS="
+  markaspot_migrate_default_content_group_jurisdiction
+  markaspot_migrate_default_content_group_organisation
   markaspot_migrate_default_content_page
   markaspot_migrate_default_content_boilerplate
   markaspot_migrate_default_content_service_status
