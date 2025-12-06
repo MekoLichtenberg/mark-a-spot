@@ -7,9 +7,9 @@ dependencies:
 _core:
   default_config_hash: null
 id: user_admin_people
-label: Benutzer
+label: User
 module: user
-description: 'Menschen finden und verwalten, die mit Ihrer Website in Kontakt stehen.'
+description: 'Find and manage people who interact with your site.'
 tag: default
 base_table: users_field_data
 base_field: uid
@@ -20,7 +20,7 @@ display:
     display_plugin: default
     position: 0
     display_options:
-      title: Benutzer
+      title: People
       fields:
         user_bulk_form:
           id: user_bulk_form
@@ -82,7 +82,7 @@ display:
           entity_type: user
           entity_field: name
           plugin_id: field
-          label: Benutzername
+          label: Username
           exclude: false
           alter:
             alter_text: false
@@ -842,14 +842,14 @@ display:
       menu:
         type: 'default tab'
         title: Liste
-        description: 'Menschen finden und verwalten, die mit Ihrer Website in Kontakt stehen.'
+        description: 'Find and manage people who interact with your site.'
         weight: -10
         menu_name: admin
         context: ''
       tab_options:
         type: normal
-        title: Benutzer
-        description: 'Verwalten von Benutzerkonten, Rollen und Zugriffsrechten.'
+        title: People
+        description: 'Manage user accounts, roles, and permissions.'
         weight: 0
         menu_name: admin
       always_use_admin_theme: false

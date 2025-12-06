@@ -8,9 +8,9 @@ dependencies:
 _core:
   default_config_hash: null
 id: content_recent
-label: 'Neuester Inhalt'
+label: 'Recent content'
 module: node
-description: 'Neuer Inhalt.'
+description: 'New content.'
 tag: default
 base_table: node_field_data
 base_field: nid
@@ -21,7 +21,7 @@ display:
     display_plugin: default
     position: 0
     display_options:
-      title: 'Neuester Inhalt'
+      title: 'Recent content'
       fields:
         title:
           id: title

@@ -10,7 +10,7 @@ _core:
 id: files
 label: Dateien
 module: file
-description: 'Dateien suchen und verwalten.'
+description: 'Find and manage files.'
 tag: default
 base_table: file_managed
 base_field: fid

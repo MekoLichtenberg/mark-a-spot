@@ -10,9 +10,9 @@ dependencies:
 _core:
   default_config_hash: null
 id: archive
-label: Archiv
+label: Archive
 module: node
-description: 'Gesamter Inhalt, nach Monaten'
+description: 'All content, by month'
 tag: default
 base_table: node_field_data
 base_field: nid

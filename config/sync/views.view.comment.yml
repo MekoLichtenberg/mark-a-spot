@@ -10,7 +10,7 @@ _core:
 id: comment
 label: Comments
 module: comment
-description: 'Kommentare finden und verwalten.'
+description: 'Find and manage comments.'
 tag: default
 base_table: comment_field_data
 base_field: cid

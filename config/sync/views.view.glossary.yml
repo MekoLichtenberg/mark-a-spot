@@ -10,9 +10,9 @@ dependencies:
 _core:
   default_config_hash: null
 id: glossary
-label: Glossar
+label: Glossary
 module: node
-description: 'Gesamter Inhalt, alphabetisch'
+description: 'All content, alphabetically'
 tag: default
 base_table: node_field_data
 base_field: nid
