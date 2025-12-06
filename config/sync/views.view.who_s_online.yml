@@ -7,7 +7,7 @@ dependencies:
 _core:
   default_config_hash: null
 id: who_s_online
-label: 'Who'"'"'s online block'
+label: "Who's online block"
 module: user
 description: 'Shows usernames of recently active users and total number of active users.'
 tag: default
@@ -214,7 +214,7 @@ display:
     display_options:
       display_description: 'A list of currently logged in users.'
       display_extenders: {  }
-      block_description: 'Who'"'"'s online'
+      block_description: "Who's online"
     cache_metadata:
       max-age: -1
       contexts:
