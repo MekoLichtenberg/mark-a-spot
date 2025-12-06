@@ -6663,12 +6663,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/markaspot/markaspot.git",
-                "reference": "8c1dc7810a254a96a309dd8ff1d6c0b5418c440d"
+                "reference": "1a3a67cc516013eb894d07070674c62f79bb8b57"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/markaspot/markaspot/zipball/8c1dc7810a254a96a309dd8ff1d6c0b5418c440d",
-                "reference": "8c1dc7810a254a96a309dd8ff1d6c0b5418c440d",
+                "url": "https://api.github.com/repos/markaspot/markaspot/zipball/1a3a67cc516013eb894d07070674c62f79bb8b57",
+                "reference": "1a3a67cc516013eb894d07070674c62f79bb8b57",
                 "shasum": ""
             },
             "require": {
@@ -6687,6 +6687,7 @@
                 "drupal/gin": "^5",
                 "drupal/gin_login": "^2.1",
                 "drupal/gin_toolbar": "^3",
+                "drupal/group": "^3",
                 "drupal/iconify_field": "^1.2",
                 "drupal/image_effects": "^4",
                 "drupal/inline_entity_form": "^3",
@@ -6768,7 +6769,7 @@
                 "issues": "https://github.com/markaspot/markaspot/issues",
                 "source": "https://github.com/markaspot/markaspot/tree/11.7.x-dev"
             },
-            "time": "2025-11-26T14:37:56+00:00"
+            "time": "2025-12-06T05:05:13+00:00"
         },
         {
             "name": "masterminds/html5",
