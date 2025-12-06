@@ -7,7 +7,7 @@ dependencies:
 _core:
   default_config_hash: null
 id: node_unpublish_action
-label: 'Inhalt offline nehmen'
+label: 'Unpublish content'
 type: node
 plugin: 'entity:unpublish_action:node'
 configuration: {  }

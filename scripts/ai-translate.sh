@@ -50,7 +50,7 @@ for csv_file in "$ARTIFACTS_DIR"/*.csv; do
     fi
 
     case "$filename" in
-      "taxonomy_service_categories.csv"|"taxonomy_service_provider.csv"|"taxonomy_service_status.csv"|"page.csv"|"boilerplate.csv"|"block.csv"|"menu.csv")
+      "taxonomy_service_categories.csv"|"taxonomy_service_provider.csv"|"taxonomy_service_status.csv"|"page.csv"|"boilerplate.csv"|"block.csv"|"menu.csv"|"group_jurisdiction.csv"|"group_organisation.csv")
         # Continue with translation
         ;;
       *)
@@ -123,6 +123,15 @@ for csv_file in "$ARTIFACTS_DIR"/*.csv; do
        "menu.csv")
          echo "Translate this CSV data from English to $LANG_CODE. Translate ONLY the text in column 1 (title) and column 2 (description). Change langcode in column 4 from \"en\" to \"$LANG_CODE\". All other columns MUST remain EXACTLY the same, without any changes to numbers, formatting, quotes or values. This is critically important for all fields, especially uuid, link.uri, weight and parent. Return ONLY the translated CSV rows without the header." > "$prompt_file"
          ;;
+      "group_jurisdiction.csv"|"group_organisation.csv")
+        echo "Translate this CSV data from English to $LANG_CODE. The CSV has columns: uuid, langcode, type, label, field_head_organisation_e_mail. Translate ONLY the 'label' column (column 4). Change langcode in column 2 from \"en\" to \"$LANG_CODE\". All other columns MUST remain EXACTLY the same - especially uuid, type, and email addresses. Return ONLY the translated CSV rows without the header." > "$prompt_file"
+        echo "" >> "$prompt_file"
+        echo "IMPORTANT:" >> "$prompt_file"
+        echo "1. Only translate the label (e.g., 'Default Jurisdiction' -> 'Jurisdicción Predeterminada' for Spanish)" >> "$prompt_file"
+        echo "2. Keep uuid exactly as-is (e.g., 550e8400-e29b-41d4-a716-446655440001)" >> "$prompt_file"
+        echo "3. Keep type exactly as-is (e.g., 'jur' or 'org')" >> "$prompt_file"
+        echo "4. Keep email addresses exactly as-is" >> "$prompt_file"
+        ;;
     esac
     # --- End Prompt Generation ---
 
@@ -271,7 +280,8 @@ echo "Setting processed content as primary language content in $ARTIFACTS_DIR...
 updated_lang_count=0
 for csv_file in "$ARTIFACTS_DIR"/*.csv; do
   # Ensure it's a file and not a backup
-  if [ -f "$csv_file" ] && ! [[ "$csv_file" == *.bak ]]; then
+  case "$csv_file" in *.bak) continue ;; esac
+  if [ -f "$csv_file" ]; then
     # Check if the file actually contains the target language code (it might be original English if fallback occurred)
     # Also check if it contains 'langcode' column header
     if grep -q "langcode" "$csv_file" && grep -q "\"$LANG_CODE\"" "$csv_file"; then

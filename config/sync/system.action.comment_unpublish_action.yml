@@ -7,7 +7,7 @@ dependencies:
 _core:
   default_config_hash: null
 id: comment_unpublish_action
-label: 'Kommentar offline nehmen'
+label: 'Unpublish comment'
 type: comment
 plugin: 'entity:unpublish_action:comment'
 configuration: {  }

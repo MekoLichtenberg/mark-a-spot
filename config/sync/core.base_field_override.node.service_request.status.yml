@@ -8,7 +8,7 @@ id: node.service_request.status
 field_name: status
 entity_type: node
 bundle: service_request
-label: Veröffentlicht
+label: Published
 description: ''
 required: false
 translatable: false

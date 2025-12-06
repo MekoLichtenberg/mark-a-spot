@@ -81,8 +81,8 @@ if [ "$ENVIRONMENT" != "prod" ]; then
 
 // Override the GeoReport API key with environment configuration when available.
 if ((isset($app_root) || PHP_SAPI === 'cli') && ($geoKey = getenv('GEOREPORT_API_KEY'))) {
-  if ($geoKey !== 'changeme' && $geoKey !== '') {
-    $config['services_api_key_auth.api_key.test_mas']['key'] = $geoKey;
+  if ($geoKey !== '*' && $geoKey !== '') {
+    $config['services_api_key_auth.api_key.nuxt']['key'] = $geoKey;
   }
 }
 
@@ -315,7 +315,75 @@ EOF
   printf "\e[36mAdd Admin Role...\e[0m\n"
   drush user:role:add "administrator" --uid=1
 
+  # Set coordinates in all config locations
+  printf "\e[36mConfiguring map coordinates...\e[0m\n"
 
+  # markaspot_nuxt.settings - main frontend map center
+  drush config:set markaspot_nuxt.settings center_lat "$latitude" -y >/dev/null
+  drush config:set markaspot_nuxt.settings center_lng "$longitude" -y >/dev/null
+
+  # Field default value for geolocation field
+  drush config:set field.field.node.service_request.field_geolocation default_value.0.lat "$latitude" -y >/dev/null
+  drush config:set field.field.node.service_request.field_geolocation default_value.0.lng "$longitude" -y >/dev/null
+
+  # Widget settings for form displays (map center in edit forms)
+  drush config:set core.entity_form_display.node.service_request.default third_party_settings.geolocation.centre.lat "$latitude" -y >/dev/null 2>&1 || true
+  drush config:set core.entity_form_display.node.service_request.default third_party_settings.geolocation.centre.lng "$longitude" -y >/dev/null 2>&1 || true
+
+  # Update widget center_lat/center_lng settings
+  for form_mode in default management nuxt; do
+    drush config:set "core.entity_form_display.node.service_request.$form_mode" content.field_geolocation.settings.center_lat "$latitude" -y >/dev/null 2>&1 || true
+    drush config:set "core.entity_form_display.node.service_request.$form_mode" content.field_geolocation.settings.center_lng "$longitude" -y >/dev/null 2>&1 || true
+  done
+
+  printf "\e[32mMap coordinates set to: %s, %s\e[0m\n" "$latitude" "$longitude"
+
+  # Fix GeoReport status configuration
+  # status_closed should be 5,6 (Closed, Archived) not 3,4
+  printf "\e[36mConfiguring GeoReport status mappings...\e[0m\n"
+  drush config:delete markaspot_open311.settings status_closed.3 -y >/dev/null 2>&1 || true
+  drush config:delete markaspot_open311.settings status_closed.4 -y >/dev/null 2>&1 || true
+  drush config:set markaspot_open311.settings status_closed.5 5 -y >/dev/null 2>&1
+  drush config:set markaspot_open311.settings status_closed.6 6 -y >/dev/null 2>&1
+
+  # Add view permission to organisation-anonymous group role for API access
+  printf "\e[36mConfiguring Group permissions for anonymous API access...\e[0m\n"
+  drush php:eval '
+    $config = \Drupal::service("config.factory")->getEditable("group.role.organisation-anonymous");
+    $perms = $config->get("permissions") ?: [];
+    if (!in_array("view group_node:service_request entity", $perms)) {
+      $perms[] = "view group_node:service_request entity";
+      $config->set("permissions", $perms)->save();
+    }
+  ' 2>/dev/null || true
+
+  # Add admin user to groups with admin role
+  printf "\e[36mAdding admin user to groups...\e[0m\n"
+  drush php:eval '
+    $user = \Drupal\user\Entity\User::load(1);
+    if ($user) {
+      $group_storage = \Drupal::entityTypeManager()->getStorage("group");
+      $role_storage = \Drupal::entityTypeManager()->getStorage("group_role");
+      $groups = $group_storage->loadMultiple();
+      foreach ($groups as $group) {
+        $membership = $group->getMember($user);
+        if (!$membership) {
+          $group_type = $group->getGroupType()->id();
+          $admin_role_id = $group_type . "-admin";
+          // Check if admin role exists
+          $admin_role = $role_storage->load($admin_role_id);
+          if ($admin_role) {
+            $group->addMember($user, ["group_roles" => [$admin_role_id]]);
+            echo "Added admin to group: " . $group->label() . " (with admin role)\n";
+          } else {
+            // Add without specific role if admin role does not exist
+            $group->addMember($user);
+            echo "Added admin to group: " . $group->label() . " (no admin role found)\n";
+          }
+        }
+      }
+    }
+  ' 2>/dev/null || true
 
   # Process language settings
   language=$(echo "$locale" | cut -d '_' -f1)
@@ -424,29 +492,69 @@ EOF
   fi
 
   printf "\e[36mExecuting georeport client to import initial service requests...\e[0m\n"
-  # Ensure GeoReport API key exists in Drupal config and export for clients.
+  # Ensure GeoReport API key exists in environment and Drupal config.
+  # Config file has key: '*' (safe for git), real key injected via settings.php.
   ENV_GEOREPORT_API_KEY=${GEOREPORT_API_KEY:-}
-  CURRENT_API_KEY=$(drush config-get services_api_key_auth.api_key.test_mas key --format=string 2>/dev/null || true)
 
-  if [ -n "$ENV_GEOREPORT_API_KEY" ] && [ "$ENV_GEOREPORT_API_KEY" != "changeme" ]; then
+  if [ -n "$ENV_GEOREPORT_API_KEY" ] && [ "$ENV_GEOREPORT_API_KEY" != "*" ]; then
     GEOREPORT_API_KEY="$ENV_GEOREPORT_API_KEY"
-    drush config-set services_api_key_auth.api_key.test_mas key "$GEOREPORT_API_KEY" -y >/dev/null
-  elif [ -n "$CURRENT_API_KEY" ] && [ "$CURRENT_API_KEY" != "changeme" ]; then
-    GEOREPORT_API_KEY="$CURRENT_API_KEY"
   else
-    GEOREPORT_API_KEY=$(php -r 'echo bin2hex(random_bytes(8));')
-    drush config-set services_api_key_auth.api_key.test_mas key "$GEOREPORT_API_KEY" -y >/dev/null
+    # Generate a new API key
+    GEOREPORT_API_KEY=$(php -r 'echo bin2hex(random_bytes(16));')
+  fi
+
+  # Set the key in Drupal config for immediate use during installation
+  drush config-set services_api_key_auth.api_key.nuxt key "$GEOREPORT_API_KEY" -y >/dev/null
+  printf "\e[32mAPI key set in Drupal config\e[0m\n"
+
+  # Write to .ddev/.env for DDEV environments (persists across restarts)
+  DDEV_ENV_FILE="$PROJECT_ROOT/.ddev/.env"
+  if [ -d "$PROJECT_ROOT/.ddev" ]; then
+    # Create or update .ddev/.env with the API key
+    if [ -f "$DDEV_ENV_FILE" ]; then
+      # Remove existing GEOREPORT_API_KEY line if present
+      grep -v "^GEOREPORT_API_KEY=" "$DDEV_ENV_FILE" > "${DDEV_ENV_FILE}.tmp" 2>/dev/null || true
+      mv "${DDEV_ENV_FILE}.tmp" "$DDEV_ENV_FILE"
+    fi
+    echo "GEOREPORT_API_KEY=$GEOREPORT_API_KEY" >> "$DDEV_ENV_FILE"
+    printf "\e[32mAPI key written to .ddev/.env (persists after restart)\e[0m\n"
   fi
 
   export GEOREPORT_API_KEY
   printf "GeoReport API key: %s\n" "$GEOREPORT_API_KEY"
-  printf "Hint: update GEOREPORT_API_KEY in your host environment (e.g. .env) so external clients use the same key.\n"
+
+  # Restart DDEV to apply API key to UI container
+  if [ -n "$DDEV_HOSTNAME" ]; then
+    printf "\e[36mRestarting DDEV to apply API key to UI container...\e[0m\n"
+    ddev restart
+  fi
 
   $SCRIPT_DIR/georeport-client.sh
 
-  printf "\e[36mOne-Time Login for User 1 ...\e[0m\n"
-  printf "\e[36m...\e[0m\n"
-  drush uli --uri=http://localhost
-  printf "\e[36m \e[0m\n"
-  printf "\e[36mInstallation completed...\e[0m\n"
+  printf "\n\e[32m╔════════════════════════════════════════════════════════════════════════╗\e[0m\n"
+  printf "\e[32m║ Mark-a-Spot Installation Complete!                                     ║\e[0m\n"
+  printf "\e[32m╠════════════════════════════════════════════════════════════════════════╣\e[0m\n"
+  printf "\e[32m║\e[0m City: %-62s \e[32m║\e[0m\n" "$city"
+  printf "\e[32m║\e[0m Locale: %-60s \e[32m║\e[0m\n" "$locale"
+  printf "\e[32m║\e[0m                                                                        \e[32m║\e[0m\n"
+  printf "\e[32m║\e[0m GeoReport API Key: %-50s \e[32m║\e[0m\n" "$GEOREPORT_API_KEY"
+  printf "\e[32m║\e[0m                                                                        \e[32m║\e[0m\n"
+  printf "\e[32m║\e[0m Users created:                                                         \e[32m║\e[0m\n"
+  printf "\e[32m║\e[0m   • admin (uid 1)                                                      \e[32m║\e[0m\n"
+  printf "\e[32m║\e[0m   • api_user (api_password) - API access                               \e[32m║\e[0m\n"
+  printf "\e[32m║\e[0m   • moderation_1, moderation_2 (mod_password) - Moderators             \e[32m║\e[0m\n"
+  printf "\e[32m║\e[0m                                                                        \e[32m║\e[0m\n"
+  printf "\e[32m║\e[0m Service requests: 50 test entries created                              \e[32m║\e[0m\n"
+  printf "\e[32m╚════════════════════════════════════════════════════════════════════════╝\e[0m\n"
+
+  printf "\n\e[36mOne-Time Login for Admin:\e[0m\n"
+  if [ -n "$DDEV_HOSTNAME" ]; then
+    drush uli --uri="https://$DDEV_HOSTNAME"
+  else
+    drush uli --uri=http://localhost
+  fi
+
+  printf "\n\e[33mNext steps for DDEV:\e[0m\n"
+  printf "  1. Run 'ddev restart' to apply the API key to frontend\n"
+  printf "  2. Access frontend at: https://\$DDEV_HOSTNAME:8040\n\n"
 fi

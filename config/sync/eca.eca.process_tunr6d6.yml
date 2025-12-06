@@ -113,7 +113,7 @@ actions:
     label: 'Send E-Mail'
     configuration:
       recipient: '[node:field_e_mail:value]'
-      subject: 'Your Request #[node:request_id] in Mängelmelder Mascity. Unfortunately, we are not responsible.'
+      subject: 'Your Request #[node:request_id] in Mark-a-Spot. Unfortunately, we are not responsible.'
       message: |
         Good day!
 

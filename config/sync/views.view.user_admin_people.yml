@@ -7,9 +7,9 @@ dependencies:
 _core:
   default_config_hash: null
 id: user_admin_people
-label: Benutzer
+label: User
 module: user
-description: 'Menschen finden und verwalten, die mit Ihrer Website in Kontakt stehen.'
+description: 'Find and manage people who interact with your site.'
 tag: default
 base_table: users_field_data
 base_field: uid
@@ -20,7 +20,7 @@ display:
     display_plugin: default
     position: 0
     display_options:
-      title: Benutzer
+      title: People
       fields:
         user_bulk_form:
           id: user_bulk_form
@@ -82,7 +82,7 @@ display:
           entity_type: user
           entity_field: name
           plugin_id: field
-          label: Benutzername
+          label: Username
           exclude: false
           alter:
             alter_text: false
@@ -419,7 +419,7 @@ display:
             items_per_page_label: 'Elemente pro Seite'
             items_per_page_options: '5, 10, 25, 50'
             items_per_page_options_all: false
-            items_per_page_options_all_label: '- Alle -'
+            items_per_page_options_all_label: '- All -'
             offset: false
             offset_label: Offset
           quantity: 9
@@ -428,11 +428,11 @@ display:
         options:
           submit_button: Filter
           reset_button: true
-          reset_button_label: Zurücksetzen
-          exposed_sorts_label: 'Sortieren nach'
+          reset_button_label: Reset
+          exposed_sorts_label: 'Sort by'
           expose_sort_order: true
-          sort_asc_label: Aufsteigend
-          sort_desc_label: Absteigend
+          sort_asc_label: Ascending
+          sort_desc_label: Descending
       access:
         type: perm
         options:
@@ -449,7 +449,7 @@ display:
           admin_label: ''
           plugin_id: text_custom
           empty: true
-          content: 'Keine Personen verfügbar.'
+          content: 'No people available.'
           tokenize: false
       sorts:
         created:
@@ -483,7 +483,7 @@ display:
           exposed: true
           expose:
             operator_id: combine_op
-            label: 'Name oder E-Mail-Adresse enthält'
+            label: 'Name or email contains'
             description: ''
             use_operator: false
             operator: combine_op
@@ -842,14 +842,14 @@ display:
       menu:
         type: 'default tab'
         title: Liste
-        description: 'Menschen finden und verwalten, die mit Ihrer Website in Kontakt stehen.'
+        description: 'Find and manage people who interact with your site.'
         weight: -10
         menu_name: admin
         context: ''
       tab_options:
         type: normal
-        title: Benutzer
-        description: 'Verwalten von Benutzerkonten, Rollen und Zugriffsrechten.'
+        title: People
+        description: 'Manage user accounts, roles, and permissions.'
         weight: 0
         menu_name: admin
       always_use_admin_theme: false

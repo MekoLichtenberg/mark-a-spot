@@ -3,7 +3,7 @@ langcode: en
 status: true
 dependencies:
   config:
-    - group.type.organisation
+    - group.type.org
     - user.role.anonymous
 id: organisation-anonymous
 label: Anonymous
@@ -11,5 +11,6 @@ weight: -102
 admin: false
 scope: outsider
 global_role: anonymous
-group_type: organisation
-permissions: {  }
+group_type: org
+permissions:
+  - 'view group_node:service_request entity'

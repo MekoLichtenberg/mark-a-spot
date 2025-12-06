@@ -19,7 +19,7 @@ dependencies:
 _core:
   default_config_hash: null
 id: authenticated
-label: 'Angemeldete Benutzer'
+label: 'Authenticated user'
 weight: -8
 is_admin: false
 permissions:

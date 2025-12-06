@@ -10,7 +10,7 @@ field_name: field_object_id
 entity_type: node
 bundle: service_request
 label: 'Object ID'
-description: 'Auf vielen Einrichtungen und Objekten befindet sich eine Nummer (z.B. auf Papierkörben, Laternen, Parkscheinautomaten, Spielplätzen). Tragen Sie hier diese Nummern ein.'
+description: 'Many facilities and objects have an ID number (e.g., on trash cans, street lights, parking meters, playgrounds). Enter that number here.'
 required: false
 translatable: false
 default_value: {  }

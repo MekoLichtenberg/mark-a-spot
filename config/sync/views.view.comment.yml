@@ -10,7 +10,7 @@ _core:
 id: comment
 label: Comments
 module: comment
-description: 'Kommentare finden und verwalten.'
+description: 'Find and manage comments.'
 tag: default
 base_table: comment_field_data
 base_field: cid
@@ -546,7 +546,7 @@ display:
             items_per_page_label: 'Elemente pro Seite'
             items_per_page_options: '5, 10, 25, 50'
             items_per_page_options_all: false
-            items_per_page_options_all_label: '- Alle -'
+            items_per_page_options_all_label: '- All -'
             offset: false
             offset_label: Offset
           quantity: 9
@@ -555,11 +555,11 @@ display:
         options:
           submit_button: Filter
           reset_button: false
-          reset_button_label: Zurücksetzen
-          exposed_sorts_label: 'Sortieren nach'
+          reset_button_label: Reset
+          exposed_sorts_label: 'Sort by'
           expose_sort_order: true
-          sort_asc_label: Aufsteigend
-          sort_desc_label: Absteigend
+          sort_asc_label: Ascending
+          sort_desc_label: Descending
       access:
         type: perm
         options:
@@ -577,7 +577,7 @@ display:
           admin_label: ''
           plugin_id: text_custom
           empty: true
-          content: 'Keine Kommentare verfügbar.'
+          content: 'No comments available.'
           tokenize: false
       sorts:
         changed:
@@ -870,11 +870,11 @@ display:
       cacheable: false
   page_published:
     id: page_published
-    display_title: 'Veröffentlichte Kommentare'
+    display_title: 'Published comments'
     display_plugin: page
     position: 1
     display_options:
-      display_description: 'Die Liste veröffentlichter Kommentare.'
+      display_description: 'List of published comments.'
       display_comment: ''
       exposed_block: false
       display_extenders: {  }
@@ -882,7 +882,7 @@ display:
       menu:
         type: tab
         title: Comments
-        description: 'Kommentare veröffentlicht'
+        description: 'Published comments'
         weight: 0
         menu_name: admin
         parent: ''
@@ -900,7 +900,7 @@ display:
       cacheable: false
   page_unapproved:
     id: page_unapproved
-    display_title: 'Unbestätigte Kommentare'
+    display_title: 'Unapproved comments'
     display_plugin: page
     position: 2
     display_options:
@@ -1582,13 +1582,13 @@ display:
         fields: false
         filters: false
         filter_groups: false
-      display_description: 'Die Liste unveröffentlichter Kommentare'
+      display_description: 'List of unapproved comments'
       display_extenders: {  }
       path: admin/content/comment/approval
       menu:
         type: tab
-        title: 'Unbestätigte Kommentare'
-        description: 'Unveröffentlichte Kommentare'
+        title: 'Unapproved comments'
+        description: 'Unapproved comments'
         weight: 1
         menu_name: admin
         parent: ''

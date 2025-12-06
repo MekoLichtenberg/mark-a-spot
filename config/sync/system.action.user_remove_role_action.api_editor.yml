@@ -7,7 +7,7 @@ dependencies:
   module:
     - user
 id: user_remove_role_action.api_editor
-label: 'Den ausgewählten Benutzern die Rolle API Editor entziehen'
+label: 'Remove the API Editor role from the selected users'
 type: user
 plugin: user_remove_role_action
 configuration:

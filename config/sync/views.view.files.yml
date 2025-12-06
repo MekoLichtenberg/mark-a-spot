@@ -10,7 +10,7 @@ _core:
 id: files
 label: Dateien
 module: file
-description: 'Dateien suchen und verwalten.'
+description: 'Find and manage files.'
 tag: default
 base_table: file_managed
 base_field: fid
@@ -181,7 +181,7 @@ display:
           entity_type: file
           entity_field: filesize
           plugin_id: field
-          label: Größe
+          label: Size
           exclude: false
           alter:
             alter_text: false
@@ -277,8 +277,8 @@ display:
           type: boolean
           settings:
             format: custom
-            format_custom_false: Temporär
-            format_custom_true: Dauerhaft
+            format_custom_false: Temporary
+            format_custom_true: Permanent
         created:
           id: created
           table: file_managed
@@ -354,7 +354,7 @@ display:
           entity_type: file
           entity_field: changed
           plugin_id: field
-          label: 'Datum geändert'
+          label: 'Date changed'
           exclude: false
           alter:
             alter_text: false
@@ -481,7 +481,7 @@ display:
             items_per_page_label: 'Elemente pro Seite'
             items_per_page_options: '5, 10, 25, 50'
             items_per_page_options_all: false
-            items_per_page_options_all_label: '- Alle -'
+            items_per_page_options_all_label: '- All -'
             offset: false
             offset_label: Offset
       exposed_form:
@@ -489,11 +489,11 @@ display:
         options:
           submit_button: Filter
           reset_button: false
-          reset_button_label: Zurücksetzen
-          exposed_sorts_label: 'Sortieren nach'
+          reset_button_label: Reset
+          exposed_sorts_label: 'Sort by'
           expose_sort_order: true
-          sort_asc_label: Aufsteigend
-          sort_desc_label: Absteigend
+          sort_asc_label: Ascending
+          sort_desc_label: Descending
       access:
         type: perm
         options:
@@ -508,7 +508,7 @@ display:
           field: area_text_custom
           plugin_id: text_custom
           empty: true
-          content: 'Keine Dateien verfügbar'
+          content: 'No files available'
       sorts: {  }
       arguments: {  }
       filters:
@@ -747,7 +747,7 @@ display:
       tags: {  }
   page_1:
     id: page_1
-    display_title: Dateiübersicht
+    display_title: 'File overview'
     display_plugin: page
     position: 1
     display_options:
@@ -799,7 +799,7 @@ display:
           group_type: group
           admin_label: ''
           plugin_id: entity_label
-          label: Entität
+          label: Entity
           exclude: false
           alter:
             alter_text: false
@@ -849,7 +849,7 @@ display:
           group_type: group
           admin_label: ''
           plugin_id: standard
-          label: Entitätstyp
+          label: 'Entity type'
           exclude: false
           alter:
             alter_text: false
@@ -1011,7 +1011,7 @@ display:
             items_per_page_label: 'Elemente pro Seite'
             items_per_page_options: '5, 10, 25, 50'
             items_per_page_options_all: false
-            items_per_page_options_all_label: '- Alle -'
+            items_per_page_options_all_label: '- All -'
             offset: false
             offset_label: Offset
       empty: {  }
@@ -1032,7 +1032,7 @@ display:
             title_enable: false
             title: All
           title_enable: true
-          title: 'Dateiverwendungsinformationen für {{ arguments.fid }}'
+          title: 'File usage information for {{ arguments.fid }}'
           default_argument_type: fixed
           default_argument_options:
             argument: ''

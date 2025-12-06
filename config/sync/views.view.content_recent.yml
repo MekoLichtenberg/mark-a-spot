@@ -8,9 +8,9 @@ dependencies:
 _core:
   default_config_hash: null
 id: content_recent
-label: 'Neuester Inhalt'
+label: 'Recent content'
 module: node
-description: 'Neuer Inhalt.'
+description: 'New content.'
 tag: default
 base_table: node_field_data
 base_field: nid
@@ -21,7 +21,7 @@ display:
     display_plugin: default
     position: 0
     display_options:
-      title: 'Neuester Inhalt'
+      title: 'Recent content'
       fields:
         title:
           id: title
@@ -131,13 +131,13 @@ display:
       exposed_form:
         type: basic
         options:
-          submit_button: Suchen
+          submit_button: Search
           reset_button: false
-          reset_button_label: Zurücksetzen
-          exposed_sorts_label: 'Sortieren nach'
+          reset_button_label: Reset
+          exposed_sorts_label: 'Sort by'
           expose_sort_order: true
-          sort_asc_label: Aufsteigend
-          sort_desc_label: Absteigend
+          sort_asc_label: Ascending
+          sort_desc_label: Descending
       access:
         type: perm
         options:

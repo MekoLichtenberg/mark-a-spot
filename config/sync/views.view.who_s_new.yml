@@ -7,9 +7,9 @@ dependencies:
 _core:
   default_config_hash: null
 id: who_s_new
-label: 'Neue Mitglieder'
+label: 'New members'
 module: user
-description: 'Zeigt eine Liste der neuesten Benutzerkonten der Website.'
+description: 'Shows list of newest user accounts on the site.'
 tag: default
 base_table: users_field_data
 base_field: uid
@@ -20,7 +20,7 @@ display:
     display_plugin: default
     position: 0
     display_options:
-      title: 'Neue Mitglieder'
+      title: 'New members'
       fields:
         name:
           id: name
@@ -64,13 +64,13 @@ display:
       exposed_form:
         type: basic
         options:
-          submit_button: Suchen
+          submit_button: Search
           reset_button: false
-          reset_button_label: Zurücksetzen
-          exposed_sorts_label: 'Sortieren nach'
+          reset_button_label: Reset
+          exposed_sorts_label: 'Sort by'
           expose_sort_order: true
-          sort_asc_label: Aufsteigend
-          sort_desc_label: Absteigend
+          sort_asc_label: Ascending
+          sort_desc_label: Descending
       access:
         type: perm
         options:
@@ -180,13 +180,13 @@ display:
       tags: {  }
   block_1:
     id: block_1
-    display_title: 'Neue Mitglieder'
+    display_title: 'New members'
     display_plugin: block
     position: 1
     display_options:
-      display_description: 'Eine Liste neuer Benutzer'
+      display_description: 'A list of new users'
       display_extenders: {  }
-      block_description: 'Neue Mitglieder'
+      block_description: 'New members'
       block_category: User
     cache_metadata:
       max-age: -1

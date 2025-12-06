@@ -74,19 +74,19 @@ actions:
     label: 'Send Mail (Welcome Closed)'
     configuration:
       recipient: '[node:field_e_mail:value]'
-      subject: "Closed Danke für Ihr Anliegen [node:request_id] bei Sag's uns"
+      subject: "Your request [node:request_id] status update"
       message: |-
-        Guten Tag!
+        Hello!
 
-        Ihr Anliegen mit der Nummer #[node:request_id]  ist eingegangen und die Erledigung wurde bei der zuständigen Stelle beauftragt.
+        Your request #[node:request_id]  has been received and assigned to the responsible department.
 
-        Bitte klicken Sie auf den folgenden Link, um sich jederzeit weitere Informationen zu Ihrem Anliegen anzusehen: 
+        Please click the following link to view more information about your request: 
 
         [site:url][node:url:path]
 
-        Bitte beachten Sie: Sollte es sich bei Ihrem Anliegen um einen dringenden Notfall bzw. einer akuter Gefährdung handeln, wenden Sie sich bitte sofort telefonisch an die Polizei (110) bzw. Feuerwehr (112).
+        Please note: If this is an urgent emergency, please contact emergency services immediately.
 
-         -- Dies ist eine automatisch generierte E-Mail, auf die Sie leider nicht antworten können.
+         -- This is an automated email. Please do not reply.
       replace_tokens: ''
     successors:
       -
@@ -118,19 +118,19 @@ actions:
     label: 'Send Mail (Welcome Open)'
     configuration:
       recipient: '[node:field_e_mail:value]'
-      subject: "Progress Danke für Ihr Anliegen [node:request_id] bei Sag's uns"
+      subject: "Your request [node:request_id] status update"
       message: |-
-        Guten Tag!
+        Hello!
 
-        Ihr Anliegen mit der Nummer #[node:request_id]  ist eingegangen und wird bald bearbeitet.
+        Your request #[node:request_id]  has been received and will be processed soon.
 
-        Bitte klicken Sie auf den folgenden Link, um sich jederzeit weitere Informationen zu Ihrem Anliegen anzusehen: 
+        Please click the following link to view more information about your request: 
 
         [site:url][node:url:path]
 
-        Bitte beachten Sie: Sollte es sich bei Ihrem Anliegen um einen dringenden Notfall bzw. einer akuter Gefährdung handeln, wenden Sie sich bitte sofort telefonisch an die Polizei (110) bzw. Feuerwehr (112).
+        Please note: If this is an urgent emergency, please contact emergency services immediately.
 
-         -- Dies ist eine automatisch generierte E-Mail, auf die Sie leider nicht antworten können.
+         -- This is an automated email. Please do not reply.
       replace_tokens: ''
     successors:
       -
@@ -163,6 +163,6 @@ actions:
     configuration:
       replace_tokens: false
       recipient: '[node:field_e_mail:value]'
-      subject: "Open Danke für Ihr Anliegen [node:request_id] bei Sag's uns"
+      subject: "Your request [node:request_id] status update"
       message: ''
     successors: {  }
