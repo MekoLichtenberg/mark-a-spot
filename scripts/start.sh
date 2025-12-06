@@ -444,9 +444,31 @@ EOF
 
   $SCRIPT_DIR/georeport-client.sh
 
-  printf "\e[36mOne-Time Login for User 1 ...\e[0m\n"
-  printf "\e[36m...\e[0m\n"
-  drush uli --uri=http://localhost
-  printf "\e[36m \e[0m\n"
-  printf "\e[36mInstallation completed...\e[0m\n"
+  printf "\n\e[32m╔════════════════════════════════════════════════════════════════════════╗\e[0m\n"
+  printf "\e[32m║ Mark-a-Spot Installation Complete!                                     ║\e[0m\n"
+  printf "\e[32m╠════════════════════════════════════════════════════════════════════════╣\e[0m\n"
+  printf "\e[32m║\e[0m City: %-62s \e[32m║\e[0m\n" "$city"
+  printf "\e[32m║\e[0m Locale: %-60s \e[32m║\e[0m\n" "$locale"
+  printf "\e[32m║\e[0m                                                                        \e[32m║\e[0m\n"
+  printf "\e[32m║\e[0m GeoReport API Key: %-50s \e[32m║\e[0m\n" "$GEOREPORT_API_KEY"
+  printf "\e[32m║\e[0m                                                                        \e[32m║\e[0m\n"
+  printf "\e[32m║\e[0m Users created:                                                         \e[32m║\e[0m\n"
+  printf "\e[32m║\e[0m   • admin (uid 1)                                                      \e[32m║\e[0m\n"
+  printf "\e[32m║\e[0m   • api_user (api_password) - API access                               \e[32m║\e[0m\n"
+  printf "\e[32m║\e[0m   • mod1, mod2 (mod_password) - Moderators                             \e[32m║\e[0m\n"
+  printf "\e[32m║\e[0m                                                                        \e[32m║\e[0m\n"
+  printf "\e[32m║\e[0m Service requests: 50 test entries created                              \e[32m║\e[0m\n"
+  printf "\e[32m╚════════════════════════════════════════════════════════════════════════╝\e[0m\n"
+
+  printf "\n\e[36mOne-Time Login for Admin:\e[0m\n"
+  if [ -n "$DDEV_HOSTNAME" ]; then
+    drush uli --uri="https://$DDEV_HOSTNAME"
+  else
+    drush uli --uri=http://localhost
+  fi
+
+  printf "\n\e[33mNext steps for DDEV:\e[0m\n"
+  printf "  1. Update GEOREPORT_API_KEY in .ddev/docker-compose.node-dev.yaml\n"
+  printf "  2. Run 'ddev restart' to apply the API key to frontend\n"
+  printf "  3. Access frontend at: https://\$DDEV_HOSTNAME:8040\n\n"
 fi

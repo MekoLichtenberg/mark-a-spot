@@ -1,17 +1,65 @@
 #!/bin/sh
+#
+# GeoReport Client Script
+# Creates users, sets up API key, and generates test service requests
+#
 
-./vendor/bin/drush user-create "api_user" --password="my_password" && drush user-add-role "api_user" "api_user"
-UUID=$(./vendor/bin/drush user-information api_user --fields=uuid --format=list)
-UUID=$(./vendor/bin/drush sql:query "SELECT uuid FROM users WHERE uid = 2" --database=default)
+set -e
 
-./vendor/bin/drush config-set services_api_key_auth.api_key.test_mas user_uuid $UUID -y
+# Determine if we're in DDEV or legacy Docker
+if command -v drush >/dev/null 2>&1; then
+  DRUSH="drush"
+elif [ -f "./vendor/bin/drush" ]; then
+  DRUSH="./vendor/bin/drush"
+else
+  echo "ERROR: drush not found"
+  exit 1
+fi
+
+# Determine API endpoint (DDEV uses 'web', legacy Docker uses VIRTUAL_HOST)
+if [ -n "$DDEV_HOSTNAME" ] || [ -f "/.dockerenv" ]; then
+  API_HOST="http://web"
+elif [ -n "$VIRTUAL_HOST" ]; then
+  API_HOST="http://$VIRTUAL_HOST"
+else
+  API_HOST="http://localhost"
+fi
+
+printf "\e[36mCreating users...\e[0m\n"
+
+# Create API user
+printf "  Creating api_user...\n"
+$DRUSH user:create "api_user" --password="api_password" 2>/dev/null || echo "  api_user already exists"
+$DRUSH user:role:add "api_user" "api_user" 2>/dev/null || true
+
+# Create 2 moderator users
+printf "  Creating moderator users...\n"
+$DRUSH user:create "mod1" --mail="mod1@example.com" --password="mod_password" 2>/dev/null || echo "  mod1 already exists"
+$DRUSH user:role:add "moderator" "mod1" 2>/dev/null || true
+
+$DRUSH user:create "mod2" --mail="mod2@example.com" --password="mod_password" 2>/dev/null || echo "  mod2 already exists"
+$DRUSH user:role:add "moderator" "mod2" 2>/dev/null || true
+
+printf "\e[32m✓ Users created: api_user, mod1, mod2\e[0m\n"
+
+# Get API user UUID and link to API key
+printf "\e[36mConfiguring API key...\e[0m\n"
+UUID=$($DRUSH sql:query "SELECT uuid FROM users WHERE uid = (SELECT uid FROM users_field_data WHERE name = 'api_user')" --database=default 2>/dev/null || echo "")
+
+if [ -n "$UUID" ]; then
+  $DRUSH config-set services_api_key_auth.api_key.test_mas user_uuid "$UUID" -y
+  printf "\e[32m✓ API key linked to api_user (UUID: %s)\e[0m\n" "$UUID"
+else
+  echo "Warning: Could not get api_user UUID"
+fi
 
 # Get the API key from the configuration
-API_KEY=${GEOREPORT_API_KEY:-$(./vendor/bin/drush config-get services_api_key_auth.api_key.test_mas | awk '/key:/ {print $2}')}
+API_KEY=${GEOREPORT_API_KEY:-$($DRUSH config-get services_api_key_auth.api_key.test_mas key --format=string 2>/dev/null || echo "changeme")}
+printf "  Using API key: %s\n" "$API_KEY"
 
 # Set the center latitude and longitude
-CENTER_LAT=$(./vendor/bin/drush cget markaspot_nuxt.settings center_lat --format=string)
-CENTER_LNG=$(./vendor/bin/drush cget markaspot_nuxt.settings center_lng --format=string)
+CENTER_LAT=$($DRUSH cget markaspot_nuxt.settings center_lat --format=string 2>/dev/null || echo "50.0")
+CENTER_LNG=$($DRUSH cget markaspot_nuxt.settings center_lng --format=string 2>/dev/null || echo "7.0")
 
 # Set the radius in kilometers
 RADIUS=15
@@ -20,7 +68,8 @@ RADIUS=15
 RADIUS_IN_DEGREES=$(awk "BEGIN {print ($RADIUS / 111.32)}")
 
 # Retrieve the services list from the server
-services_json=$(curl -s -w '\n%{http_code}\n' http://$VIRTUAL_HOST/georeport/v2/services.json)
+printf "\e[36mRetrieving services from %s...\e[0m\n" "$API_HOST"
+services_json=$(curl -s -w '\n%{http_code}\n' "${API_HOST}/georeport/v2/services.json")
 # Check for errors in the response
 response_code=$(echo "$services_json" | tail -n 1)
 if [ "$response_code" != "200" ]; then
@@ -70,7 +119,7 @@ for i in $(seq 1 50); do
   MEDIA_URL="https://markaspot.de/demo-images/image_${RANDOM_NUMBER}.jpg"
 
   REQUEST_START=$(date +%s.%N)
-  RESPONSE=$(curl -s --location 'http://web/georeport/v2/requests.json?api_key='"$API_KEY"'' \
+  RESPONSE=$(curl -s --location "${API_HOST}/georeport/v2/requests.json?api_key=${API_KEY}" \
     --header 'Content-Type: application/x-www-form-urlencoded' \
     --data-urlencode 'service_code='"$RANDOM_SERVICE_CODE"'' \
     --data-urlencode 'description='"$DESCRIPTION"'' \
@@ -87,3 +136,29 @@ for i in $(seq 1 50); do
 done
 
 echo "------------------------------------------------------------------------------------------------------------------"
+
+printf "\n\e[32m╔════════════════════════════════════════════════════════════════════════╗\e[0m\n"
+printf "\e[32m║ Setup Complete!                                                        ║\e[0m\n"
+printf "\e[32m╠════════════════════════════════════════════════════════════════════════╣\e[0m\n"
+printf "\e[32m║\e[0m Users created:                                                         \e[32m║\e[0m\n"
+printf "\e[32m║\e[0m   • api_user (password: api_password) - API access                     \e[32m║\e[0m\n"
+printf "\e[32m║\e[0m   • mod1 (password: mod_password) - Moderator                          \e[32m║\e[0m\n"
+printf "\e[32m║\e[0m   • mod2 (password: mod_password) - Moderator                          \e[32m║\e[0m\n"
+printf "\e[32m║\e[0m                                                                        \e[32m║\e[0m\n"
+printf "\e[32m║\e[0m GeoReport API Key: %-50s \e[32m║\e[0m\n" "$API_KEY"
+printf "\e[32m║\e[0m                                                                        \e[32m║\e[0m\n"
+printf "\e[32m║\e[0m Test requests created: 50                                              \e[32m║\e[0m\n"
+printf "\e[32m╚════════════════════════════════════════════════════════════════════════╝\e[0m\n"
+
+# Auto-update DDEV docker-compose if it exists
+DDEV_NODE_CONFIG=".ddev/docker-compose.node-dev.yaml"
+if [ -f "$DDEV_NODE_CONFIG" ] && [ -n "$API_KEY" ] && [ "$API_KEY" != "changeme" ]; then
+  printf "\n\e[36mUpdating DDEV node-dev configuration with API key...\e[0m\n"
+  sed -i.bak "s/GEOREPORT_API_KEY=.*/GEOREPORT_API_KEY=$API_KEY/" "$DDEV_NODE_CONFIG"
+  rm -f "${DDEV_NODE_CONFIG}.bak"
+  printf "\e[32m✓ Updated %s\e[0m\n" "$DDEV_NODE_CONFIG"
+  printf "\e[33m  Run 'ddev restart' to apply the API key to frontend.\e[0m\n\n"
+else
+  printf "\n\e[33mHint: Update GEOREPORT_API_KEY in .ddev/docker-compose.node-dev.yaml\e[0m\n"
+  printf "\e[33m      then run 'ddev restart' to apply to frontend.\e[0m\n\n"
+fi
