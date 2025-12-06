@@ -68,7 +68,7 @@ actions:
     plugin: group_add_content
     label: 'Apply Group'
     configuration:
-      replace_tokens: false
+      replace_tokens: true
       values: {  }
       operation: create
       content_plugin: 'group_node:service_request'
@@ -99,7 +99,7 @@ actions:
     plugin: action_send_email_action
     label: 'Notify Group'
     configuration:
-      replace_tokens: false
+      replace_tokens: true
       recipient: '[node:field_organisation:entity:field_head_organisation_e_mail]'
       subject: 'A request #[node:request_id] for the category [node:field_category]'
       message: |-
