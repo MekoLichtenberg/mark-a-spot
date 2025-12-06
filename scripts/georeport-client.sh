@@ -47,14 +47,14 @@ printf "\e[36mConfiguring API key...\e[0m\n"
 UUID=$($DRUSH sql:query "SELECT uuid FROM users WHERE uid = (SELECT uid FROM users_field_data WHERE name = 'api_user')" --database=default 2>/dev/null || echo "")
 
 if [ -n "$UUID" ]; then
-  $DRUSH config-set services_api_key_auth.api_key.test_mas user_uuid "$UUID" -y
+  $DRUSH config-set services_api_key_auth.api_key.nuxt user_uuid "$UUID" -y
   printf "\e[32m✓ API key linked to api_user (UUID: %s)\e[0m\n" "$UUID"
 else
   echo "Warning: Could not get api_user UUID"
 fi
 
 # Get the API key from the configuration
-API_KEY=${GEOREPORT_API_KEY:-$($DRUSH config-get services_api_key_auth.api_key.test_mas key --format=string 2>/dev/null || echo "changeme")}
+API_KEY=${GEOREPORT_API_KEY:-$($DRUSH config-get services_api_key_auth.api_key.nuxt key --format=string 2>/dev/null || echo "*")}
 printf "  Using API key: %s\n" "$API_KEY"
 
 # Set the center latitude and longitude
@@ -152,7 +152,7 @@ printf "\e[32m╚═════════════════════
 
 # Auto-update DDEV docker-compose if it exists
 DDEV_NODE_CONFIG=".ddev/docker-compose.node-dev.yaml"
-if [ -f "$DDEV_NODE_CONFIG" ] && [ -n "$API_KEY" ] && [ "$API_KEY" != "changeme" ]; then
+if [ -f "$DDEV_NODE_CONFIG" ] && [ -n "$API_KEY" ] && [ "$API_KEY" != "*" ]; then
   printf "\n\e[36mUpdating DDEV node-dev configuration with API key...\e[0m\n"
   sed -i.bak "s/GEOREPORT_API_KEY=.*/GEOREPORT_API_KEY=$API_KEY/" "$DDEV_NODE_CONFIG"
   rm -f "${DDEV_NODE_CONFIG}.bak"

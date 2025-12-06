@@ -3,5 +3,5 @@ status: true
 dependencies: {  }
 id: nuxt
 label: nuxt
-key: CHANGE_ME_NUXT_API_KEY
+key: '*'
 user_uuid: null

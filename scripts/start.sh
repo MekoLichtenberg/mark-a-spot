@@ -81,8 +81,8 @@ if [ "$ENVIRONMENT" != "prod" ]; then
 
 // Override the GeoReport API key with environment configuration when available.
 if ((isset($app_root) || PHP_SAPI === 'cli') && ($geoKey = getenv('GEOREPORT_API_KEY'))) {
-  if ($geoKey !== 'changeme' && $geoKey !== '') {
-    $config['services_api_key_auth.api_key.test_mas']['key'] = $geoKey;
+  if ($geoKey !== '*' && $geoKey !== '') {
+    $config['services_api_key_auth.api_key.nuxt']['key'] = $geoKey;
   }
 }
 
@@ -424,23 +424,32 @@ EOF
   fi
 
   printf "\e[36mExecuting georeport client to import initial service requests...\e[0m\n"
-  # Ensure GeoReport API key exists in Drupal config and export for clients.
+  # Ensure GeoReport API key exists in environment and Drupal config.
+  # Config file has key: '*' (safe for git), real key injected via settings.php.
   ENV_GEOREPORT_API_KEY=${GEOREPORT_API_KEY:-}
-  CURRENT_API_KEY=$(drush config-get services_api_key_auth.api_key.test_mas key --format=string 2>/dev/null || true)
 
-  if [ -n "$ENV_GEOREPORT_API_KEY" ] && [ "$ENV_GEOREPORT_API_KEY" != "changeme" ]; then
+  if [ -n "$ENV_GEOREPORT_API_KEY" ] && [ "$ENV_GEOREPORT_API_KEY" != "*" ]; then
     GEOREPORT_API_KEY="$ENV_GEOREPORT_API_KEY"
-    drush config-set services_api_key_auth.api_key.test_mas key "$GEOREPORT_API_KEY" -y >/dev/null
-  elif [ -n "$CURRENT_API_KEY" ] && [ "$CURRENT_API_KEY" != "changeme" ]; then
-    GEOREPORT_API_KEY="$CURRENT_API_KEY"
   else
-    GEOREPORT_API_KEY=$(php -r 'echo bin2hex(random_bytes(8));')
-    drush config-set services_api_key_auth.api_key.test_mas key "$GEOREPORT_API_KEY" -y >/dev/null
+    # Generate a new API key
+    GEOREPORT_API_KEY=$(php -r 'echo bin2hex(random_bytes(16));')
+  fi
+
+  # Write to .ddev/.env for DDEV environments (persists across restarts)
+  DDEV_ENV_FILE="$PROJECT_ROOT/.ddev/.env"
+  if [ -d "$PROJECT_ROOT/.ddev" ]; then
+    # Create or update .ddev/.env with the API key
+    if [ -f "$DDEV_ENV_FILE" ]; then
+      # Remove existing GEOREPORT_API_KEY line if present
+      grep -v "^GEOREPORT_API_KEY=" "$DDEV_ENV_FILE" > "${DDEV_ENV_FILE}.tmp" 2>/dev/null || true
+      mv "${DDEV_ENV_FILE}.tmp" "$DDEV_ENV_FILE"
+    fi
+    echo "GEOREPORT_API_KEY=$GEOREPORT_API_KEY" >> "$DDEV_ENV_FILE"
+    printf "\e[32mAPI key written to .ddev/.env\e[0m\n"
   fi
 
   export GEOREPORT_API_KEY
   printf "GeoReport API key: %s\n" "$GEOREPORT_API_KEY"
-  printf "Hint: update GEOREPORT_API_KEY in your host environment (e.g. .env) so external clients use the same key.\n"
 
   $SCRIPT_DIR/georeport-client.sh
 
@@ -468,7 +477,6 @@ EOF
   fi
 
   printf "\n\e[33mNext steps for DDEV:\e[0m\n"
-  printf "  1. Update GEOREPORT_API_KEY in .ddev/docker-compose.node-dev.yaml\n"
-  printf "  2. Run 'ddev restart' to apply the API key to frontend\n"
-  printf "  3. Access frontend at: https://\$DDEV_HOSTNAME:8040\n\n"
+  printf "  1. Run 'ddev restart' to apply the API key to frontend\n"
+  printf "  2. Access frontend at: https://\$DDEV_HOSTNAME:3001\n\n"
 fi
