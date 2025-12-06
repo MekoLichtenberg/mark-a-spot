@@ -338,6 +338,53 @@ EOF
 
   printf "\e[32mMap coordinates set to: %s, %s\e[0m\n" "$latitude" "$longitude"
 
+  # Fix GeoReport status configuration
+  # status_closed should be 5,6 (Closed, Archived) not 3,4
+  printf "\e[36mConfiguring GeoReport status mappings...\e[0m\n"
+  drush config:delete markaspot_open311.settings status_closed.3 -y >/dev/null 2>&1 || true
+  drush config:delete markaspot_open311.settings status_closed.4 -y >/dev/null 2>&1 || true
+  drush config:set markaspot_open311.settings status_closed.5 5 -y >/dev/null 2>&1
+  drush config:set markaspot_open311.settings status_closed.6 6 -y >/dev/null 2>&1
+
+  # Add view permission to organisation-anonymous group role for API access
+  printf "\e[36mConfiguring Group permissions for anonymous API access...\e[0m\n"
+  drush php:eval '
+    $config = \Drupal::service("config.factory")->getEditable("group.role.organisation-anonymous");
+    $perms = $config->get("permissions") ?: [];
+    if (!in_array("view group_node:service_request entity", $perms)) {
+      $perms[] = "view group_node:service_request entity";
+      $config->set("permissions", $perms)->save();
+    }
+  ' 2>/dev/null || true
+
+  # Add admin user to groups with admin role
+  printf "\e[36mAdding admin user to groups...\e[0m\n"
+  drush php:eval '
+    $user = \Drupal\user\Entity\User::load(1);
+    if ($user) {
+      $group_storage = \Drupal::entityTypeManager()->getStorage("group");
+      $role_storage = \Drupal::entityTypeManager()->getStorage("group_role");
+      $groups = $group_storage->loadMultiple();
+      foreach ($groups as $group) {
+        $membership = $group->getMember($user);
+        if (!$membership) {
+          $group_type = $group->getGroupType()->id();
+          $admin_role_id = $group_type . "-admin";
+          // Check if admin role exists
+          $admin_role = $role_storage->load($admin_role_id);
+          if ($admin_role) {
+            $group->addMember($user, ["group_roles" => [$admin_role_id]]);
+            echo "Added admin to group: " . $group->label() . " (with admin role)\n";
+          } else {
+            // Add without specific role if admin role does not exist
+            $group->addMember($user);
+            echo "Added admin to group: " . $group->label() . " (no admin role found)\n";
+          }
+        }
+      }
+    }
+  ' 2>/dev/null || true
+
   # Process language settings
   language=$(echo "$locale" | cut -d '_' -f1)
   
@@ -495,7 +542,7 @@ EOF
   printf "\e[32m║\e[0m Users created:                                                         \e[32m║\e[0m\n"
   printf "\e[32m║\e[0m   • admin (uid 1)                                                      \e[32m║\e[0m\n"
   printf "\e[32m║\e[0m   • api_user (api_password) - API access                               \e[32m║\e[0m\n"
-  printf "\e[32m║\e[0m   • mod1, mod2 (mod_password) - Moderators                             \e[32m║\e[0m\n"
+  printf "\e[32m║\e[0m   • moderation_1, moderation_2 (mod_password) - Moderators             \e[32m║\e[0m\n"
   printf "\e[32m║\e[0m                                                                        \e[32m║\e[0m\n"
   printf "\e[32m║\e[0m Service requests: 50 test entries created                              \e[32m║\e[0m\n"
   printf "\e[32m╚════════════════════════════════════════════════════════════════════════╝\e[0m\n"

@@ -14,3 +14,4 @@ global_role: authenticated
 group_type: org
 permissions:
   - 'view group'
+  - 'view group_node:service_request entity'

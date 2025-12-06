@@ -34,13 +34,13 @@ $DRUSH user:role:add "api_user" "api_user" 2>/dev/null || true
 
 # Create 2 moderator users
 printf "  Creating moderator users...\n"
-$DRUSH user:create "mod1" --mail="mod1@example.com" --password="mod_password" 2>/dev/null || echo "  mod1 already exists"
-$DRUSH user:role:add "moderator" "mod1" 2>/dev/null || true
+$DRUSH user:create "moderation_1" --mail="moderation_1@example.com" --password="mod_password" 2>/dev/null || echo "  moderation_1 already exists"
+$DRUSH user:role:add "moderator" "moderation_1" 2>/dev/null || true
 
-$DRUSH user:create "mod2" --mail="mod2@example.com" --password="mod_password" 2>/dev/null || echo "  mod2 already exists"
-$DRUSH user:role:add "moderator" "mod2" 2>/dev/null || true
+$DRUSH user:create "moderation_2" --mail="moderation_2@example.com" --password="mod_password" 2>/dev/null || echo "  moderation_2 already exists"
+$DRUSH user:role:add "moderator" "moderation_2" 2>/dev/null || true
 
-printf "\e[32m✓ Users created: api_user, mod1, mod2\e[0m\n"
+printf "\e[32m✓ Users created: api_user, moderation_1, moderation_2\e[0m\n"
 
 # Get API user UUID and link to API key
 printf "\e[36mConfiguring API key...\e[0m\n"
@@ -142,8 +142,8 @@ printf "\e[32m║ Setup Complete!                                               
 printf "\e[32m╠════════════════════════════════════════════════════════════════════════╣\e[0m\n"
 printf "\e[32m║\e[0m Users created:                                                         \e[32m║\e[0m\n"
 printf "\e[32m║\e[0m   • api_user (password: api_password) - API access                     \e[32m║\e[0m\n"
-printf "\e[32m║\e[0m   • mod1 (password: mod_password) - Moderator                          \e[32m║\e[0m\n"
-printf "\e[32m║\e[0m   • mod2 (password: mod_password) - Moderator                          \e[32m║\e[0m\n"
+printf "\e[32m║\e[0m   • moderation_1 (password: mod_password) - Moderator                   \e[32m║\e[0m\n"
+printf "\e[32m║\e[0m   • moderation_2 (password: mod_password) - Moderator                   \e[32m║\e[0m\n"
 printf "\e[32m║\e[0m                                                                        \e[32m║\e[0m\n"
 printf "\e[32m║\e[0m GeoReport API Key: %-50s \e[32m║\e[0m\n" "$API_KEY"
 printf "\e[32m║\e[0m                                                                        \e[32m║\e[0m\n"
