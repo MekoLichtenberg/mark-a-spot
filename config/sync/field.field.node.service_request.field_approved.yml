@@ -12,7 +12,7 @@ field_name: field_approved
 entity_type: node
 bundle: service_request
 label: Approved
-description: 'Meldeperson hat E-Mail bestätigt und stimmt Kontaktaufnahme zu.'
+description: 'Reporter has confirmed email and agreed to be contacted.'
 required: false
 translatable: false
 default_value:

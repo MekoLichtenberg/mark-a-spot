@@ -13,7 +13,7 @@ id: node.boilerplate.body
 field_name: body
 entity_type: node
 bundle: boilerplate
-label: Textkörper
+label: Body
 description: ''
 required: false
 translatable: false

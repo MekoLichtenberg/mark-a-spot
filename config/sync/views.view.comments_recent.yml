@@ -158,7 +158,7 @@ display:
           plugin_id: text_custom
           label: ''
           empty: true
-          content: 'Keine Kommentare verfügbar.'
+          content: 'No comments available.'
           tokenize: false
       sorts:
         created:

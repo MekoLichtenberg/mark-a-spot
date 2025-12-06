@@ -114,10 +114,10 @@ modeldata: |
             <camunda:string>[node:field_e_mail:value]</camunda:string>
           </camunda:field>
           <camunda:field name="subject">
-            <camunda:string>Progress Danke für Ihr Anliegen [node:request_id] bei Sag's uns</camunda:string>
+            <camunda:string>Progress Your request [node:request_id] status update</camunda:string>
           </camunda:field>
           <camunda:field name="message">
-            <camunda:string>Guten Tag!
+            <camunda:string>Hello!
 
   Ihr Anliegen mit der Nummer #[node:request_id]  ist eingegangen und wird bald bearbeitet.
 
@@ -125,9 +125,9 @@ modeldata: |
 
   [site:url]requests/[node:request_id]
 
-  Bitte beachten Sie: Sollte es sich bei Ihrem Anliegen um einen dringenden Notfall bzw. einer akuter Gefährdung handeln, wenden Sie sich bitte sofort telefonisch an die Polizei (110) bzw. Feuerwehr (112).
+  Please note: If this is an urgent emergency, please contact emergency services immediately.
 
-   -- Dies ist eine automatisch generierte E-Mail, auf die Sie leider nicht antworten können.</camunda:string>
+   -- This is an automated email. Please do not reply.</camunda:string>
           </camunda:field>
           <camunda:field name="replace_tokens">
             <camunda:string></camunda:string>
@@ -213,7 +213,7 @@ modeldata: |
             <camunda:string>[node:field_e_mail:value]</camunda:string>
           </camunda:field>
           <camunda:field name="subject">
-            <camunda:string>Open Danke für Ihr Anliegen [node:request_id] bei Sag's uns</camunda:string>
+            <camunda:string>Open Your request [node:request_id] status update</camunda:string>
           </camunda:field>
           <camunda:field name="message">
             <camunda:string></camunda:string>

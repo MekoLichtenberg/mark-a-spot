@@ -383,7 +383,7 @@ display:
           plugin_id: text
           empty: false
           content:
-            value: "<p style=\"margin: 10px 0 20px 0\">Sie können Anliegen in folgenden Kategorien erstellen:</p>\r\n\r\n"
+            value: "<p style=\"margin: 10px 0 20px 0\">You can create requests in the following categories:</p>\r\n\r\n"
             format: full_html
           tokenize: false
       footer: {  }

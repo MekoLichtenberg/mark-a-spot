@@ -11,9 +11,9 @@ dependencies:
 _core:
   default_config_hash: null
 id: taxonomy_term
-label: Taxonomie-Begriff
+label: 'Taxonomy term'
 module: taxonomy
-description: 'Inhalt, der zu einem bestimmten Taxonomie-Begriff gehört.'
+description: 'Content belonging to a specific taxonomy term.'
 tag: default
 base_table: node_field_data
 base_field: nid
@@ -40,19 +40,19 @@ display:
             items_per_page_label: 'Elemente pro Seite'
             items_per_page_options: '5, 10, 25, 50'
             items_per_page_options_all: false
-            items_per_page_options_all_label: '- Alle -'
+            items_per_page_options_all_label: '- All -'
             offset: false
             offset_label: Offset
       exposed_form:
         type: basic
         options:
-          submit_button: Suchen
+          submit_button: Search
           reset_button: false
-          reset_button_label: Zurücksetzen
-          exposed_sorts_label: 'Sortieren nach'
+          reset_button_label: Reset
+          exposed_sorts_label: 'Sort by'
           expose_sort_order: true
-          sort_asc_label: Aufsteigend
-          sort_desc_label: Absteigend
+          sort_asc_label: Ascending
+          sort_desc_label: Descending
       access:
         type: perm
         options:

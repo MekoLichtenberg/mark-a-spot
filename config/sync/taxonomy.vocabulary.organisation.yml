@@ -9,6 +9,6 @@ _core:
   default_config_hash: null
 name: Organisation
 vid: organisation
-description: 'Die Organisation, die für die Anliegen verantwortlich ist.'
+description: 'The organisation responsible for handling requests.'
 weight: 0
 new_revision: false
