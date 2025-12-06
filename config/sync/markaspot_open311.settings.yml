@@ -2,8 +2,8 @@ status_open:
   3: '3'
   4: '4'
 status_closed:
-  3: '3'
-  4: '4'
+  5: '5'
+  6: '6'
 status_open_start: '3'
 node_options_status: '1'
 changeset: '2023-05-24T21:43:15+02:00'

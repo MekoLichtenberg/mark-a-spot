@@ -315,7 +315,28 @@ EOF
   printf "\e[36mAdd Admin Role...\e[0m\n"
   drush user:role:add "administrator" --uid=1
 
+  # Set coordinates in all config locations
+  printf "\e[36mConfiguring map coordinates...\e[0m\n"
 
+  # markaspot_nuxt.settings - main frontend map center
+  drush config:set markaspot_nuxt.settings center_lat "$latitude" -y >/dev/null
+  drush config:set markaspot_nuxt.settings center_lng "$longitude" -y >/dev/null
+
+  # Field default value for geolocation field
+  drush config:set field.field.node.service_request.field_geolocation default_value.0.lat "$latitude" -y >/dev/null
+  drush config:set field.field.node.service_request.field_geolocation default_value.0.lng "$longitude" -y >/dev/null
+
+  # Widget settings for form displays (map center in edit forms)
+  drush config:set core.entity_form_display.node.service_request.default third_party_settings.geolocation.centre.lat "$latitude" -y >/dev/null 2>&1 || true
+  drush config:set core.entity_form_display.node.service_request.default third_party_settings.geolocation.centre.lng "$longitude" -y >/dev/null 2>&1 || true
+
+  # Update widget center_lat/center_lng settings
+  for form_mode in default management nuxt; do
+    drush config:set "core.entity_form_display.node.service_request.$form_mode" content.field_geolocation.settings.center_lat "$latitude" -y >/dev/null 2>&1 || true
+    drush config:set "core.entity_form_display.node.service_request.$form_mode" content.field_geolocation.settings.center_lng "$longitude" -y >/dev/null 2>&1 || true
+  done
+
+  printf "\e[32mMap coordinates set to: %s, %s\e[0m\n" "$latitude" "$longitude"
 
   # Process language settings
   language=$(echo "$locale" | cut -d '_' -f1)
@@ -435,6 +456,10 @@ EOF
     GEOREPORT_API_KEY=$(php -r 'echo bin2hex(random_bytes(16));')
   fi
 
+  # Set the key in Drupal config for immediate use during installation
+  drush config-set services_api_key_auth.api_key.nuxt key "$GEOREPORT_API_KEY" -y >/dev/null
+  printf "\e[32mAPI key set in Drupal config\e[0m\n"
+
   # Write to .ddev/.env for DDEV environments (persists across restarts)
   DDEV_ENV_FILE="$PROJECT_ROOT/.ddev/.env"
   if [ -d "$PROJECT_ROOT/.ddev" ]; then
@@ -445,11 +470,17 @@ EOF
       mv "${DDEV_ENV_FILE}.tmp" "$DDEV_ENV_FILE"
     fi
     echo "GEOREPORT_API_KEY=$GEOREPORT_API_KEY" >> "$DDEV_ENV_FILE"
-    printf "\e[32mAPI key written to .ddev/.env\e[0m\n"
+    printf "\e[32mAPI key written to .ddev/.env (persists after restart)\e[0m\n"
   fi
 
   export GEOREPORT_API_KEY
   printf "GeoReport API key: %s\n" "$GEOREPORT_API_KEY"
+
+  # Restart DDEV to apply API key to UI container
+  if [ -n "$DDEV_HOSTNAME" ]; then
+    printf "\e[36mRestarting DDEV to apply API key to UI container...\e[0m\n"
+    ddev restart
+  fi
 
   $SCRIPT_DIR/georeport-client.sh
 
@@ -478,5 +509,5 @@ EOF
 
   printf "\n\e[33mNext steps for DDEV:\e[0m\n"
   printf "  1. Run 'ddev restart' to apply the API key to frontend\n"
-  printf "  2. Access frontend at: https://\$DDEV_HOSTNAME:3001\n\n"
+  printf "  2. Access frontend at: https://\$DDEV_HOSTNAME:8040\n\n"
 fi

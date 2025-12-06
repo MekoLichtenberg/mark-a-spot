@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "d9dc0eb0e35ef0ccb7010f5e4bfa7c2f",
+    "content-hash": "33ed56b83315aa54bef6758f18377d75",
     "packages": [
         {
             "name": "anthonymartin/geo-location",

@@ -271,7 +271,8 @@ echo "Setting processed content as primary language content in $ARTIFACTS_DIR...
 updated_lang_count=0
 for csv_file in "$ARTIFACTS_DIR"/*.csv; do
   # Ensure it's a file and not a backup
-  if [ -f "$csv_file" ] && ! [[ "$csv_file" == *.bak ]]; then
+  case "$csv_file" in *.bak) continue ;; esac
+  if [ -f "$csv_file" ]; then
     # Check if the file actually contains the target language code (it might be original English if fallback occurred)
     # Also check if it contains 'langcode' column header
     if grep -q "langcode" "$csv_file" && grep -q "\"$LANG_CODE\"" "$csv_file"; then
