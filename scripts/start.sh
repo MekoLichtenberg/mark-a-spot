@@ -319,21 +319,21 @@ EOF
   printf "\e[36mConfiguring map coordinates...\e[0m\n"
 
   # markaspot_nuxt.settings - main frontend map center
-  drush config:set markaspot_nuxt.settings center_lat "$latitude" -y >/dev/null
-  drush config:set markaspot_nuxt.settings center_lng "$longitude" -y >/dev/null
+  drush config:set markaspot_nuxt.settings center_lat -y -- "$latitude" >/dev/null
+  drush config:set markaspot_nuxt.settings center_lng -y -- "$longitude" >/dev/null
 
   # Field default value for geolocation field
-  drush config:set field.field.node.service_request.field_geolocation default_value.0.lat "$latitude" -y >/dev/null
-  drush config:set field.field.node.service_request.field_geolocation default_value.0.lng "$longitude" -y >/dev/null
+  drush config:set field.field.node.service_request.field_geolocation default_value.0.lat -y -- "$latitude" >/dev/null
+  drush config:set field.field.node.service_request.field_geolocation default_value.0.lng -y -- "$longitude" >/dev/null
 
   # Widget settings for form displays (map center in edit forms)
-  drush config:set core.entity_form_display.node.service_request.default third_party_settings.geolocation.centre.lat "$latitude" -y >/dev/null 2>&1 || true
-  drush config:set core.entity_form_display.node.service_request.default third_party_settings.geolocation.centre.lng "$longitude" -y >/dev/null 2>&1 || true
+  drush config:set core.entity_form_display.node.service_request.default third_party_settings.geolocation.centre.lat -y -- "$latitude" >/dev/null 2>&1 || true
+  drush config:set core.entity_form_display.node.service_request.default third_party_settings.geolocation.centre.lng -y -- "$longitude" >/dev/null 2>&1 || true
 
   # Update widget center_lat/center_lng settings
   for form_mode in default management nuxt; do
-    drush config:set "core.entity_form_display.node.service_request.$form_mode" content.field_geolocation.settings.center_lat "$latitude" -y >/dev/null 2>&1 || true
-    drush config:set "core.entity_form_display.node.service_request.$form_mode" content.field_geolocation.settings.center_lng "$longitude" -y >/dev/null 2>&1 || true
+    drush config:set "core.entity_form_display.node.service_request.$form_mode" content.field_geolocation.settings.center_lat -y -- "$latitude" >/dev/null 2>&1 || true
+    drush config:set "core.entity_form_display.node.service_request.$form_mode" content.field_geolocation.settings.center_lng -y -- "$longitude" >/dev/null 2>&1 || true
   done
 
   printf "\e[32mMap coordinates set to: %s, %s\e[0m\n" "$latitude" "$longitude"
