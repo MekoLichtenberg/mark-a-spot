@@ -5,7 +5,7 @@ dependencies:
   config:
     - group.type.org
     - user.role.authenticated
-id: organisation-outsider
+id: org-outsider
 label: Outsider
 weight: -10
 admin: false

@@ -346,10 +346,10 @@ EOF
   drush config:set markaspot_open311.settings status_closed.5 5 -y >/dev/null 2>&1
   drush config:set markaspot_open311.settings status_closed.6 6 -y >/dev/null 2>&1
 
-  # Add view permission to organisation-anonymous group role for API access
+  # Add view permission to org-anonymous group role for API access
   printf "\e[36mConfiguring Group permissions for anonymous API access...\e[0m\n"
   drush php:eval '
-    $config = \Drupal::service("config.factory")->getEditable("group.role.organisation-anonymous");
+    $config = \Drupal::service("config.factory")->getEditable("group.role.org-anonymous");
     $perms = $config->get("permissions") ?: [];
     if (!in_array("view group_node:service_request entity", $perms)) {
       $perms[] = "view group_node:service_request entity";

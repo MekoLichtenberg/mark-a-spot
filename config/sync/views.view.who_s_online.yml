@@ -5,11 +5,11 @@ dependencies:
   module:
     - user
 _core:
-  default_config_hash: null
+  default_config_hash: m0vmYmhrzMR6S_IC0UlK0Cl-q5lEvL8-EbxbbcDtk34
 id: who_s_online
-label: 'Who'"'"'s online block'
+label: 'Wer ist online Block'
 module: user
-description: 'Shows usernames of recently active users and total number of active users.'
+description: 'Zeigt die Benutzernamen der zuletzt aktiven Benutzer und die Gesamtzahl der aktiven Benutzer.'
 tag: default
 base_table: users_field_data
 base_field: uid
@@ -64,13 +64,13 @@ display:
       exposed_form:
         type: basic
         options:
-          submit_button: Search
+          submit_button: Suchen
           reset_button: false
-          reset_button_label: Reset
-          exposed_sorts_label: 'Sort by'
+          reset_button_label: Zurücksetzen
+          exposed_sorts_label: 'Sortieren nach'
           expose_sort_order: true
-          sort_asc_label: Ascending
-          sort_desc_label: Descending
+          sort_asc_label: Aufsteigend
+          sort_desc_label: Absteigend
       access:
         type: perm
         options:
@@ -88,7 +88,7 @@ display:
           admin_label: ''
           plugin_id: text_custom
           empty: true
-          content: 'There are currently 0 users online.'
+          content: 'Derzeit sind 0 Benutzer online.'
           tokenize: false
       sorts:
         access:
@@ -142,8 +142,8 @@ display:
           exposed: false
           expose:
             operator_id: access_op
-            label: 'Last access'
-            description: 'A user is considered online for this period of time after they have last viewed a page.'
+            label: 'Letzter Zugriff'
+            description: 'Ein Benutzer gilt für diesen Zeitraum als „online“, nachdem er das letzte Mal eine Seite betrachtet hat.'
             use_operator: false
             operator: access_op
             operator_limit_selection: false
@@ -196,7 +196,7 @@ display:
           admin_label: ''
           plugin_id: result
           empty: false
-          content: 'There are currently @total users online.'
+          content: 'Derzeit sind @total Benutzer online.'
       footer: {  }
       display_extenders: {  }
     cache_metadata:
@@ -212,9 +212,9 @@ display:
     display_plugin: block
     position: 1
     display_options:
-      display_description: 'A list of currently logged in users.'
+      display_description: 'Eine Liste der derzeit angemeldeten Benutzer.'
       display_extenders: {  }
-      block_description: 'Who'"'"'s online'
+      block_description: 'Wer ist online'
     cache_metadata:
       max-age: -1
       contexts:

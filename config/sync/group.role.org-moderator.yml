@@ -4,7 +4,7 @@ dependencies:
   config:
     - group.type.org
     - user.role.moderator
-id: organisation-moderator
+id: org-moderator
 label: Moderator External
 weight: 1
 admin: false
