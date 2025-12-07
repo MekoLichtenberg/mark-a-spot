@@ -5,7 +5,7 @@ dependencies:
   config:
     - group.type.jur
     - user.role.anonymous
-id: jurisdiction-anonymous
+id: jur-anonymous
 label: Anonymous
 weight: -102
 admin: false

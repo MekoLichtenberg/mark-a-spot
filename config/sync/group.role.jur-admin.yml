@@ -5,7 +5,7 @@ dependencies:
   config:
     - group.type.jur
     - user.role.administrator
-id: jurisdiction-admin
+id: jur-admin
 label: Admin
 weight: -99
 admin: true

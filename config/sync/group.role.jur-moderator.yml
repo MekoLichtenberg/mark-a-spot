@@ -4,7 +4,7 @@ dependencies:
   config:
     - group.type.jur
     - user.role.moderator
-id: jurisdiction-moderator
+id: jur-moderator
 label: Moderator
 weight: 1
 admin: false

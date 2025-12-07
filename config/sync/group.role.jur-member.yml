@@ -3,7 +3,7 @@ status: true
 dependencies:
   config:
     - group.type.jur
-id: jurisdiction-member
+id: jur-member
 label: Member
 weight: 0
 admin: false

@@ -4,7 +4,7 @@ status: true
 dependencies:
   config:
     - group.type.org
-id: organisation-admin
+id: org-admin
 label: Admin
 weight: -8
 admin: true
