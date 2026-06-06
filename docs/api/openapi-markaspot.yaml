@@ -1,0 +1,1046 @@
+openapi: 3.1.0
+info:
+  title: Mark-a-Spot API
+  description: |
+    Custom REST API endpoints for Mark-a-Spot citizen reporting platform.
+
+    For JSON:API endpoints (CRUD operations on entities), see the auto-generated
+    JSON:API documentation.
+
+    For Open311 GeoReport v2 standard endpoints, see openapi-open311.yaml
+  version: 2.0.0
+  contact:
+    name: Mark-a-Spot
+    url: https://markaspot.de
+  license:
+    name: GPL-2.0-or-later
+    url: https://www.gnu.org/licenses/gpl-2.0.html
+
+servers:
+  - url: https://dev.ddev.site
+    description: Development
+  - url: https://{jurisdiction}.example.com
+    description: Production
+    variables:
+      jurisdiction:
+        default: demo
+
+tags:
+  - name: Authentication
+    description: Passwordless authentication endpoints
+  - name: Statistics
+    description: Report statistics and KPIs
+  - name: Dashboard
+    description: Dashboard data for staff/admin
+  - name: AI
+    description: AI-powered features (duplicates, sentiment, vision)
+  - name: Feedback
+    description: Citizen feedback on service requests
+  - name: Service Provider
+    description: External service provider integration
+  - name: Settings
+    description: Frontend configuration endpoints
+  - name: Emergency
+    description: Emergency mode status
+  - name: CAP Alerts
+    description: Common Alerting Protocol feeds
+  - name: Voting
+    description: Upvote/downvote functionality
+  - name: Status Notes
+    description: Internal status notes management
+
+paths:
+  # ============================================================================
+  # Authentication
+  # ============================================================================
+  /api/auth/request-code:
+    post:
+      tags: [Authentication]
+      summary: Request authentication code
+      description: Sends a one-time code to the user's email for passwordless login
+      operationId: requestAuthCode
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [email]
+              properties:
+                email:
+                  type: string
+                  format: email
+      responses:
+        '200':
+          description: Code sent successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+        '429':
+          description: Too many requests
+
+  /api/auth/verify-code:
+    post:
+      tags: [Authentication]
+      summary: Verify authentication code
+      description: Validates the one-time code and creates a session
+      operationId: verifyAuthCode
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [email, code]
+              properties:
+                email:
+                  type: string
+                  format: email
+                code:
+                  type: string
+                  pattern: '^\d{6}$'
+      responses:
+        '200':
+          description: Authentication successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthStatus'
+        '401':
+          description: Invalid or expired code
+
+  /api/auth/status:
+    get:
+      tags: [Authentication]
+      summary: Get current auth status
+      description: Returns current user session information
+      operationId: getAuthStatus
+      responses:
+        '200':
+          description: Current auth status
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthStatus'
+
+  /api/auth/logout:
+    post:
+      tags: [Authentication]
+      summary: Logout current user
+      operationId: logout
+      responses:
+        '200':
+          description: Logged out successfully
+
+  # ============================================================================
+  # Statistics (Public)
+  # ============================================================================
+  /api/stats/status:
+    get:
+      tags: [Statistics]
+      summary: Get status statistics
+      description: Returns count of service requests per status
+      operationId: getStatusStats
+      parameters:
+        - $ref: '#/components/parameters/AcceptLanguage'
+      responses:
+        '200':
+          description: Status statistics
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/StatusStat'
+
+  /api/stats/categories:
+    get:
+      tags: [Statistics]
+      summary: Get category statistics
+      description: Returns count of service requests per category
+      operationId: getCategoryStats
+      parameters:
+        - $ref: '#/components/parameters/AcceptLanguage'
+      responses:
+        '200':
+          description: Category statistics
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CategoryStat'
+
+  /stats/categories/hierarchical:
+    get:
+      tags: [Statistics]
+      summary: Get hierarchical category statistics
+      description: Returns category stats with parent/child relationships
+      operationId: getHierarchicalCategoryStats
+      parameters:
+        - $ref: '#/components/parameters/AcceptLanguage'
+      responses:
+        '200':
+          description: Hierarchical category statistics
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/HierarchicalCategoryStat'
+
+  # ============================================================================
+  # Dashboard (Authenticated)
+  # ============================================================================
+  /api/dashboard/kpis:
+    get:
+      tags: [Dashboard]
+      summary: Get dashboard KPIs
+      description: Returns key performance indicators for dashboard
+      operationId: getDashboardKpis
+      security:
+        - cookieAuth: []
+      responses:
+        '200':
+          description: Dashboard KPIs
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DashboardKpis'
+        '403':
+          description: Access denied
+
+  /api/dashboard/time-series/volume:
+    get:
+      tags: [Dashboard]
+      summary: Get volume time series
+      description: Returns report volume over time
+      operationId: getTimeSeriesVolume
+      security:
+        - cookieAuth: []
+      parameters:
+        - name: period
+          in: query
+          schema:
+            type: string
+            enum: [day, week, month, year]
+            default: month
+      responses:
+        '200':
+          description: Time series data
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TimeSeriesPoint'
+
+  /api/dashboard/time-series/processing:
+    get:
+      tags: [Dashboard]
+      summary: Get processing time series
+      description: Returns processing metrics over time
+      operationId: getTimeSeriesProcessing
+      security:
+        - cookieAuth: []
+      responses:
+        '200':
+          description: Processing time series
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TimeSeriesPoint'
+
+  /api/dashboard/forwarding-details:
+    get:
+      tags: [Dashboard]
+      summary: Get forwarding details
+      description: Returns service provider forwarding statistics
+      operationId: getForwardingDetails
+      security:
+        - cookieAuth: []
+      responses:
+        '200':
+          description: Forwarding details
+
+  /api/dashboard/hazards:
+    get:
+      tags: [Dashboard]
+      summary: Get hazard statistics
+      description: Returns AI-detected hazard statistics
+      operationId: getHazardStatistics
+      security:
+        - cookieAuth: []
+      responses:
+        '200':
+          description: Hazard statistics
+
+  # ============================================================================
+  # AI Features
+  # ============================================================================
+  /api/ai/duplicates/{node}:
+    get:
+      tags: [AI]
+      summary: Get duplicate matches for a node
+      operationId: getDuplicates
+      security:
+        - cookieAuth: []
+      parameters:
+        - name: node
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: List of duplicate matches
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/DuplicateMatch'
+
+  /api/ai/duplicates/{node}/scan:
+    post:
+      tags: [AI]
+      summary: Scan node for duplicates
+      operationId: scanNodeForDuplicates
+      security:
+        - cookieAuth: []
+      parameters:
+        - name: node
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Scan initiated
+
+  /api/ai/duplicates/pending:
+    get:
+      tags: [AI]
+      summary: Get pending duplicate matches
+      operationId: getPendingDuplicates
+      security:
+        - cookieAuth: []
+      responses:
+        '200':
+          description: Pending matches for review
+
+  /api/ai/duplicates/{match}/review:
+    post:
+      tags: [AI]
+      summary: Review a duplicate match
+      operationId: reviewDuplicateMatch
+      security:
+        - cookieAuth: []
+      parameters:
+        - name: match
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                action:
+                  type: string
+                  enum: [confirm, reject, merge]
+      responses:
+        '200':
+          description: Review processed
+
+  /api/ai/sentiment/{node}:
+    get:
+      tags: [AI]
+      summary: Get sentiment analysis for a node
+      operationId: getSentiment
+      security:
+        - cookieAuth: []
+      parameters:
+        - name: node
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Sentiment analysis result
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SentimentResult'
+
+  /api/ai/sentiment/stats:
+    get:
+      tags: [AI]
+      summary: Get sentiment statistics
+      operationId: getSentimentStats
+      security:
+        - cookieAuth: []
+      responses:
+        '200':
+          description: Aggregated sentiment statistics
+
+  /api/ai/sentiment/frustrated:
+    get:
+      tags: [AI]
+      summary: Get frustrated reports
+      description: Returns reports with negative sentiment for prioritization
+      operationId: getFrustratedReports
+      security:
+        - cookieAuth: []
+      responses:
+        '200':
+          description: List of frustrated reports
+
+  /api/ai/usage:
+    get:
+      tags: [AI]
+      summary: Get AI usage statistics
+      operationId: getAiUsage
+      security:
+        - cookieAuth: []
+      responses:
+        '200':
+          description: AI API usage statistics
+
+  /api/ai/processing/status:
+    get:
+      tags: [AI]
+      summary: Get AI processing status
+      operationId: getAiProcessingStatus
+      security:
+        - cookieAuth: []
+      responses:
+        '200':
+          description: Processing queue status
+
+  /api/ai/processing/queue:
+    post:
+      tags: [AI]
+      summary: Queue missing items for AI processing
+      operationId: queueMissingItems
+      security:
+        - cookieAuth: []
+      responses:
+        '200':
+          description: Items queued
+
+  /api/ai/processing/run:
+    post:
+      tags: [AI]
+      summary: Process AI queue
+      operationId: processAiQueue
+      security:
+        - cookieAuth: []
+      responses:
+        '200':
+          description: Queue processed
+
+  # ============================================================================
+  # Feedback
+  # ============================================================================
+  /api/feedback/{uuid}:
+    get:
+      tags: [Feedback]
+      summary: Get service request for feedback
+      operationId: getFeedbackRequest
+      parameters:
+        - name: uuid
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Service request details
+        '404':
+          description: Request not found
+
+    post:
+      tags: [Feedback]
+      summary: Submit feedback
+      operationId: submitFeedback
+      parameters:
+        - name: uuid
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FeedbackSubmission'
+      responses:
+        '200':
+          description: Feedback submitted
+
+  # ============================================================================
+  # Service Provider
+  # ============================================================================
+  /api/service-response/{uuid}:
+    get:
+      tags: [Service Provider]
+      summary: Get service request for response
+      operationId: getServiceResponse
+      parameters:
+        - name: uuid
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Service request details
+
+    post:
+      tags: [Service Provider]
+      summary: Submit service provider response
+      operationId: submitServiceResponse
+      parameters:
+        - name: uuid
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ServiceProviderResponse'
+      responses:
+        '200':
+          description: Response submitted
+
+  /api/service-response/{uuid}/auth:
+    post:
+      tags: [Service Provider]
+      summary: Authenticate service provider
+      operationId: authenticateServiceProvider
+      parameters:
+        - name: uuid
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                code:
+                  type: string
+      responses:
+        '200':
+          description: Authentication successful
+        '401':
+          description: Invalid code
+
+  # ============================================================================
+  # Settings
+  # ============================================================================
+  /api/mark-a-spot-settings:
+    get:
+      tags: [Settings]
+      summary: Get frontend settings
+      description: Returns theme, features, and configuration for the frontend
+      operationId: getMarkASpotSettings
+      parameters:
+        - name: jurisdiction
+          in: query
+          schema:
+            type: integer
+          description: Jurisdiction/Group ID for multi-tenant setups
+      responses:
+        '200':
+          description: Frontend configuration
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MarkASpotSettings'
+
+  /api/mark-a-spot-form-mode-settings/{entity_type}/{bundle}/{form_mode}:
+    get:
+      tags: [Settings]
+      summary: Get form mode settings
+      description: Returns field configuration for a specific form mode
+      operationId: getFormModeSettings
+      parameters:
+        - name: entity_type
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: bundle
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: form_mode
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Form mode configuration
+
+  /api/field-options/{entity_type}/{field_name}:
+    get:
+      tags: [Settings]
+      summary: Get field options
+      description: Returns allowed values for a field (e.g., list fields)
+      operationId: getFieldOptions
+      parameters:
+        - name: entity_type
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: field_name
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Field options
+
+  /api/jurisdictions:
+    get:
+      tags: [Settings]
+      summary: Get available jurisdictions
+      operationId: getJurisdictions
+      responses:
+        '200':
+          description: List of jurisdictions
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Jurisdiction'
+
+  /api/organisations:
+    get:
+      tags: [Settings]
+      summary: Get available organisations
+      operationId: getOrganisations
+      responses:
+        '200':
+          description: List of organisations
+
+  # ============================================================================
+  # Emergency
+  # ============================================================================
+  /api/emergency-mode/status:
+    get:
+      tags: [Emergency]
+      summary: Get emergency mode status
+      operationId: getEmergencyStatus
+      responses:
+        '200':
+          description: Emergency mode status
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  active:
+                    type: boolean
+                  message:
+                    type: string
+                  redirect_url:
+                    type: string
+                    format: uri
+
+  # ============================================================================
+  # CAP Alerts
+  # ============================================================================
+  /api/cap/v1/alerts:
+    get:
+      tags: [CAP Alerts]
+      summary: Get CAP alerts feed
+      description: Returns Common Alerting Protocol alerts
+      operationId: getCapAlerts
+      responses:
+        '200':
+          description: CAP alerts
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CapAlert'
+
+  /api/cap/v1/alerts/{id}:
+    get:
+      tags: [CAP Alerts]
+      summary: Get single CAP alert
+      operationId: getCapAlert
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: CAP alert details
+
+  # ============================================================================
+  # Voting
+  # ============================================================================
+  /api/vote-sum/{uuid}:
+    get:
+      tags: [Voting]
+      summary: Get vote sum for a service request
+      operationId: getVoteSum
+      parameters:
+        - name: uuid
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Vote count
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  sum:
+                    type: integer
+                  user_vote:
+                    type: integer
+                    enum: [-1, 0, 1]
+
+  # ============================================================================
+  # Status Notes
+  # ============================================================================
+  /api/dashboard/status-notes:
+    post:
+      tags: [Status Notes]
+      summary: Create status note
+      operationId: createStatusNote
+      security:
+        - cookieAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StatusNoteCreate'
+      responses:
+        '201':
+          description: Status note created
+
+  /api/dashboard/status-notes/{uuid}:
+    delete:
+      tags: [Status Notes]
+      summary: Delete status note
+      operationId: deleteStatusNote
+      security:
+        - cookieAuth: []
+      parameters:
+        - name: uuid
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '204':
+          description: Status note deleted
+
+  # ============================================================================
+  # Confirm
+  # ============================================================================
+  /api/confirm/{uuid}:
+    get:
+      tags: [Settings]
+      summary: Confirm email/action via UUID
+      operationId: confirmAction
+      parameters:
+        - name: uuid
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Confirmation successful
+
+components:
+  securitySchemes:
+    cookieAuth:
+      type: apiKey
+      in: cookie
+      name: SSESS
+      description: Drupal session cookie
+
+    apiKeyAuth:
+      type: apiKey
+      in: query
+      name: api_key
+      description: API key for Open311 endpoints
+
+  parameters:
+    AcceptLanguage:
+      name: Accept-Language
+      in: header
+      schema:
+        type: string
+        default: en
+      description: Preferred language for response content (de, en, nl, etc.)
+
+  schemas:
+    AuthStatus:
+      type: object
+      properties:
+        authenticated:
+          type: boolean
+        user:
+          type: object
+          properties:
+            uid:
+              type: integer
+            name:
+              type: string
+            email:
+              type: string
+              format: email
+            roles:
+              type: array
+              items:
+                type: string
+
+    StatusStat:
+      type: object
+      properties:
+        status:
+          type: string
+          description: Localized status label
+        count:
+          type: integer
+        color:
+          type: string
+          pattern: '^#[0-9A-Fa-f]{6}$'
+          description: Hex color code
+
+    CategoryStat:
+      type: object
+      properties:
+        category:
+          type: string
+          description: Localized category label
+        count:
+          type: integer
+        color:
+          type: string
+          pattern: '^#[0-9A-Fa-f]{6}$'
+        tid:
+          type: integer
+          description: Taxonomy term ID
+
+    HierarchicalCategoryStat:
+      allOf:
+        - $ref: '#/components/schemas/CategoryStat'
+        - type: object
+          properties:
+            children:
+              type: array
+              items:
+                $ref: '#/components/schemas/CategoryStat'
+
+    DashboardKpis:
+      type: object
+      properties:
+        total_reports:
+          type: integer
+        open_reports:
+          type: integer
+        closed_reports:
+          type: integer
+        avg_resolution_time:
+          type: number
+          description: Average resolution time in hours
+        reports_today:
+          type: integer
+        reports_this_week:
+          type: integer
+
+    TimeSeriesPoint:
+      type: object
+      properties:
+        date:
+          type: string
+          format: date
+        count:
+          type: integer
+
+    DuplicateMatch:
+      type: object
+      properties:
+        match_id:
+          type: integer
+        original_nid:
+          type: integer
+        duplicate_nid:
+          type: integer
+        confidence:
+          type: number
+          minimum: 0
+          maximum: 1
+        status:
+          type: string
+          enum: [pending, confirmed, rejected]
+
+    SentimentResult:
+      type: object
+      properties:
+        sentiment:
+          type: string
+          enum: [positive, neutral, negative, frustrated]
+        confidence:
+          type: number
+        analyzed_at:
+          type: string
+          format: date-time
+
+    FeedbackSubmission:
+      type: object
+      properties:
+        rating:
+          type: integer
+          minimum: 1
+          maximum: 5
+        comment:
+          type: string
+        resolved:
+          type: boolean
+
+    ServiceProviderResponse:
+      type: object
+      properties:
+        status:
+          type: string
+        notes:
+          type: string
+        attachments:
+          type: array
+          items:
+            type: string
+            format: uri
+
+    MarkASpotSettings:
+      type: object
+      properties:
+        client:
+          type: object
+          properties:
+            name:
+              type: string
+            shortName:
+              type: string
+            logo:
+              type: string
+              format: uri
+        theme:
+          type: object
+          properties:
+            primary:
+              type: string
+            secondary:
+              type: string
+            neutral:
+              type: string
+        features:
+          type: object
+          properties:
+            voting:
+              type: boolean
+            statistics:
+              type: boolean
+            photoReporting:
+              type: boolean
+            dashboard:
+              type: boolean
+        map:
+          type: object
+          properties:
+            center:
+              type: array
+              items:
+                type: number
+              minItems: 2
+              maxItems: 2
+            zoom:
+              type: integer
+
+    Jurisdiction:
+      type: object
+      properties:
+        id:
+          type: integer
+        label:
+          type: string
+        slug:
+          type: string
+
+    CapAlert:
+      type: object
+      properties:
+        identifier:
+          type: string
+        sender:
+          type: string
+        sent:
+          type: string
+          format: date-time
+        status:
+          type: string
+        msgType:
+          type: string
+        severity:
+          type: string
+        headline:
+          type: string
+        description:
+          type: string
+
+    StatusNoteCreate:
+      type: object
+      required: [service_request_uuid, note]
+      properties:
+        service_request_uuid:
+          type: string
+          format: uuid
+        note:
+          type: string
+        internal:
+          type: boolean
+          default: true

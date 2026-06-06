@@ -1,0 +1,36 @@
+# PHPStan + Drupal static analysis for Mark-a-Spot dev/
+#
+# Activation: requires `composer require --dev mglaman/phpstan-drupal phpstan/extension-installer phpstan/phpstan-deprecation-rules`
+# See LSP-NOTES.md for the full setup including drupal-stubs.
+#
+# Run: ddev exec vendor/bin/phpstan analyse
+# IDE integration: VS Code "PHP Sniffer & Beautifier" or "PHPStan" extension picks this up automatically.
+
+parameters:
+  # Level 0 = catch syntax errors and undefined symbols only.
+  # Bump to 2-4 once baseline is clean. Drupal codebases rarely run cleanly at level 6+.
+  level: 0
+
+  # What to analyse — profile modules + custom code only.
+  # Drupal core and contrib modules are excluded; they are upstream concerns.
+  paths:
+    - web/profiles/contrib/markaspot
+
+  # Exclude paths that are noise or upstream:
+  excludePaths:
+    - web/profiles/contrib/markaspot/**/tests/**
+    - web/profiles/contrib/markaspot/**/vendor/**
+    - web/profiles/contrib/markaspot/**/node_modules/**
+
+  # NOTE: drupal_root is deprecated since phpstan-drupal 2.x — auto-discovered now.
+  # NOTE: core/tests/bootstrap.php as bootstrapFile breaks with PHPUnit 11 (AssertionError).
+
+  # Tolerated patterns in Drupal that PHPStan flags without nuance:
+  ignoreErrors:
+    # Drupal services are routinely accessed via static \Drupal::service() with
+    # a string ID — the return type is mixed unless explicit. Don't flag every call.
+    - '#^Call to an undefined method Drupal\\.+::#'
+
+  # Reporting
+  reportUnmatchedIgnoredErrors: false
+  treatPhpDocTypesAsCertain: false

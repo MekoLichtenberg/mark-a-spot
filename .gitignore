@@ -36,3 +36,23 @@ web/sites/*/settings.php
 /update.php
 /web.config
 *.log
+web/modules/custom/markaspot_vision/
+translations/*.po
+.vercel
+
+# Config-less distribution: the markaspot install profile seeds from
+# config/install (site:install WITHOUT --existing-config), not config/sync.
+# Keep the dir present for fresh clones via .gitkeep; ignore local exports.
+config/sync/*
+!config/sync/.gitkeep
+
+# Documentation: active sibling repo (own remote, deployed to Vercel) + local
+# doc notes — separate projects, not part of the distribution.
+/markaspot-user-guide/
+/docs/feature-requests/
+/docs/jurisdiction-scoped-request-ids.md
+/docs/seed-amsterdam-status-attributes.md
+
+# Drupal test-runner artifacts (regenerated per run)
+/sites/
+web/sites/simpletest/
