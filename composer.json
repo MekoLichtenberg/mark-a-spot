@@ -23,29 +23,38 @@
         "composer/installers": "^2",
         "cweagans/composer-patches": "^1.7.0",
         "drupal/backup_migrate": "^5",
-        "drupal/bpmn_io": "^2",
-        "drupal/core": "^11",
-        "drupal/core-composer-scaffold": "^11",
-        "drupal/core-recommended": "^11.1",
+        "drupal/bpmn_io": "^3",
+        "drupal/core": "^11.3",
+        "drupal/core-composer-scaffold": "^11.3",
+        "drupal/core-recommended": "^11.3",
         "drupal/devel": "^5",
-        "drupal/eca": "^2",
+        "drupal/eca": "~3.0.11",
         "drupal/gin_login": "^2",
         "drupal/group": "^3",
         "drupal/group_action": "^1.1",
         "drupal/iconify_field": "^1.2",
         "drupal/jquery_ui": "^1.6",
         "drupal/jquery_ui_draggable": "^1.2",
+        "drupal/json_form_widget": "1.x-dev",
         "drupal/jsonapi_extras": "^3",
+        "drupal/jsonapi_resources": "^1.5",
         "drupal/layout_library": "^1.0@beta",
         "drupal/mailsystem": "^4.4",
+        "drupal/migrate_plus": "^6.0",
+        "drupal/migrate_source_csv": "^3.8",
+        "drupal/migrate_tools": "^6.1",
         "drupal/phpmailer_smtp": "^2.1",
-        "drupal/s3fs": "^3.1",
         "drush/drush": "13",
+        "enshrined/svg-sanitize": "^0.22",
+        "geocoder-php/mapbox-provider": "^1.5",
+        "geocoder-php/nominatim-provider": "^5.8",
         "kevinquillen/recipe-generator": "^2.0",
-        "markaspot/markaspot": "dev-11.7.x-dev",
+        "markaspot/markaspot": "^11.9",
+        "php-http/guzzle7-adapter": "^1.1",
         "vlucas/phpdotenv": "^5.5",
         "webflo/drupal-finder": "^1.0.0",
         "webmozart/assert": "1.11.0",
+        "willdurand/geocoder": "^5.0",
         "zaporylie/composer-drupal-optimizations": "^1.2.0"
     },
     "conflict": {
@@ -100,18 +109,39 @@
                 "type:drupal-drush"
             ]
         },
-        "enable-patching": false
+        "enable-patching": true,
+        "patches": {
+            "drupal/gin_login": {
+                "#3517414 Fix undefined array key brand_image warning": "https://git.drupalcode.org/project/gin_login/-/merge_requests/43.diff"
+            },
+            "drupal/json_form_widget": {
+                "#3563296 Fix undefined array key warning": "https://git.drupalcode.org/project/json_form_widget/-/merge_requests/1.diff",
+                "#3564474 Drupal 11.3 void return type": "https://git.drupalcode.org/project/json_form_widget/-/merge_requests/2.diff"
+            }
+        }
     },
     "config": {
         "sort-packages": true,
         "allow-plugins": {
             "composer/installers": true,
             "cweagans/composer-patches": true,
+            "dealerdirect/phpcodesniffer-composer-installer": true,
             "drupal/core-composer-scaffold": true,
             "oomphinc/composer-installers-extender": true,
-            "zaporylie/composer-drupal-optimizations": true,
+            "php-http/discovery": true,
             "phpstan/extension-installer": true,
-            "dealerdirect/phpcodesniffer-composer-installer": true
+            "zaporylie/composer-drupal-optimizations": true
         }
+    },
+    "require-dev": {
+        "behat/mink": "^1.13",
+        "drupal/coder": "*",
+        "mglaman/phpstan-drupal": "^2.0",
+        "mikey179/vfsstream": "^1.6.11",
+        "phpspec/prophecy-phpunit": "^2.5",
+        "phpstan/extension-installer": "^1.4",
+        "phpstan/phpstan-deprecation-rules": "^2.0",
+        "phpunit/phpunit": "^11",
+        "squizlabs/php_codesniffer": "*"
     }
 }

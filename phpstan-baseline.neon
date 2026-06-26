@@ -1,0 +1,1389 @@
+parameters:
+	ignoreErrors:
+		-
+			message: '#^Unsafe usage of new static\(\)\.$#'
+			identifier: new.static
+			count: 1
+			path: web/profiles/contrib/markaspot/modules/fa_icon_class/src/Controller/FaIconController.php
+
+		-
+			message: '#^Call to static method decode\(\) on an unknown class Drupal\\Core\\Serialization\\Yaml\.$#'
+			identifier: class.notFound
+			count: 1
+			path: web/profiles/contrib/markaspot/modules/markaspot_ai/markaspot_ai.install
+
+		-
+			message: '#^Unsafe usage of new static\(\)\.$#'
+			identifier: new.static
+			count: 1
+			path: web/profiles/contrib/markaspot/modules/markaspot_ai/src/Controller/AiAdminController.php
+
+		-
+			message: '''
+				#^Call to method getGroup\(\) of deprecated class Drupal\\group\\GroupMembership\:
+				in group\:3\.2\.0 and is removed from group\:4\.0\.0\. Use the static
+				  methods on \\Drupal\\group\\Entity\\GroupMembership instead\.$#
+			'''
+			identifier: method.deprecatedClass
+			count: 1
+			path: web/profiles/contrib/markaspot/modules/markaspot_ai/src/Controller/AttributeController.php
+
+		-
+			message: '''
+				#^Call to method loadByUser\(\) of deprecated interface Drupal\\group\\GroupMembershipLoaderInterface\:
+				in group\:3\.2\.0 and is removed from group\:4\.0\.0\. Use the static
+				  methods on \\Drupal\\group\\Entity\\GroupMembership instead\.$#
+			'''
+			identifier: method.deprecatedInterface
+			count: 1
+			path: web/profiles/contrib/markaspot/modules/markaspot_ai/src/Controller/AttributeController.php
+
+		-
+			message: '''
+				#^Parameter \$membershipLoader of method Drupal\\markaspot_ai\\Controller\\AttributeController\:\:__construct\(\) has typehint with deprecated interface Drupal\\group\\GroupMembershipLoaderInterface\:
+				in group\:3\.2\.0 and is removed from group\:4\.0\.0\. Use the static
+				  methods on \\Drupal\\group\\Entity\\GroupMembership instead\.$#
+			'''
+			identifier: parameter.deprecatedInterface
+			count: 1
+			path: web/profiles/contrib/markaspot/modules/markaspot_ai/src/Controller/AttributeController.php
+
+		-
+			message: '#^Unsafe usage of new static\(\)\.$#'
+			identifier: new.static
+			count: 1
+			path: web/profiles/contrib/markaspot/modules/markaspot_ai/src/Controller/AttributeController.php
+
+		-
+			message: '''
+				#^Call to method getGroup\(\) of deprecated class Drupal\\group\\GroupMembership\:
+				in group\:3\.2\.0 and is removed from group\:4\.0\.0\. Use the static
+				  methods on \\Drupal\\group\\Entity\\GroupMembership instead\.$#
+			'''
+			identifier: method.deprecatedClass
+			count: 1
+			path: web/profiles/contrib/markaspot/modules/markaspot_ai/src/Controller/DuplicateController.php
+
+		-
+			message: '''
+				#^Call to method loadByUser\(\) of deprecated interface Drupal\\group\\GroupMembershipLoaderInterface\:
+				in group\:3\.2\.0 and is removed from group\:4\.0\.0\. Use the static
+				  methods on \\Drupal\\group\\Entity\\GroupMembership instead\.$#
+			'''
+			identifier: method.deprecatedInterface
+			count: 1
+			path: web/profiles/contrib/markaspot/modules/markaspot_ai/src/Controller/DuplicateController.php
+
+		-
+			message: '''
+				#^Parameter \$membershipLoader of method Drupal\\markaspot_ai\\Controller\\DuplicateController\:\:__construct\(\) has typehint with deprecated interface Drupal\\group\\GroupMembershipLoaderInterface\:
+				in group\:3\.2\.0 and is removed from group\:4\.0\.0\. Use the static
+				  methods on \\Drupal\\group\\Entity\\GroupMembership instead\.$#
+			'''
+			identifier: parameter.deprecatedInterface
+			count: 1
+			path: web/profiles/contrib/markaspot/modules/markaspot_ai/src/Controller/DuplicateController.php
+
+		-
+			message: '#^Unsafe usage of new static\(\)\.$#'
+			identifier: new.static
+			count: 1
+			path: web/profiles/contrib/markaspot/modules/markaspot_ai/src/Controller/DuplicateController.php
+
+		-
+			message: '#^Unsafe usage of new static\(\)\.$#'
+			identifier: new.static
+			count: 1
+			path: web/profiles/contrib/markaspot/modules/markaspot_ai/src/Controller/ProcessingController.php
+
+		-
+			message: '''
+				#^Call to method getGroup\(\) of deprecated class Drupal\\group\\GroupMembership\:
+				in group\:3\.2\.0 and is removed from group\:4\.0\.0\. Use the static
+				  methods on \\Drupal\\group\\Entity\\GroupMembership instead\.$#
+			'''
+			identifier: method.deprecatedClass
+			count: 1
+			path: web/profiles/contrib/markaspot/modules/markaspot_ai/src/Controller/SentimentController.php
+
+		-
+			message: '''
+				#^Call to method loadByUser\(\) of deprecated interface Drupal\\group\\GroupMembershipLoaderInterface\:
+				in group\:3\.2\.0 and is removed from group\:4\.0\.0\. Use the static
+				  methods on \\Drupal\\group\\Entity\\GroupMembership instead\.$#
+			'''
+			identifier: method.deprecatedInterface
+			count: 1
+			path: web/profiles/contrib/markaspot/modules/markaspot_ai/src/Controller/SentimentController.php
+
+		-
+			message: '''
+				#^Parameter \$membership_loader of method Drupal\\markaspot_ai\\Controller\\SentimentController\:\:__construct\(\) has typehint with deprecated interface Drupal\\group\\GroupMembershipLoaderInterface\:
+				in group\:3\.2\.0 and is removed from group\:4\.0\.0\. Use the static
+				  methods on \\Drupal\\group\\Entity\\GroupMembership instead\.$#
+			'''
+			identifier: parameter.deprecatedInterface
+			count: 1
+			path: web/profiles/contrib/markaspot/modules/markaspot_ai/src/Controller/SentimentController.php
+
+		-
+			message: '#^Unsafe usage of new static\(\)\.$#'
+			identifier: new.static
+			count: 1
+			path: web/profiles/contrib/markaspot/modules/markaspot_ai/src/Controller/SentimentController.php
+
+		-
+			message: '#^\\Drupal calls should be avoided in classes, use dependency injection instead$#'
+			identifier: globalDrupalDependencyInjection.useDependencyInjection
+			count: 4
+			path: web/profiles/contrib/markaspot/modules/markaspot_ai/src/Controller/SentimentController.php
+
+		-
+			message: '#^Unsafe usage of new static\(\)\.$#'
+			identifier: new.static
+			count: 1
+			path: web/profiles/contrib/markaspot/modules/markaspot_ai/src/Controller/UsageController.php
+
+		-
+			message: '#^Unsafe usage of new static\(\)\.$#'
+			identifier: new.static
+			count: 1
+			path: web/profiles/contrib/markaspot/modules/markaspot_ai/src/Form/DuplicateReviewForm.php
+
+		-
+			message: '#^Unsafe usage of new static\(\)\.$#'
+			identifier: new.static
+			count: 1
+			path: web/profiles/contrib/markaspot/modules/markaspot_ai/src/Form/MarkaspotAiSettingsForm.php
+
+		-
+			message: '#^Unsafe usage of new static\(\)\.$#'
+			identifier: new.static
+			count: 1
+			path: web/profiles/contrib/markaspot/modules/markaspot_ai/src/Plugin/QueueWorker/AttributeFillingQueueWorker.php
+
+		-
+			message: '#^Unsafe usage of new static\(\)\.$#'
+			identifier: new.static
+			count: 1
+			path: web/profiles/contrib/markaspot/modules/markaspot_ai/src/Plugin/QueueWorker/DuplicateScanQueueWorker.php
+
+		-
+			message: '#^\\Drupal calls should be avoided in classes, use dependency injection instead$#'
+			identifier: globalDrupalDependencyInjection.useDependencyInjection
+			count: 1
+			path: web/profiles/contrib/markaspot/modules/markaspot_ai/src/Plugin/QueueWorker/DuplicateScanQueueWorker.php
+
+		-
+			message: '#^Unsafe usage of new static\(\)\.$#'
+			identifier: new.static
+			count: 1
+			path: web/profiles/contrib/markaspot/modules/markaspot_ai/src/Plugin/QueueWorker/EmbeddingQueueWorker.php
+
+		-
+			message: '#^\\Drupal calls should be avoided in classes, use dependency injection instead$#'
+			identifier: globalDrupalDependencyInjection.useDependencyInjection
+			count: 4
+			path: web/profiles/contrib/markaspot/modules/markaspot_ai/src/Service/DuplicateDetectionService.php
+
+		-
+			message: '#^\\Drupal calls should be avoided in classes, use dependency injection instead$#'
+			identifier: globalDrupalDependencyInjection.useDependencyInjection
+			count: 1
+			path: web/profiles/contrib/markaspot/modules/markaspot_ai/src/Service/EmbeddingService.php
+
+		-
+			message: '#^\\Drupal calls should be avoided in classes, use dependency injection instead$#'
+			identifier: globalDrupalDependencyInjection.useDependencyInjection
+			count: 1
+			path: web/profiles/contrib/markaspot/modules/markaspot_ai/src/Service/TokenTrackingService.php
+
+		-
+			message: '#^\\Drupal calls should be avoided in classes, use dependency injection instead$#'
+			identifier: globalDrupalDependencyInjection.useDependencyInjection
+			count: 6
+			path: web/profiles/contrib/markaspot/modules/markaspot_archive/src/ArchiveService.php
+
+		-
+			message: '#^Unsafe usage of new static\(\)\.$#'
+			identifier: new.static
+			count: 1
+			path: web/profiles/contrib/markaspot/modules/markaspot_archive/src/Form/MarkaspotArchiveSettingsForm.php
+
+		-
+			message: '#^Unsafe usage of new static\(\)\.$#'
+			identifier: new.static
+			count: 1
+			path: web/profiles/contrib/markaspot/modules/markaspot_archive/src/Plugin/QueueWorker/ArchiveQueueWorker.php
+
+		-
+			message: '#^\\Drupal calls should be avoided in classes, use dependency injection instead$#'
+			identifier: globalDrupalDependencyInjection.useDependencyInjection
+			count: 2
+			path: web/profiles/contrib/markaspot/modules/markaspot_archive/src/Plugin/QueueWorker/ArchiveQueueWorker.php
+
+		-
+			message: '#^Unsafe usage of new static\(\)\.$#'
+			identifier: new.static
+			count: 1
+			path: web/profiles/contrib/markaspot/modules/markaspot_bbox_cache/src/Form/BboxCacheSettingsForm.php
+
+		-
+			message: '#^\\Drupal calls should be avoided in classes, use dependency injection instead$#'
+			identifier: globalDrupalDependencyInjection.useDependencyInjection
+			count: 1
+			path: web/profiles/contrib/markaspot/modules/markaspot_bbox_cache/src/Form/BboxCacheSettingsForm.php
+
+		-
+			message: '#^Unsafe usage of new static\(\)\.$#'
+			identifier: new.static
+			count: 1
+			path: web/profiles/contrib/markaspot/modules/markaspot_blocks/src/Plugin/Block/MarkaspotBuiltWithBlock.php
+
+		-
+			message: '#^Unsafe usage of new static\(\)\.$#'
+			identifier: new.static
+			count: 1
+			path: web/profiles/contrib/markaspot/modules/markaspot_boilerplate/src/Controller/LoadController.php
+
+		-
+			message: '#^Unsafe usage of new static\(\)\.$#'
+			identifier: new.static
+			count: 1
+			path: web/profiles/contrib/markaspot/modules/markaspot_cap/src/Controller/CapAlertController.php
+
+		-
+			message: '#^\\Drupal calls should be avoided in classes, use dependency injection instead$#'
+			identifier: globalDrupalDependencyInjection.useDependencyInjection
+			count: 1
+			path: web/profiles/contrib/markaspot/modules/markaspot_cap/src/Controller/CapAlertController.php
+
+		-
+			message: '#^Unsafe usage of new static\(\)\.$#'
+			identifier: new.static
+			count: 1
+			path: web/profiles/contrib/markaspot/modules/markaspot_confirm/src/Controller/ConfirmController.php
+
+		-
+			message: '#^Unsafe usage of new static\(\)\.$#'
+			identifier: new.static
+			count: 1
+			path: web/profiles/contrib/markaspot/modules/markaspot_contact/src/Controller/ContactController.php
+
+		-
+			message: '#^Unsafe usage of new static\(\)\.$#'
+			identifier: new.static
+			count: 1
+			path: web/profiles/contrib/markaspot/modules/markaspot_dashboard/src/Controller/DashboardAdminController.php
+
+		-
+			message: '#^Unsafe usage of new static\(\)\.$#'
+			identifier: new.static
+			count: 1
+			path: web/profiles/contrib/markaspot/modules/markaspot_dashboard/src/Controller/DashboardController.php
+
+		-
+			message: '''
+				#^Call to method getGroup\(\) of deprecated class Drupal\\group\\GroupMembership\:
+				in group\:3\.2\.0 and is removed from group\:4\.0\.0\. Use the static
+				  methods on \\Drupal\\group\\Entity\\GroupMembership instead\.$#
+			'''
+			identifier: method.deprecatedClass
+			count: 1
+			path: web/profiles/contrib/markaspot/modules/markaspot_dashboard/src/Controller/DuplicateController.php
+
+		-
+			message: '''
+				#^Call to method loadByUser\(\) of deprecated interface Drupal\\group\\GroupMembershipLoaderInterface\:
+				in group\:3\.2\.0 and is removed from group\:4\.0\.0\. Use the static
+				  methods on \\Drupal\\group\\Entity\\GroupMembership instead\.$#
+			'''
+			identifier: method.deprecatedInterface
+			count: 1
+			path: web/profiles/contrib/markaspot/modules/markaspot_dashboard/src/Controller/DuplicateController.php
+
+		-
+			message: '''
+				#^Parameter \$membership_loader of method Drupal\\markaspot_dashboard\\Controller\\DuplicateController\:\:__construct\(\) has typehint with deprecated interface Drupal\\group\\GroupMembershipLoaderInterface\:
+				in group\:3\.2\.0 and is removed from group\:4\.0\.0\. Use the static
+				  methods on \\Drupal\\group\\Entity\\GroupMembership instead\.$#
+			'''
+			identifier: parameter.deprecatedInterface
+			count: 1
+			path: web/profiles/contrib/markaspot/modules/markaspot_dashboard/src/Controller/DuplicateController.php
+
+		-
+			message: '#^Unsafe usage of new static\(\)\.$#'
+			identifier: new.static
+			count: 1
+			path: web/profiles/contrib/markaspot/modules/markaspot_dashboard/src/Controller/DuplicateController.php
+
+		-
+			message: '#^Unsafe usage of new static\(\)\.$#'
+			identifier: new.static
+			count: 1
+			path: web/profiles/contrib/markaspot/modules/markaspot_dashboard/src/Controller/InternalRemarkController.php
+
+		-
+			message: '#^\\Drupal calls should be avoided in classes, use dependency injection instead$#'
+			identifier: globalDrupalDependencyInjection.useDependencyInjection
+			count: 1
+			path: web/profiles/contrib/markaspot/modules/markaspot_dashboard/src/Controller/InternalRemarkController.php
+
+		-
+			message: '#^Unsafe usage of new static\(\)\.$#'
+			identifier: new.static
+			count: 1
+			path: web/profiles/contrib/markaspot/modules/markaspot_dashboard/src/Controller/StatusNoteController.php
+
+		-
+			message: '#^Unsafe usage of new static\(\)\.$#'
+			identifier: new.static
+			count: 1
+			path: web/profiles/contrib/markaspot/modules/markaspot_dashboard/src/Form/DashboardFilterForm.php
+
+		-
+			message: '''
+				#^Call to deprecated method getClosedStatusTid\(\) of class Drupal\\markaspot_dashboard\\Service\\MetricsCalculatorService\:
+				in markaspot\:11\.8\.0 and is removed from markaspot\:12\.0\.0\.
+				  Use getClosedStatusTids\(\) for multiple closed statuses\.$#
+			'''
+			identifier: method.deprecated
+			count: 4
+			path: web/profiles/contrib/markaspot/modules/markaspot_dashboard/src/Service/MetricsCalculatorService.php
+
+		-
+			message: '#^\\Drupal calls should be avoided in classes, use dependency injection instead$#'
+			identifier: globalDrupalDependencyInjection.useDependencyInjection
+			count: 1
+			path: web/profiles/contrib/markaspot/modules/markaspot_demo/src/Form/DemoSettingsForm.php
+
+		-
+			message: '#^Unsafe usage of new static\(\)\.$#'
+			identifier: new.static
+			count: 1
+			path: web/profiles/contrib/markaspot/modules/markaspot_emergency/src/Controller/EmergencyModeController.php
+
+		-
+			message: '#^\\Drupal calls should be avoided in classes, use dependency injection instead$#'
+			identifier: globalDrupalDependencyInjection.useDependencyInjection
+			count: 4
+			path: web/profiles/contrib/markaspot/modules/markaspot_emergency/src/Controller/EmergencyModeController.php
+
+		-
+			message: '#^\\Drupal calls should be avoided in classes, use dependency injection instead$#'
+			identifier: globalDrupalDependencyInjection.useDependencyInjection
+			count: 5
+			path: web/profiles/contrib/markaspot/modules/markaspot_emergency/src/Form/EmergencySettingsForm.php
+
+		-
+			message: '#^Unsafe usage of new static\(\)\.$#'
+			identifier: new.static
+			count: 1
+			path: web/profiles/contrib/markaspot/modules/markaspot_escalation/src/Controller/EscalationController.php
+
+		-
+			message: '#^Unsafe usage of new static\(\)\.$#'
+			identifier: new.static
+			count: 1
+			path: web/profiles/contrib/markaspot/modules/markaspot_escalation/src/Form/DelegateForm.php
+
+		-
+			message: '#^Unsafe usage of new static\(\)\.$#'
+			identifier: new.static
+			count: 1
+			path: web/profiles/contrib/markaspot/modules/markaspot_escalation/src/Form/EscalateConfirmForm.php
+
+		-
+			message: '#^\\Drupal calls should be avoided in classes, use dependency injection instead$#'
+			identifier: globalDrupalDependencyInjection.useDependencyInjection
+			count: 1
+			path: web/profiles/contrib/markaspot/modules/markaspot_escalation/src/Service/EscalationService.php
+
+		-
+			message: '#^Unsafe usage of new static\(\)\.$#'
+			identifier: new.static
+			count: 1
+			path: web/profiles/contrib/markaspot/modules/markaspot_facility/src/Controller/FacilitySettingsController.php
+
+		-
+			message: '''
+				#^Call to method getRoles\(\) of deprecated class Drupal\\group\\GroupMembership\:
+				in group\:3\.2\.0 and is removed from group\:4\.0\.0\. Use the static
+				  methods on \\Drupal\\group\\Entity\\GroupMembership instead\.$#
+			'''
+			identifier: method.deprecatedClass
+			count: 1
+			path: web/profiles/contrib/markaspot/modules/markaspot_fastmap/src/Controller/BillingController.php
+
+		-
+			message: '#^\\Drupal calls should be avoided in classes, use dependency injection instead$#'
+			identifier: globalDrupalDependencyInjection.useDependencyInjection
+			count: 1
+			path: web/profiles/contrib/markaspot/modules/markaspot_fastmap/src/Controller/FastMapWorkspaceController.php
+
+		-
+			message: '''
+				#^Call to method getRoles\(\) of deprecated class Drupal\\group\\GroupMembership\:
+				in group\:3\.2\.0 and is removed from group\:4\.0\.0\. Use the static
+				  methods on \\Drupal\\group\\Entity\\GroupMembership instead\.$#
+			'''
+			identifier: method.deprecatedClass
+			count: 1
+			path: web/profiles/contrib/markaspot/modules/markaspot_fastmap/src/Controller/WorkspaceUsageController.php
+
+		-
+			message: '#^Unsafe usage of new static\(\)\.$#'
+			identifier: new.static
+			count: 1
+			path: web/profiles/contrib/markaspot/modules/markaspot_fastmap/src/Plugin/Validation/Constraint/TierLimitConstraintValidator.php
+
+		-
+			message: '#^\\Drupal calls should be avoided in classes, use dependency injection instead$#'
+			identifier: globalDrupalDependencyInjection.useDependencyInjection
+			count: 3
+			path: web/profiles/contrib/markaspot/modules/markaspot_fastmap/src/Service/TierConfigService.php
+
+		-
+			message: '#^Unsafe usage of new static\(\)\.$#'
+			identifier: new.static
+			count: 1
+			path: web/profiles/contrib/markaspot/modules/markaspot_feedback/src/Controller/FeedbackController.php
+
+		-
+			message: '#^\\Drupal calls should be avoided in classes, use dependency injection instead$#'
+			identifier: globalDrupalDependencyInjection.useDependencyInjection
+			count: 3
+			path: web/profiles/contrib/markaspot/modules/markaspot_feedback/src/Form/MarkaspotFeedbackForm.php
+
+		-
+			message: '#^Unsafe usage of new static\(\)\.$#'
+			identifier: new.static
+			count: 1
+			path: web/profiles/contrib/markaspot/modules/markaspot_feedback/src/Form/MarkaspotFeedbackSettingsForm.php
+
+		-
+			message: '#^Unsafe usage of new static\(\)\.$#'
+			identifier: new.static
+			count: 1
+			path: web/profiles/contrib/markaspot/modules/markaspot_feedback/src/Plugin/QueueWorker/FeedbackQueueWorker.php
+
+		-
+			message: '#^\\Drupal calls should be avoided in classes, use dependency injection instead$#'
+			identifier: globalDrupalDependencyInjection.useDependencyInjection
+			count: 3
+			path: web/profiles/contrib/markaspot/modules/markaspot_feedback/src/Plugin/QueueWorker/FeedbackQueueWorker.php
+
+		-
+			message: '''
+				#^Parameter \$client of method Drupal\\markaspot_geocoder\\Geocoder\\Provider\\MarkaspotNominatim\:\:__construct\(\) has typehint with deprecated interface Http\\Client\\HttpClient\:
+				since version 2\.4, use Psr\\Http\\Client\\ClientInterface instead; see https\://www\.php\-fig\.org/psr/psr\-18/$#
+			'''
+			identifier: parameter.deprecatedInterface
+			count: 1
+			path: web/profiles/contrib/markaspot/modules/markaspot_geocoder/src/Geocoder/Provider/MarkaspotNominatim.php
+
+		-
+			message: '''
+				#^Parameter \$client of method Drupal\\markaspot_geocoder\\Geocoder\\Provider\\MarkaspotNominatim\:\:withOpenStreetMapServer\(\) has typehint with deprecated interface Http\\Client\\HttpClient\:
+				since version 2\.4, use Psr\\Http\\Client\\ClientInterface instead; see https\://www\.php\-fig\.org/psr/psr\-18/$#
+			'''
+			identifier: parameter.deprecatedInterface
+			count: 1
+			path: web/profiles/contrib/markaspot/modules/markaspot_geocoder/src/Geocoder/Provider/MarkaspotNominatim.php
+
+		-
+			message: '''
+				#^Call to method getGroupRelationship\(\) of deprecated class Drupal\\group\\GroupMembership\:
+				in group\:3\.2\.0 and is removed from group\:4\.0\.0\. Use the static
+				  methods on \\Drupal\\group\\Entity\\GroupMembership instead\.$#
+			'''
+			identifier: method.deprecatedClass
+			count: 1
+			path: web/profiles/contrib/markaspot/modules/markaspot_group/markaspot_group.install
+
+		-
+			message: '''
+				#^Call to method getGroup\(\) of deprecated class Drupal\\group\\GroupMembership\:
+				in group\:3\.2\.0 and is removed from group\:4\.0\.0\. Use the static
+				  methods on \\Drupal\\group\\Entity\\GroupMembership instead\.$#
+			'''
+			identifier: method.deprecatedClass
+			count: 1
+			path: web/profiles/contrib/markaspot/modules/markaspot_group/markaspot_group.module
+
+		-
+			message: '''
+				#^Call to method getGroupRelationship\(\) of deprecated class Drupal\\group\\GroupMembership\:
+				in group\:3\.2\.0 and is removed from group\:4\.0\.0\. Use the static
+				  methods on \\Drupal\\group\\Entity\\GroupMembership instead\.$#
+			'''
+			identifier: method.deprecatedClass
+			count: 3
+			path: web/profiles/contrib/markaspot/modules/markaspot_group/markaspot_group.module
+
+		-
+			message: '''
+				#^Call to method loadByUser\(\) of deprecated class Drupal\\group\\GroupMembershipLoader\:
+				in group\:3\.2\.0 and is removed from group\:4\.0\.0\. Use the static
+				  methods on \\Drupal\\group\\Entity\\GroupMembership instead\.$#
+			'''
+			identifier: method.deprecatedClass
+			count: 1
+			path: web/profiles/contrib/markaspot/modules/markaspot_group/markaspot_group.module
+
+		-
+			message: '''
+				#^Call to method getGroup\(\) of deprecated class Drupal\\group\\GroupMembership\:
+				in group\:3\.2\.0 and is removed from group\:4\.0\.0\. Use the static
+				  methods on \\Drupal\\group\\Entity\\GroupMembership instead\.$#
+			'''
+			identifier: method.deprecatedClass
+			count: 3
+			path: web/profiles/contrib/markaspot/modules/markaspot_group/src/Controller/GroupInvitationController.php
+
+		-
+			message: '''
+				#^Call to method loadByUser\(\) of deprecated interface Drupal\\group\\GroupMembershipLoaderInterface\:
+				in group\:3\.2\.0 and is removed from group\:4\.0\.0\. Use the static
+				  methods on \\Drupal\\group\\Entity\\GroupMembership instead\.$#
+			'''
+			identifier: method.deprecatedInterface
+			count: 3
+			path: web/profiles/contrib/markaspot/modules/markaspot_group/src/Controller/GroupInvitationController.php
+
+		-
+			message: '''
+				#^Parameter \$membershipLoader of method Drupal\\markaspot_group\\Controller\\GroupInvitationController\:\:__construct\(\) has typehint with deprecated interface Drupal\\group\\GroupMembershipLoaderInterface\:
+				in group\:3\.2\.0 and is removed from group\:4\.0\.0\. Use the static
+				  methods on \\Drupal\\group\\Entity\\GroupMembership instead\.$#
+			'''
+			identifier: parameter.deprecatedInterface
+			count: 1
+			path: web/profiles/contrib/markaspot/modules/markaspot_group/src/Controller/GroupInvitationController.php
+
+		-
+			message: '#^Unsafe usage of new static\(\)\.$#'
+			identifier: new.static
+			count: 1
+			path: web/profiles/contrib/markaspot/modules/markaspot_group/src/Controller/GroupInvitationController.php
+
+		-
+			message: '''
+				#^Call to method getGroup\(\) of deprecated class Drupal\\group\\GroupMembership\:
+				in group\:3\.2\.0 and is removed from group\:4\.0\.0\. Use the static
+				  methods on \\Drupal\\group\\Entity\\GroupMembership instead\.$#
+			'''
+			identifier: method.deprecatedClass
+			count: 8
+			path: web/profiles/contrib/markaspot/modules/markaspot_group/src/Controller/GroupMembersController.php
+
+		-
+			message: '''
+				#^Call to method getGroupRelationship\(\) of deprecated class Drupal\\group\\GroupMembership\:
+				in group\:3\.2\.0 and is removed from group\:4\.0\.0\. Use the static
+				  methods on \\Drupal\\group\\Entity\\GroupMembership instead\.$#
+			'''
+			identifier: method.deprecatedClass
+			count: 1
+			path: web/profiles/contrib/markaspot/modules/markaspot_group/src/Controller/GroupMembersController.php
+
+		-
+			message: '''
+				#^Call to method getRoles\(\) of deprecated class Drupal\\group\\GroupMembership\:
+				in group\:3\.2\.0 and is removed from group\:4\.0\.0\. Use the static
+				  methods on \\Drupal\\group\\Entity\\GroupMembership instead\.$#
+			'''
+			identifier: method.deprecatedClass
+			count: 4
+			path: web/profiles/contrib/markaspot/modules/markaspot_group/src/Controller/GroupMembersController.php
+
+		-
+			message: '''
+				#^Call to method loadByUser\(\) of deprecated interface Drupal\\group\\GroupMembershipLoaderInterface\:
+				in group\:3\.2\.0 and is removed from group\:4\.0\.0\. Use the static
+				  methods on \\Drupal\\group\\Entity\\GroupMembership instead\.$#
+			'''
+			identifier: method.deprecatedInterface
+			count: 7
+			path: web/profiles/contrib/markaspot/modules/markaspot_group/src/Controller/GroupMembersController.php
+
+		-
+			message: '''
+				#^Parameter \$membershipLoader of method Drupal\\markaspot_group\\Controller\\GroupMembersController\:\:__construct\(\) has typehint with deprecated interface Drupal\\group\\GroupMembershipLoaderInterface\:
+				in group\:3\.2\.0 and is removed from group\:4\.0\.0\. Use the static
+				  methods on \\Drupal\\group\\Entity\\GroupMembership instead\.$#
+			'''
+			identifier: parameter.deprecatedInterface
+			count: 1
+			path: web/profiles/contrib/markaspot/modules/markaspot_group/src/Controller/GroupMembersController.php
+
+		-
+			message: '#^Unsafe usage of new static\(\)\.$#'
+			identifier: new.static
+			count: 1
+			path: web/profiles/contrib/markaspot/modules/markaspot_group/src/Controller/GroupMembersController.php
+
+		-
+			message: '#^\\Drupal calls should be avoided in classes, use dependency injection instead$#'
+			identifier: globalDrupalDependencyInjection.useDependencyInjection
+			count: 2
+			path: web/profiles/contrib/markaspot/modules/markaspot_group/src/Controller/GroupMembersController.php
+
+		-
+			message: '#^Unsafe usage of new static\(\)\.$#'
+			identifier: new.static
+			count: 1
+			path: web/profiles/contrib/markaspot/modules/markaspot_group/src/Plugin/EntityReferenceSelection/JurisdictionCategorySelection.php
+
+		-
+			message: '#^Unsafe usage of new static\(\)\.$#'
+			identifier: new.static
+			count: 1
+			path: web/profiles/contrib/markaspot/modules/markaspot_health/src/Controller/HealthCheckController.php
+
+		-
+			message: '#^Unsafe usage of new static\(\)\.$#'
+			identifier: new.static
+			count: 1
+			path: web/profiles/contrib/markaspot/modules/markaspot_health/src/Controller/SmokeCheckController.php
+
+		-
+			message: '#^Unsafe usage of new static\(\)\.$#'
+			identifier: new.static
+			count: 1
+			path: web/profiles/contrib/markaspot/modules/markaspot_health/src/GroupIntegrityCheckBase.php
+
+		-
+			message: '#^Unsafe usage of new static\(\)\.$#'
+			identifier: new.static
+			count: 1
+			path: web/profiles/contrib/markaspot/modules/markaspot_health/src/HealthCheckPluginBase.php
+
+		-
+			message: '#^Unsafe usage of new static\(\)\.$#'
+			identifier: new.static
+			count: 1
+			path: web/profiles/contrib/markaspot/modules/markaspot_health/src/Plugin/HealthCheck/ApiKeyEmptyCheck.php
+
+		-
+			message: '#^Unsafe usage of new static\(\)\.$#'
+			identifier: new.static
+			count: 1
+			path: web/profiles/contrib/markaspot/modules/markaspot_health/src/Plugin/HealthCheck/ContentWithoutJurisdictionCheck.php
+
+		-
+			message: '#^Unsafe usage of new static\(\)\.$#'
+			identifier: new.static
+			count: 1
+			path: web/profiles/contrib/markaspot/modules/markaspot_health/src/Plugin/HealthCheck/EcaTidMismatchCheck.php
+
+		-
+			message: '#^Unsafe usage of new static\(\)\.$#'
+			identifier: new.static
+			count: 1
+			path: web/profiles/contrib/markaspot/modules/markaspot_health/src/Plugin/HealthCheck/MailFailureRateCheck.php
+
+		-
+			message: '#^Unsafe usage of new static\(\)\.$#'
+			identifier: new.static
+			count: 1
+			path: web/profiles/contrib/markaspot/modules/markaspot_health/src/Plugin/HealthCheck/MailsystemDriftCheck.php
+
+		-
+			message: '#^Unsafe usage of new static\(\)\.$#'
+			identifier: new.static
+			count: 1
+			path: web/profiles/contrib/markaspot/modules/markaspot_health/src/Plugin/HealthCheck/MissingTenantAdminRoleCheck.php
+
+		-
+			message: '#^Unsafe usage of new static\(\)\.$#'
+			identifier: new.static
+			count: 1
+			path: web/profiles/contrib/markaspot/modules/markaspot_health/src/Plugin/HealthCheck/ModuleSchemaDriftCheck.php
+
+		-
+			message: '#^Unsafe usage of new static\(\)\.$#'
+			identifier: new.static
+			count: 1
+			path: web/profiles/contrib/markaspot/modules/markaspot_health/src/Plugin/HealthCheck/PasswordlessFeatureMissingCheck.php
+
+		-
+			message: '#^Unsafe usage of new static\(\)\.$#'
+			identifier: new.static
+			count: 1
+			path: web/profiles/contrib/markaspot/modules/markaspot_health/src/Plugin/HealthCheck/PiiProviderTimeoutCheck.php
+
+		-
+			message: '#^Unsafe usage of new static\(\)\.$#'
+			identifier: new.static
+			count: 1
+			path: web/profiles/contrib/markaspot/modules/markaspot_health/src/Plugin/HealthCheck/TenantBoilerplateOrgCoverageCheck.php
+
+		-
+			message: '#^Unsafe usage of new static\(\)\.$#'
+			identifier: new.static
+			count: 1
+			path: web/profiles/contrib/markaspot/modules/markaspot_health/src/Plugin/HealthCheck/TenantPagesAssignedCheck.php
+
+		-
+			message: '#^Unsafe usage of new static\(\)\.$#'
+			identifier: new.static
+			count: 1
+			path: web/profiles/contrib/markaspot/modules/markaspot_health/src/Plugin/HealthCheck/TenantServiceCategoriesAssignedCheck.php
+
+		-
+			message: '#^Unsafe usage of new static\(\)\.$#'
+			identifier: new.static
+			count: 1
+			path: web/profiles/contrib/markaspot/modules/markaspot_health/src/Plugin/HealthCheck/VisionEnvDriftCheck.php
+
+		-
+			message: '#^Unsafe usage of new static\(\)\.$#'
+			identifier: new.static
+			count: 1
+			path: web/profiles/contrib/markaspot/modules/markaspot_health/src/Plugin/SmokeCheck/BoilerplateRenderNoUnresolvedTokensCheck.php
+
+		-
+			message: '#^Unsafe usage of new static\(\)\.$#'
+			identifier: new.static
+			count: 1
+			path: web/profiles/contrib/markaspot/modules/markaspot_health/src/Plugin/SmokeCheck/BundleFieldMapPopulatedCheck.php
+
+		-
+			message: '#^Instantiated class Drupal\\markaspot_health\\Plugin\\SmokeCheck\\ExecutableFinder not found\.$#'
+			identifier: class.notFound
+			count: 1
+			path: web/profiles/contrib/markaspot/modules/markaspot_health/src/Plugin/SmokeCheck/DrushCrSubprocessCheck.php
+
+		-
+			message: '#^Unsafe usage of new static\(\)\.$#'
+			identifier: new.static
+			count: 1
+			path: web/profiles/contrib/markaspot/modules/markaspot_health/src/Plugin/SmokeCheck/DrushCrSubprocessCheck.php
+
+		-
+			message: '#^Unsafe usage of new static\(\)\.$#'
+			identifier: new.static
+			count: 1
+			path: web/profiles/contrib/markaspot/modules/markaspot_health/src/Plugin/SmokeCheck/HealthWrapCheck.php
+
+		-
+			message: '#^Unsafe usage of new static\(\)\.$#'
+			identifier: new.static
+			count: 1
+			path: web/profiles/contrib/markaspot/modules/markaspot_health/src/Plugin/SmokeCheck/HttpBackendLoginPageCheck.php
+
+		-
+			message: '#^Unsafe usage of new static\(\)\.$#'
+			identifier: new.static
+			count: 1
+			path: web/profiles/contrib/markaspot/modules/markaspot_health/src/Plugin/SmokeCheck/HttpFrontendPublicCheck.php
+
+		-
+			message: '#^Unsafe usage of new static\(\)\.$#'
+			identifier: new.static
+			count: 1
+			path: web/profiles/contrib/markaspot/modules/markaspot_health/src/Plugin/SmokeCheck/HttpJsonapiRootCheck.php
+
+		-
+			message: '#^Unsafe usage of new static\(\)\.$#'
+			identifier: new.static
+			count: 1
+			path: web/profiles/contrib/markaspot/modules/markaspot_health/src/Plugin/SmokeCheck/ReportCreateViaOpen311Check.php
+
+		-
+			message: '#^Unsafe usage of new static\(\)\.$#'
+			identifier: new.static
+			count: 1
+			path: web/profiles/contrib/markaspot/modules/markaspot_health/src/Plugin/SmokeCheck/RequestCreateJurisdictionScopeLockCheck.php
+
+		-
+			message: '#^Unsafe usage of new static\(\)\.$#'
+			identifier: new.static
+			count: 1
+			path: web/profiles/contrib/markaspot/modules/markaspot_health/src/Plugin/SmokeCheck/RouteTableFreshCheck.php
+
+		-
+			message: '#^Unsafe usage of new static\(\)\.$#'
+			identifier: new.static
+			count: 1
+			path: web/profiles/contrib/markaspot/modules/markaspot_health/src/Plugin/SmokeCheck/SchemaVsInfoYmlCheck.php
+
+		-
+			message: '#^Unsafe usage of new static\(\)\.$#'
+			identifier: new.static
+			count: 1
+			path: web/profiles/contrib/markaspot/modules/markaspot_health/src/Plugin/SmokeCheck/ServiceContainerFreshCheck.php
+
+		-
+			message: '#^Unsafe usage of new static\(\)\.$#'
+			identifier: new.static
+			count: 1
+			path: web/profiles/contrib/markaspot/modules/markaspot_health/src/Plugin/SmokeCheck/StatusChangeWritesStatusNoteCheck.php
+
+		-
+			message: '#^Unsafe usage of new static\(\)\.$#'
+			identifier: new.static
+			count: 1
+			path: web/profiles/contrib/markaspot/modules/markaspot_health/src/SmokeCheckPluginBase.php
+
+		-
+			message: '''
+				#^Call to deprecated method invalidateAll\(\) of interface Drupal\\Core\\Cache\\CacheBackendInterface\:
+				in drupal\:11\.2\.0 and is removed from drupal\:12\.0\.0\. Use
+				  CacheBackendInterface\:\:deleteAll\(\) or cache tag invalidation instead\.$#
+			'''
+			identifier: method.deprecated
+			count: 1
+			path: web/profiles/contrib/markaspot/modules/markaspot_icons/markaspot_icons.install
+
+		-
+			message: '#^Unsafe usage of new static\(\)\.$#'
+			identifier: new.static
+			count: 1
+			path: web/profiles/contrib/markaspot/modules/markaspot_icons/src/Form/IconMigrationForm.php
+
+		-
+			message: '#^Unsafe usage of new static\(\)\.$#'
+			identifier: new.static
+			count: 1
+			path: web/profiles/contrib/markaspot/modules/markaspot_icons/src/Form/IconSettingsForm.php
+
+		-
+			message: '#^Unsafe usage of new static\(\)\.$#'
+			identifier: new.static
+			count: 1
+			path: web/profiles/contrib/markaspot/modules/markaspot_language/src/MarkaspotLanguageTaxonomy.php
+
+		-
+			message: '#^Unsafe usage of new static\(\)\.$#'
+			identifier: new.static
+			count: 1
+			path: web/profiles/contrib/markaspot/modules/markaspot_moderation/src/Controller/ModerationAdminController.php
+
+		-
+			message: '#^Unsafe usage of new static\(\)\.$#'
+			identifier: new.static
+			count: 1
+			path: web/profiles/contrib/markaspot/modules/markaspot_moderation/src/Controller/ModerationController.php
+
+		-
+			message: '#^Unsafe usage of new static\(\)\.$#'
+			identifier: new.static
+			count: 1
+			path: web/profiles/contrib/markaspot/modules/markaspot_moderation/src/Form/DeleteRequestConfirmForm.php
+
+		-
+			message: '#^Unsafe usage of new static\(\)\.$#'
+			identifier: new.static
+			count: 1
+			path: web/profiles/contrib/markaspot/modules/markaspot_moderation/src/Form/DismissFlagsConfirmForm.php
+
+		-
+			message: '#^Unsafe usage of new static\(\)\.$#'
+			identifier: new.static
+			count: 1
+			path: web/profiles/contrib/markaspot/modules/markaspot_moderation/src/Form/HideRequestConfirmForm.php
+
+		-
+			message: '#^\\Drupal calls should be avoided in classes, use dependency injection instead$#'
+			identifier: globalDrupalDependencyInjection.useDependencyInjection
+			count: 1
+			path: web/profiles/contrib/markaspot/modules/markaspot_moderation/src/Service/ModerationService.php
+
+		-
+			message: '#^Missing cache backend declaration for performance\.$#'
+			identifier: pluginManagerSetsCacheBackend.missingCacheBackend
+			count: 1
+			path: web/profiles/contrib/markaspot/modules/markaspot_notification/src/Mail/NotifyMailManager.php
+
+		-
+			message: '#^Unsafe usage of new static\(\)\.$#'
+			identifier: new.static
+			count: 1
+			path: web/profiles/contrib/markaspot/modules/markaspot_notification/src/Plugin/rest/resource/NotificationsResource.php
+
+		-
+			message: '''
+				#^Call to deprecated method basename\(\) of class Drupal\\Core\\File\\FileSystem\:
+				in drupal\:11\.3\.0 and is removed from drupal\:13\.0\.0\. Use PHP native basename\(\) instead\.$#
+			'''
+			identifier: method.deprecated
+			count: 3
+			path: web/profiles/contrib/markaspot/modules/markaspot_nuxt/markaspot_nuxt.module
+
+		-
+			message: '#^Unsafe usage of new static\(\)\.$#'
+			identifier: new.static
+			count: 1
+			path: web/profiles/contrib/markaspot/modules/markaspot_nuxt/src/Controller/ContentTranslationController.php
+
+		-
+			message: '''
+				#^Call to method getGroup\(\) of deprecated class Drupal\\group\\GroupMembership\:
+				in group\:3\.2\.0 and is removed from group\:4\.0\.0\. Use the static
+				  methods on \\Drupal\\group\\Entity\\GroupMembership instead\.$#
+			'''
+			identifier: method.deprecatedClass
+			count: 1
+			path: web/profiles/contrib/markaspot/modules/markaspot_nuxt/src/Controller/DashboardAlertsController.php
+
+		-
+			message: '''
+				#^Call to method loadByUser\(\) of deprecated interface Drupal\\group\\GroupMembershipLoaderInterface\:
+				in group\:3\.2\.0 and is removed from group\:4\.0\.0\. Use the static
+				  methods on \\Drupal\\group\\Entity\\GroupMembership instead\.$#
+			'''
+			identifier: method.deprecatedInterface
+			count: 1
+			path: web/profiles/contrib/markaspot/modules/markaspot_nuxt/src/Controller/DashboardAlertsController.php
+
+		-
+			message: '''
+				#^Parameter \$membership_loader of method Drupal\\markaspot_nuxt\\Controller\\DashboardAlertsController\:\:__construct\(\) has typehint with deprecated interface Drupal\\group\\GroupMembershipLoaderInterface\:
+				in group\:3\.2\.0 and is removed from group\:4\.0\.0\. Use the static
+				  methods on \\Drupal\\group\\Entity\\GroupMembership instead\.$#
+			'''
+			identifier: parameter.deprecatedInterface
+			count: 1
+			path: web/profiles/contrib/markaspot/modules/markaspot_nuxt/src/Controller/DashboardAlertsController.php
+
+		-
+			message: '#^Unsafe usage of new static\(\)\.$#'
+			identifier: new.static
+			count: 1
+			path: web/profiles/contrib/markaspot/modules/markaspot_nuxt/src/Controller/DashboardAlertsController.php
+
+		-
+			message: '#^Unsafe usage of new static\(\)\.$#'
+			identifier: new.static
+			count: 1
+			path: web/profiles/contrib/markaspot/modules/markaspot_nuxt/src/Controller/MarkASpotSettingsController.php
+
+		-
+			message: '''
+				#^Call to method getGroup\(\) of deprecated class Drupal\\group\\GroupMembership\:
+				in group\:3\.2\.0 and is removed from group\:4\.0\.0\. Use the static
+				  methods on \\Drupal\\group\\Entity\\GroupMembership instead\.$#
+			'''
+			identifier: method.deprecatedClass
+			count: 1
+			path: web/profiles/contrib/markaspot/modules/markaspot_nuxt/src/Controller/TenantSettingsController.php
+
+		-
+			message: '''
+				#^Call to method loadByUser\(\) of deprecated interface Drupal\\group\\GroupMembershipLoaderInterface\:
+				in group\:3\.2\.0 and is removed from group\:4\.0\.0\. Use the static
+				  methods on \\Drupal\\group\\Entity\\GroupMembership instead\.$#
+			'''
+			identifier: method.deprecatedInterface
+			count: 1
+			path: web/profiles/contrib/markaspot/modules/markaspot_nuxt/src/Controller/TenantSettingsController.php
+
+		-
+			message: '''
+				#^Fetching deprecated class constant EXISTS_REPLACE of interface Drupal\\Core\\File\\FileSystemInterface\:
+				in drupal\:10\.3\.0 and is removed from drupal\:12\.0\.0\. Use
+				\\Drupal\\Core\\File\\FileExists\:\:Replace instead\.$#
+			'''
+			identifier: classConstant.deprecated
+			count: 2
+			path: web/profiles/contrib/markaspot/modules/markaspot_nuxt/src/Controller/TenantSettingsController.php
+
+		-
+			message: '''
+				#^Parameter \$membership_loader of method Drupal\\markaspot_nuxt\\Controller\\TenantSettingsController\:\:__construct\(\) has typehint with deprecated interface Drupal\\group\\GroupMembershipLoaderInterface\:
+				in group\:3\.2\.0 and is removed from group\:4\.0\.0\. Use the static
+				  methods on \\Drupal\\group\\Entity\\GroupMembership instead\.$#
+			'''
+			identifier: parameter.deprecatedInterface
+			count: 1
+			path: web/profiles/contrib/markaspot/modules/markaspot_nuxt/src/Controller/TenantSettingsController.php
+
+		-
+			message: '#^Unsafe usage of new static\(\)\.$#'
+			identifier: new.static
+			count: 1
+			path: web/profiles/contrib/markaspot/modules/markaspot_nuxt/src/Controller/TenantSettingsController.php
+
+		-
+			message: '#^\\Drupal calls should be avoided in classes, use dependency injection instead$#'
+			identifier: globalDrupalDependencyInjection.useDependencyInjection
+			count: 8
+			path: web/profiles/contrib/markaspot/modules/markaspot_nuxt/src/Plugin/Field/FieldWidget/NuxtConfigJsonFormWidget.php
+
+		-
+			message: '#^Unsafe usage of new static\(\)\.$#'
+			identifier: new.static
+			count: 1
+			path: web/profiles/contrib/markaspot/modules/markaspot_nuxt/src/Plugin/TenantAlert/BrandingAlert.php
+
+		-
+			message: '#^Unsafe usage of new static\(\)\.$#'
+			identifier: new.static
+			count: 1
+			path: web/profiles/contrib/markaspot/modules/markaspot_open311/src/Controller/GeoreportStatsController.php
+
+		-
+			message: '#^Access to an undefined property Drupal\\markaspot_open311\\Encoder\\Open311Encoder\:\:\$serializer\.$#'
+			identifier: property.notFound
+			count: 2
+			path: web/profiles/contrib/markaspot/modules/markaspot_open311/src/Encoder/Open311Encoder.php
+
+		-
+			message: '#^Access to an undefined property Drupal\\markaspot_open311\\Exception\\GeoreportException\:\:\$headers\.$#'
+			identifier: property.notFound
+			count: 2
+			path: web/profiles/contrib/markaspot/modules/markaspot_open311/src/Exception/GeoreportException.php
+
+		-
+			message: '#^Unsafe usage of new static\(\)\.$#'
+			identifier: new.static
+			count: 1
+			path: web/profiles/contrib/markaspot/modules/markaspot_open311/src/Form/MarkaspotOpen311SettingsForm.php
+
+		-
+			message: '#^\\Drupal calls should be avoided in classes, use dependency injection instead$#'
+			identifier: globalDrupalDependencyInjection.useDependencyInjection
+			count: 2
+			path: web/profiles/contrib/markaspot/modules/markaspot_open311/src/Form/MarkaspotOpen311SettingsForm.php
+
+		-
+			message: '#^Unsafe usage of new static\(\)\.$#'
+			identifier: new.static
+			count: 1
+			path: web/profiles/contrib/markaspot/modules/markaspot_open311/src/GeoreportRequestHandler.php
+
+		-
+			message: '#^Unsafe usage of new static\(\)\.$#'
+			identifier: new.static
+			count: 1
+			path: web/profiles/contrib/markaspot/modules/markaspot_open311/src/Plugin/Field/FieldWidget/ServiceDefinitionJsonFormWidget.php
+
+		-
+			message: '#^Unsafe usage of new static\(\)\.$#'
+			identifier: new.static
+			count: 1
+			path: web/profiles/contrib/markaspot/modules/markaspot_open311/src/Plugin/rest/resource/GeoreportDiscoveryResource.php
+
+		-
+			message: '#^Unsafe usage of new static\(\)\.$#'
+			identifier: new.static
+			count: 1
+			path: web/profiles/contrib/markaspot/modules/markaspot_open311/src/Plugin/rest/resource/GeoreportRequestResource.php
+
+		-
+			message: '#^\\Drupal calls should be avoided in classes, use dependency injection instead$#'
+			identifier: globalDrupalDependencyInjection.useDependencyInjection
+			count: 2
+			path: web/profiles/contrib/markaspot/modules/markaspot_open311/src/Plugin/rest/resource/GeoreportRequestResource.php
+
+		-
+			message: '#^Unsafe usage of new static\(\)\.$#'
+			identifier: new.static
+			count: 1
+			path: web/profiles/contrib/markaspot/modules/markaspot_open311/src/Plugin/rest/resource/GeoreportServiceIndexResource.php
+
+		-
+			message: '''
+				#^Fetching deprecated class constant EXISTS_RENAME of interface Drupal\\Core\\File\\FileSystemInterface\:
+				in drupal\:10\.3\.0 and is removed from drupal\:12\.0\.0\. Use
+				\\Drupal\\Core\\File\\FileExists\:\:Rename instead\.$#
+			'''
+			identifier: classConstant.deprecated
+			count: 1
+			path: web/profiles/contrib/markaspot/modules/markaspot_open311/src/Service/GeoreportProcessorService.php
+
+		-
+			message: '#^\\Drupal calls should be avoided in classes, use dependency injection instead$#'
+			identifier: globalDrupalDependencyInjection.useDependencyInjection
+			count: 9
+			path: web/profiles/contrib/markaspot/modules/markaspot_open311/src/Service/GeoreportProcessorService.php
+
+		-
+			message: '''
+				#^Call to method getGroup\(\) of deprecated class Drupal\\group\\GroupMembership\:
+				in group\:3\.2\.0 and is removed from group\:4\.0\.0\. Use the static
+				  methods on \\Drupal\\group\\Entity\\GroupMembership instead\.$#
+			'''
+			identifier: method.deprecatedClass
+			count: 1
+			path: web/profiles/contrib/markaspot/modules/markaspot_passwordless/src/Controller/PasswordlessAuthController.php
+
+		-
+			message: '''
+				#^Call to method getRoles\(\) of deprecated class Drupal\\group\\GroupMembership\:
+				in group\:3\.2\.0 and is removed from group\:4\.0\.0\. Use the static
+				  methods on \\Drupal\\group\\Entity\\GroupMembership instead\.$#
+			'''
+			identifier: method.deprecatedClass
+			count: 1
+			path: web/profiles/contrib/markaspot/modules/markaspot_passwordless/src/Controller/PasswordlessAuthController.php
+
+		-
+			message: '''
+				#^Call to method loadByUser\(\) of deprecated class Drupal\\group\\GroupMembershipLoader\:
+				in group\:3\.2\.0 and is removed from group\:4\.0\.0\. Use the static
+				  methods on \\Drupal\\group\\Entity\\GroupMembership instead\.$#
+			'''
+			identifier: method.deprecatedClass
+			count: 1
+			path: web/profiles/contrib/markaspot/modules/markaspot_passwordless/src/Controller/PasswordlessAuthController.php
+
+		-
+			message: '#^Unsafe usage of new static\(\)\.$#'
+			identifier: new.static
+			count: 1
+			path: web/profiles/contrib/markaspot/modules/markaspot_passwordless/src/Controller/PasswordlessAuthController.php
+
+		-
+			message: '#^\\Drupal calls should be avoided in classes, use dependency injection instead$#'
+			identifier: globalDrupalDependencyInjection.useDependencyInjection
+			count: 1
+			path: web/profiles/contrib/markaspot/modules/markaspot_passwordless/src/Controller/PasswordlessAuthController.php
+
+		-
+			message: '''
+				#^Call to method getGroup\(\) of deprecated class Drupal\\group\\GroupMembership\:
+				in group\:3\.2\.0 and is removed from group\:4\.0\.0\. Use the static
+				  methods on \\Drupal\\group\\Entity\\GroupMembership instead\.$#
+			'''
+			identifier: method.deprecatedClass
+			count: 1
+			path: web/profiles/contrib/markaspot/modules/markaspot_passwordless/src/Service/OtpService.php
+
+		-
+			message: '''
+				#^Call to method getRoles\(\) of deprecated class Drupal\\group\\GroupMembership\:
+				in group\:3\.2\.0 and is removed from group\:4\.0\.0\. Use the static
+				  methods on \\Drupal\\group\\Entity\\GroupMembership instead\.$#
+			'''
+			identifier: method.deprecatedClass
+			count: 1
+			path: web/profiles/contrib/markaspot/modules/markaspot_passwordless/src/Service/OtpService.php
+
+		-
+			message: '''
+				#^Call to method loadByUser\(\) of deprecated class Drupal\\group\\GroupMembershipLoader\:
+				in group\:3\.2\.0 and is removed from group\:4\.0\.0\. Use the static
+				  methods on \\Drupal\\group\\Entity\\GroupMembership instead\.$#
+			'''
+			identifier: method.deprecatedClass
+			count: 1
+			path: web/profiles/contrib/markaspot/modules/markaspot_passwordless/src/Service/OtpService.php
+
+		-
+			message: '#^\\Drupal calls should be avoided in classes, use dependency injection instead$#'
+			identifier: globalDrupalDependencyInjection.useDependencyInjection
+			count: 1
+			path: web/profiles/contrib/markaspot/modules/markaspot_passwordless/src/Service/OtpService.php
+
+		-
+			message: '#^Unsafe usage of new static\(\)\.$#'
+			identifier: new.static
+			count: 1
+			path: web/profiles/contrib/markaspot/modules/markaspot_privacy/src/Form/GDPRForm.php
+
+		-
+			message: '#^Unsafe usage of new static\(\)\.$#'
+			identifier: new.static
+			count: 1
+			path: web/profiles/contrib/markaspot/modules/markaspot_publisher/src/Form/MarkaspotPublisherSettingsForm.php
+
+		-
+			message: '#^Unsafe usage of new static\(\)\.$#'
+			identifier: new.static
+			count: 1
+			path: web/profiles/contrib/markaspot/modules/markaspot_publisher/src/Plugin/QueueWorker/PublisherQueueWorker.php
+
+		-
+			message: '#^\\Drupal calls should be avoided in classes, use dependency injection instead$#'
+			identifier: globalDrupalDependencyInjection.useDependencyInjection
+			count: 2
+			path: web/profiles/contrib/markaspot/modules/markaspot_publisher/src/Plugin/QueueWorker/PublisherQueueWorker.php
+
+		-
+			message: '#^\\Drupal calls should be avoided in classes, use dependency injection instead$#'
+			identifier: globalDrupalDependencyInjection.useDependencyInjection
+			count: 8
+			path: web/profiles/contrib/markaspot/modules/markaspot_publisher/src/PublisherService.php
+
+		-
+			message: '#^Instantiated class DrupalDateTime not found\.$#'
+			identifier: class.notFound
+			count: 1
+			path: web/profiles/contrib/markaspot/modules/markaspot_request_id/markaspot_request_id.module
+
+		-
+			message: '#^Unsafe usage of new static\(\)\.$#'
+			identifier: new.static
+			count: 1
+			path: web/profiles/contrib/markaspot/modules/markaspot_resubmission/src/Form/MarkaspotResubmissionSettingsForm.php
+
+		-
+			message: '#^\\Drupal calls should be avoided in classes, use dependency injection instead$#'
+			identifier: globalDrupalDependencyInjection.useDependencyInjection
+			count: 1
+			path: web/profiles/contrib/markaspot/modules/markaspot_resubmission/src/Form/MarkaspotResubmissionSettingsForm.php
+
+		-
+			message: '#^Unsafe usage of new static\(\)\.$#'
+			identifier: new.static
+			count: 1
+			path: web/profiles/contrib/markaspot/modules/markaspot_resubmission/src/Plugin/QueueWorker/ResubmissionQueueWorker.php
+
+		-
+			message: '#^\\Drupal calls should be avoided in classes, use dependency injection instead$#'
+			identifier: globalDrupalDependencyInjection.useDependencyInjection
+			count: 7
+			path: web/profiles/contrib/markaspot/modules/markaspot_resubmission/src/ResubmissionService.php
+
+		-
+			message: '''
+				#^Fetching deprecated class constant EVENT_NAME of class Drupal\\markaspot_service_provider\\Event\\ServiceProviderResponseEvent\:
+				in markaspot\:11\.8\.0 and is removed from markaspot\:12\.0\.0\.
+				  Use ServiceProviderEvents\:\:RESPONSE_SUBMITTED instead\.$#
+			'''
+			identifier: classConstant.deprecated
+			count: 1
+			path: web/profiles/contrib/markaspot/modules/markaspot_service_provider/src/Controller/ServiceProviderController.php
+
+		-
+			message: '#^Unsafe usage of new static\(\)\.$#'
+			identifier: new.static
+			count: 1
+			path: web/profiles/contrib/markaspot/modules/markaspot_service_provider/src/Controller/ServiceProviderController.php
+
+		-
+			message: '#^\\Drupal calls should be avoided in classes, use dependency injection instead$#'
+			identifier: globalDrupalDependencyInjection.useDependencyInjection
+			count: 1
+			path: web/profiles/contrib/markaspot/modules/markaspot_service_provider/src/Controller/ServiceProviderController.php
+
+		-
+			message: '#^\\Drupal calls should be avoided in classes, use dependency injection instead$#'
+			identifier: globalDrupalDependencyInjection.useDependencyInjection
+			count: 4
+			path: web/profiles/contrib/markaspot/modules/markaspot_service_provider/src/Form/ServiceProviderResponseForm.php
+
+		-
+			message: '#^Unsafe usage of new static\(\)\.$#'
+			identifier: new.static
+			count: 1
+			path: web/profiles/contrib/markaspot/modules/markaspot_service_provider/src/Form/ServiceProviderSettingsForm.php
+
+		-
+			message: '#^\\Drupal calls should be avoided in classes, use dependency injection instead$#'
+			identifier: globalDrupalDependencyInjection.useDependencyInjection
+			count: 1
+			path: web/profiles/contrib/markaspot/modules/markaspot_service_provider/src/Form/ServiceProviderSettingsForm.php
+
+		-
+			message: '#^Attribute class Drupal\\eca\\Attribute\\Token does not have the class target\.$#'
+			identifier: attribute.target
+			count: 2
+			path: web/profiles/contrib/markaspot/modules/markaspot_service_provider/src/Plugin/ECA/Event/ServiceProviderEvent.php
+
+		-
+			message: '#^Unsafe usage of new static\(\)\.$#'
+			identifier: new.static
+			count: 1
+			path: web/profiles/contrib/markaspot/modules/markaspot_shstweak/src/Controller/SHSTweakController.php
+
+		-
+			message: '#^\\Drupal calls should be avoided in classes, use dependency injection instead$#'
+			identifier: globalDrupalDependencyInjection.useDependencyInjection
+			count: 1
+			path: web/profiles/contrib/markaspot/modules/markaspot_shstweak/src/Controller/SHSTweakController.php
+
+		-
+			message: '#^Unsafe usage of new static\(\)\.$#'
+			identifier: new.static
+			count: 1
+			path: web/profiles/contrib/markaspot/modules/markaspot_stats/src/Controller/StatsController.php
+
+		-
+			message: '#^Unsafe usage of new static\(\)\.$#'
+			identifier: new.static
+			count: 1
+			path: web/profiles/contrib/markaspot/modules/markaspot_ui/src/Controller/MarkaspotUiController.php
+
+		-
+			message: '#^Unsafe usage of new static\(\)\.$#'
+			identifier: new.static
+			count: 1
+			path: web/profiles/contrib/markaspot/modules/markaspot_ui/src/Controller/SettingsController.php
+
+		-
+			message: '#^Unsafe usage of new static\(\)\.$#'
+			identifier: new.static
+			count: 1
+			path: web/profiles/contrib/markaspot/modules/markaspot_ui/src/Controller/SettingsListController.php
+
+		-
+			message: '#^\\Drupal calls should be avoided in classes, use dependency injection instead$#'
+			identifier: globalDrupalDependencyInjection.useDependencyInjection
+			count: 2
+			path: web/profiles/contrib/markaspot/modules/markaspot_ui/src/EventSubscriber/LoginRedirectSubscriber.php
+
+		-
+			message: '#^Unsafe usage of new static\(\)\.$#'
+			identifier: new.static
+			count: 1
+			path: web/profiles/contrib/markaspot/modules/markaspot_validation/src/Form/MarkaspotValidationSettingsForm.php
+
+		-
+			message: '#^Unsafe usage of new static\(\)\.$#'
+			identifier: new.static
+			count: 1
+			path: web/profiles/contrib/markaspot/modules/markaspot_validation/src/Plugin/Validation/Constraint/DefaultLocationConstraintValidator.php
+
+		-
+			message: '#^Unsafe usage of new static\(\)\.$#'
+			identifier: new.static
+			count: 1
+			path: web/profiles/contrib/markaspot/modules/markaspot_validation/src/Plugin/Validation/Constraint/DoublePostConstraintValidator.php
+
+		-
+			message: '#^Unsafe usage of new static\(\)\.$#'
+			identifier: new.static
+			count: 1
+			path: web/profiles/contrib/markaspot/modules/markaspot_validation/src/Plugin/Validation/Constraint/MultipleReportsConstraintValidator.php
+
+		-
+			message: '#^Unsafe usage of new static\(\)\.$#'
+			identifier: new.static
+			count: 1
+			path: web/profiles/contrib/markaspot/modules/markaspot_validation/src/Plugin/Validation/Constraint/ValidLatLonConstraintValidator.php
+
+		-
+			message: '#^Unsafe usage of new static\(\)\.$#'
+			identifier: new.static
+			count: 1
+			path: web/profiles/contrib/markaspot/modules/markaspot_validation/src/Plugin/Validation/Geo/GeoJsonBoundary.php
+
+		-
+			message: '#^Unsafe usage of new static\(\)\.$#'
+			identifier: new.static
+			count: 1
+			path: web/profiles/contrib/markaspot/modules/markaspot_vision/src/Controller/ImageProcessingController.php
+
+		-
+			message: '''
+				#^Fetching deprecated class constant EXISTS_REPLACE of interface Drupal\\Core\\File\\FileSystemInterface\:
+				in drupal\:10\.3\.0 and is removed from drupal\:12\.0\.0\. Use
+				\\Drupal\\Core\\File\\FileExists\:\:Replace instead\.$#
+			'''
+			identifier: classConstant.deprecated
+			count: 1
+			path: web/profiles/contrib/markaspot/modules/markaspot_vision/src/Service/ImageProcessingService.php
+
+		-
+			message: '''
+				#^Call to deprecated method addMethods\(\) of class PHPUnit\\Framework\\MockObject\\MockBuilder\:
+				https\://github\.com/sebastianbergmann/phpunit/issues/5320$#
+			'''
+			identifier: method.deprecated
+			count: 8
+			path: web/profiles/contrib/markaspot/tests/src/Unit/MarkaspotUpdateHooksTest.php

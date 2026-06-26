@@ -1,0 +1,47 @@
+{
+  "group": {
+    "type": "jur",
+    "label": "City of Cologne"
+  },
+  "nuxt_config": {
+    "client": {
+      "name": "Cologne Issue Reporter",
+      "shortName": "Cologne"
+    },
+    "theme": {
+      "primary": "blue",
+      "secondary": "sky",
+      "neutral": "slate"
+    },
+    "features": {
+      "statistics": true,
+      "photoReporting": true,
+      "dashboard": false,
+      "voting": false,
+      "feedback": true,
+      "search": {
+        "enabled": true,
+        "mode": "fuzzy",
+        "minLength": 2
+      },
+      "boundaries": {
+        "enabled": true,
+        "strictValidation": false,
+        "showBoundaryOnMap": true
+      }
+    },
+    "map": {
+      "center": {
+        "lat": 50.9383,
+        "lng": 6.9599
+      },
+      "zoom": 13,
+      "loadMarkersOnInit": true,
+      "enableBoundsFiltering": true
+    },
+    "languages": {
+      "available": ["de", "en"],
+      "default": "de"
+    }
+  }
+}

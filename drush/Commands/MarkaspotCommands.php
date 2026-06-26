@@ -86,8 +86,7 @@ class MarkaspotCommands extends DrushCommands implements CustomEventAwareInterfa
     $command .= " --account-name=$account_name";
     $command .= " --account-pass=$account_pass";
     $command .= " --account-mail=$account_mail";
-    $command .= " --existing-config";
-    $command .= " --locale=" . $options['locale'];
+    $command .= " --locale=" . $language;
     
     if ($options['skip-confirmation']) {
       $command .= " -y";
@@ -341,6 +340,216 @@ class MarkaspotCommands extends DrushCommands implements CustomEventAwareInterfa
     else {
       $this->logger()->warning(dt('Form display configuration @name not found.', ['@name' => $config_name]));
     }
+  }
+
+  /**
+   * Fetches a city boundary from Nominatim and saves it to a Group entity.
+   *
+   * Queries the OpenStreetMap Nominatim API for the city boundary polygon
+   * and stores it as a GeoJSON FeatureCollection in the Group entity's
+   * field_boundary field. Falls back to a 10km circle if no polygon is found.
+   *
+   * @command markaspot:fetch-boundary
+   * @aliases mfb
+   * @bootstrap full
+   * @option city The city name to search for on Nominatim.
+   * @option group The Group entity ID to save the boundary to.
+   *
+   * @usage drush markaspot:fetch-boundary --city="Cologne"
+   *   Fetches the boundary for Cologne and saves it to Group 1.
+   * @usage drush markaspot:fetch-boundary --city="Bonn" --group=15
+   *   Fetches the boundary for Bonn and saves it to Group 15.
+   */
+  public function fetchBoundary($options = [
+    'city' => self::REQ,
+    'group' => 1,
+  ]) {
+    $city = $options['city'];
+    $groupId = (int) $options['group'];
+
+    // Load the Group entity.
+    $groupStorage = \Drupal::entityTypeManager()->getStorage('group');
+    $group = $groupStorage->load($groupId);
+
+    if (!$group) {
+      $this->logger()->error(dt('Group entity @id not found.', ['@id' => $groupId]));
+      return 1;
+    }
+
+    if ($group->getGroupType()->id() !== 'jur') {
+      $this->logger()->error(dt('Group @id is type "@type", expected "jur".', [
+        '@id' => $groupId,
+        '@type' => $group->getGroupType()->id(),
+      ]));
+      return 1;
+    }
+
+    if (!$group->hasField('field_boundary')) {
+      $this->logger()->error(dt('Group @id has no field_boundary field.', ['@id' => $groupId]));
+      return 1;
+    }
+
+    // Query Nominatim (max 1 request/second per usage policy).
+    $url = 'https://nominatim.openstreetmap.org/search?' . http_build_query([
+      'q' => $city,
+      'format' => 'json',
+      'polygon_geojson' => 1,
+      'limit' => 1,
+    ]);
+
+    $this->logger()->notice(dt('Querying Nominatim for "@city"...', ['@city' => $city]));
+
+    try {
+      $response = \Drupal::httpClient()->get($url, [
+        'headers' => [
+          'User-Agent' => 'Mark-a-Spot/11.x (https://mark-a-spot.com)',
+          'Accept' => 'application/json',
+        ],
+        'timeout' => 15,
+      ]);
+
+      $data = json_decode((string) $response->getBody(), TRUE);
+    }
+    catch (\Exception $e) {
+      $this->logger()->error(dt('Nominatim request failed: @msg', ['@msg' => $e->getMessage()]));
+      return 1;
+    }
+
+    if (empty($data) || !is_array($data)) {
+      $this->logger()->error(dt('Nominatim returned no results for "@city".', ['@city' => $city]));
+      return 1;
+    }
+
+    $result = $data[0];
+    $geojson = $result['geojson'] ?? NULL;
+    $boundaryType = $geojson['type'] ?? NULL;
+
+    // Build the FeatureCollection, with circle fallback.
+    if ($geojson && in_array($boundaryType, ['Polygon', 'MultiPolygon'], TRUE)) {
+      $featureCollection = $this->buildBoundaryFeatureCollection($geojson, $city);
+      $coordCount = $this->countCoordinates($geojson);
+      $this->logger()->success(dt('Fetched @type boundary with @count coordinate pairs.', [
+        '@type' => $boundaryType,
+        '@count' => $coordCount,
+      ]));
+    }
+    else {
+      // Fallback: generate a 10km circle around the result center.
+      $lat = (float) ($result['lat'] ?? 0);
+      $lon = (float) ($result['lon'] ?? 0);
+
+      if ($lat == 0 && $lon == 0) {
+        $this->logger()->error(dt('No polygon and no coordinates returned for "@city".', ['@city' => $city]));
+        return 1;
+      }
+
+      $this->logger()->warning(dt('No polygon found. Generating 10km circle fallback at @lat, @lon.', [
+        '@lat' => $lat,
+        '@lon' => $lon,
+      ]));
+
+      $circleGeometry = $this->generateCircleBoundary($lat, $lon, 10.0);
+      $featureCollection = $this->buildBoundaryFeatureCollection($circleGeometry, $city);
+    }
+
+    // Save to group entity.
+    $json = json_encode($featureCollection, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+    $group->set('field_boundary', $json);
+    $group->save();
+
+    $this->logger()->success(dt('Boundary saved to Group @id (@label).', [
+      '@id' => $groupId,
+      '@label' => $group->label(),
+    ]));
+
+    return 0;
+  }
+
+  /**
+   * Wraps a GeoJSON geometry in a FeatureCollection with city name property.
+   *
+   * @param array $geometry
+   *   A GeoJSON geometry array (Polygon or MultiPolygon).
+   * @param string $name
+   *   The city/feature name.
+   *
+   * @return array
+   *   A GeoJSON FeatureCollection.
+   */
+  protected function buildBoundaryFeatureCollection(array $geometry, string $name): array {
+    return [
+      'type' => 'FeatureCollection',
+      'features' => [
+        [
+          'type' => 'Feature',
+          'properties' => ['name' => $name],
+          'geometry' => $geometry,
+        ],
+      ],
+    ];
+  }
+
+  /**
+   * Generates a circular polygon boundary around a center point.
+   *
+   * @param float $lat
+   *   Center latitude.
+   * @param float $lng
+   *   Center longitude.
+   * @param float $radiusKm
+   *   Radius in kilometers.
+   * @param int $points
+   *   Number of points on the circle.
+   *
+   * @return array
+   *   A GeoJSON Polygon geometry.
+   */
+  protected function generateCircleBoundary(float $lat, float $lng, float $radiusKm, int $points = 32): array {
+    $coords = [];
+    $latOffset = $radiusKm / 111.0;
+    $lngOffset = abs($lat) < 89.9 ? $radiusKm / (111.0 * cos(deg2rad($lat))) : $latOffset;
+
+    for ($i = 0; $i < $points; $i++) {
+      $angle = 2 * M_PI * $i / $points;
+      $coords[] = [
+        round($lng + $lngOffset * cos($angle), 6),
+        round($lat + $latOffset * sin($angle), 6),
+      ];
+    }
+    // Close the ring.
+    $coords[] = $coords[0];
+
+    return [
+      'type' => 'Polygon',
+      'coordinates' => [$coords],
+    ];
+  }
+
+  /**
+   * Counts coordinate pairs in a GeoJSON geometry.
+   *
+   * @param array $geojson
+   *   A GeoJSON geometry array.
+   *
+   * @return int
+   *   The number of coordinate pairs.
+   */
+  protected function countCoordinates(array $geojson): int {
+    $type = $geojson['type'] ?? '';
+    $coordinates = $geojson['coordinates'] ?? [];
+
+    if ($type === 'Polygon') {
+      return array_sum(array_map('count', $coordinates));
+    }
+    elseif ($type === 'MultiPolygon') {
+      $count = 0;
+      foreach ($coordinates as $polygon) {
+        $count += array_sum(array_map('count', $polygon));
+      }
+      return $count;
+    }
+
+    return 0;
   }
 
   /**

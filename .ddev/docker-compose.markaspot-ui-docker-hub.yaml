@@ -1,7 +1,7 @@
 services:
   markaspot-ui-docker-hub:
     container_name: "ddev-${DDEV_SITENAME}-markaspot-ui-docker-hub"
-    image: markaspot/markaspot-ui-base:latest
+    image: ${MARKASPOT_UI_BASE_IMAGE:-markaspot/markaspot-ui-base:v2.0.0}
     working_dir: /app
     restart: unless-stopped
     # Adding external_links allows connections to `https://example.ddev.site`,
@@ -15,8 +15,10 @@ services:
       - "3000"
     environment:
       - NUXT_API_BASE=http://web
-      - NUXT_GEOREPORT_API_BASE=https://${DDEV_SITENAME}.${DDEV_TLD}
-      - GEOREPORT_API_KEY=${GEOREPORT_API_KEY:-changeme}
+      - NUXT_GEOREPORT_API_BASE=http://web
+      - GEOREPORT_API_KEY=${GEOREPORT_API_KEY:-}
+      - NUXT_PUBLIC_JURISDICTION_ID=${JURISDICTION_ID:-}
+      - NUXT_JURISDICTION_ID=${JURISDICTION_ID:-}
       - USE_PROXY="true"
       - NODE_ENV=production
       - HOST=0.0.0.0
