@@ -155,6 +155,35 @@ Once the script has executed, the application should be accessible at http://loc
 
  Please exercise caution when executing the script, as it will drop the database and initialize Mark-a-Spot from scratch. Additionally, familiarize yourself with the Drupal development process, including configuring changes, backing up databases, and other relevant procedures.
 
+### AI Photo Analysis (`markaspot_vision`)
+
+The `markaspot_vision` module analyzes citizen-uploaded report photos with a vision LLM: it suggests a category, drafts a description and alt text, and flags potential hazards (CAP severity) and privacy concerns. It is **opt-in** and not part of the lean default install.
+
+Enable it by exporting an OpenAI (or OpenAI-compatible) API key **before** running the installer:
+
+```bash
+export OPENAI_API_KEY=sk-your_api_key
+./scripts/start.sh -y
+```
+
+When `OPENAI_API_KEY` is set, the installer enables `markaspot_vision` (+ `markaspot_ai`) and writes the key into `markaspot_vision.settings:api_key`. To enable the module without a key (e.g. to configure it later in the UI), pass it via `MARKASPOT_EXTRA_MODULES="markaspot_vision markaspot_ai"`.
+
+**Key and endpoint** live in `markaspot_vision.settings` and can be changed after install with drush:
+
+| Setting | Default | Purpose |
+|---------|---------|---------|
+| `api_key` | _(empty)_ | Bearer token sent to the vision endpoint (set from `OPENAI_API_KEY`). |
+| `api_url` | `https://api.openai.com/v1/chat/completions` | Chat-completions endpoint. Point it at any OpenAI-compatible API (Azure OpenAI, a self-hosted/local LLM, etc.). |
+| `ai_model` | `gpt-4.1-mini` | Vision-capable model id. |
+
+```bash
+# Change the endpoint and model after install:
+ddev drush cset markaspot_vision.settings api_url 'https://your-host/v1/chat/completions' -y
+ddev drush cset markaspot_vision.settings ai_model 'gpt-4.1-mini' -y
+```
+
+The default install ships **without** the analytical modules (`markaspot_vision`, `markaspot_escalation`, `markaspot_moderation`, `markaspot_notification`). Enable any of them on demand with `MARKASPOT_EXTRA_MODULES="..."` before running the installer.
+
 
 #### Docker Compose workflow
 
@@ -185,8 +214,10 @@ Key environment variables for deployment:
 |----------|-------------|---------|
 | `GEOREPORT_API_KEY` | API key for GeoReport v2 authentication | `abc123...` |
 | `DRUPAL_DATABASE_*` | Database connection settings | See `env.example` |
+| `OPENAI_API_KEY` | Enables AI photo analysis (`markaspot_vision`) and the `-a` AI translation flag; also written to `markaspot_vision.settings:api_key` | `sk-...` |
+| `MARKASPOT_EXTRA_MODULES` | Space-separated list of opt-in modules to enable during install (e.g. `markaspot_escalation`) | `markaspot_vision markaspot_ai` |
 
-The installer generates a fresh `GEOREPORT_API_KEY` on first run. To use a specific key, set it before installation.
+The installer generates a fresh `GEOREPORT_API_KEY` on first run. To use a specific key, set it before installation. See [AI Photo Analysis](#ai-photo-analysis-markaspot_vision) for the vision endpoint/model settings.
 
 ## API Documentation
 

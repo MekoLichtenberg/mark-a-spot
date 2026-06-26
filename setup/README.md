@@ -37,21 +37,30 @@ setup/
 ./setup/import-jurisdiction.sh
 ```
 
-This creates a new `jur` Group and outputs the Group ID.
+This updates the existing single `jur` Group when one is present. If no `jur` Group exists yet, it creates one and outputs the Group ID.
 
 ### Update Existing Jurisdiction
 
 ```bash
 # With known Group ID:
-./setup/import-jurisdiction.sh 19
+./setup/import-jurisdiction.sh GROUP_ID
 ```
 
 ### After Import
 
-1. **Update DDEV config** (`.ddev/docker-compose.node-dev.yaml`):
+1. **Set the jurisdiction ID for the pre-built UI image**. `import-jurisdiction.sh` writes this to `.ddev/.env` automatically:
+   ```bash
+   cat >> .ddev/.env <<'EOF'
+   JURISDICTION_ID=GROUP_ID
+   MARKASPOT_UI_BASE_IMAGE=markaspot/markaspot-ui-base:v2.0.0
+   EOF
+   ```
+
+   If you wire the Nuxt variables directly in Compose, set both values:
    ```yaml
    environment:
-     - NUXT_PUBLIC_JURISDICTION_ID=19  # ← Use the displayed Group ID
+     - NUXT_PUBLIC_JURISDICTION_ID=GROUP_ID
+     - NUXT_JURISDICTION_ID=GROUP_ID
    ```
 
 2. **Restart DDEV:**
@@ -61,7 +70,7 @@ This creates a new `jur` Group and outputs the Group ID.
 
 3. **Test:**
    ```
-   https://yoursite.ddev.site:3001
+   https://yoursite.ddev.site:8040
    ```
 
 ## Customizing Configuration

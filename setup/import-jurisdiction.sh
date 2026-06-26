@@ -4,7 +4,7 @@
 #
 # Usage:
 #   ./setup/import-jurisdiction.sh           # Create new jurisdiction
-#   ./setup/import-jurisdiction.sh 19        # Update existing group ID 19
+#   ./setup/import-jurisdiction.sh GROUP_ID  # Update existing group ID
 #
 # This script reads jurisdiction-config.json and creates/updates a Group entity
 # in Drupal with the configuration. This ensures the config is version-controlled
@@ -51,26 +51,70 @@ fi
 # Get group ID from argument or create new
 GROUP_ID="${1:-}"
 
-if [ -z "$GROUP_ID" ]; then
-    echo -e "${YELLOW}No GROUP_ID provided. Creating new jurisdiction group...${NC}"
+if [ -n "$GROUP_ID" ] && ! [[ "$GROUP_ID" =~ ^[0-9]+$ ]]; then
+    echo -e "${RED}Error: GROUP_ID must be numeric.${NC}"
+    exit 1
+fi
 
-    # Read label from config using jq
-    LABEL=$(cat "$CONFIG_FILE" | ddev exec jq -r '.group.label')
+if [ -z "$GROUP_ID" ]; then
+    EXISTING_JUR_GROUP_IDS=$(ddev drush php:eval '
+        foreach (\Drupal::entityTypeManager()->getStorage("group")->loadMultiple() as $group) {
+            if ($group->bundle() === "jur") {
+                echo $group->id() . PHP_EOL;
+            }
+        }
+    ')
+    JUR_GROUP_COUNT=$(printf '%s\n' "$EXISTING_JUR_GROUP_IDS" | sed '/^$/d' | wc -l | tr -d ' ')
+
+    if [ "$JUR_GROUP_COUNT" = "1" ]; then
+        GROUP_ID=$(printf '%s\n' "$EXISTING_JUR_GROUP_IDS" | sed '/^$/d' | head -n 1)
+        echo -e "${CYAN}Using existing jurisdiction group ID: $GROUP_ID${NC}"
+    elif [ "$JUR_GROUP_COUNT" != "0" ]; then
+        echo -e "${RED}Error: Multiple jurisdiction groups exist. Pass the target GROUP_ID explicitly.${NC}"
+        printf '%s\n' "$EXISTING_JUR_GROUP_IDS" | sed '/^$/d;s/^/  - /'
+        exit 1
+    fi
+fi
+
+if [ -z "$GROUP_ID" ]; then
+    echo -e "${YELLOW}No existing jurisdiction group found. Creating new jurisdiction group...${NC}"
+
+    # Pass group config through JSON so labels cannot break the PHP eval string.
+    GROUP_CONFIG=$(cat "$CONFIG_FILE" | ddev exec jq -c '.group')
+    echo "$GROUP_CONFIG" | ddev exec -s web "cat > /tmp/jurisdiction_group.json"
 
     # Create new group
-    GROUP_ID=$(ddev drush php:eval "
+    GROUP_ID=$(ddev drush php:eval '
         use Drupal\group\Entity\Group;
-        \$group = Group::create([
-            'type' => 'jur',
-            'label' => '$LABEL',
+        $group_config = json_decode(file_get_contents("/tmp/jurisdiction_group.json"), true);
+        if (!is_array($group_config) || empty($group_config["label"])) {
+            echo "ERROR: Missing group label";
+            exit(1);
+        }
+        $group = Group::create([
+            "type" => "jur",
+            "label" => $group_config["label"],
         ]);
-        \$group->save();
-        echo \$group->id();
-    ")
+        $group->save();
+        echo $group->id();
+    ')
+
+    if ! [[ "$GROUP_ID" =~ ^[0-9]+$ ]]; then
+        echo -e "${RED}Error: Could not create numeric group ID. Got: $GROUP_ID${NC}"
+        exit 1
+    fi
 
     echo -e "${GREEN}Created new group with ID: $GROUP_ID${NC}"
 else
     echo -e "${CYAN}Updating existing group ID: $GROUP_ID${NC}"
+fi
+
+DDEV_ENV_FILE="$PROJECT_ROOT/.ddev/.env"
+if [ -d "$PROJECT_ROOT/.ddev" ]; then
+    touch "$DDEV_ENV_FILE"
+    grep -v "^JURISDICTION_ID=" "$DDEV_ENV_FILE" > "${DDEV_ENV_FILE}.tmp" 2>/dev/null || true
+    mv "${DDEV_ENV_FILE}.tmp" "$DDEV_ENV_FILE"
+    echo "JURISDICTION_ID=$GROUP_ID" >> "$DDEV_ENV_FILE"
 fi
 
 # Copy logos to Drupal files directory (if they exist)
@@ -123,13 +167,17 @@ echo "Group ID: $GROUP_ID"
 echo ""
 echo -e "${CYAN}Next steps:${NC}"
 echo ""
-echo "1. Update DDEV config (.ddev/docker-compose.node-dev.yaml):"
+echo "1. Jurisdiction ID was written to .ddev/.env for the pre-built UI image:"
+echo "   JURISDICTION_ID=$GROUP_ID"
+echo ""
+echo "   Or wire the Nuxt variables directly in Compose:"
 echo "   environment:"
 echo "     - NUXT_PUBLIC_JURISDICTION_ID=$GROUP_ID"
+echo "     - NUXT_JURISDICTION_ID=$GROUP_ID"
 echo ""
 echo "2. Restart DDEV:"
 echo "   ddev restart"
 echo ""
 echo "3. Test the frontend:"
-echo "   https://$(ddev describe -j | grep -o '"primary_url":"[^"]*' | cut -d'"' -f4 | sed 's|https://||'):3001"
+echo "   https://$(ddev describe -j | grep -o '"primary_url":"[^"]*' | cut -d'"' -f4 | sed 's|https://||'):8040"
 echo ""
