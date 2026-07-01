@@ -36,7 +36,7 @@
             "onAutoForward": "notify"
         }
     },
-    "initializeCommand": "echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin",
+    "initializeCommand": "echo skipping docker login",
     "customizations": {
         "vscode": {
             "extensions": [
